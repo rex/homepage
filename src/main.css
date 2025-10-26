@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --color-night: theme('colors.night');
+  --color-void: theme('colors.void');
+  --color-neon-100: theme('colors.neon.100');
+  --color-neon-200: theme('colors.neon.200');
+  --color-neon-300: theme('colors.neon.300');
+  --color-neon-400: theme('colors.neon.400');
+  --color-neon-500: theme('colors.neon.500');
+  --color-magenta-500: theme('colors.magenta.500');
+  --color-magenta-600: theme('colors.magenta.600');
+  --color-glitch-cyan: theme('colors.glitch.cyan');
+  --color-glitch-pink: theme('colors.glitch.pink');
+  --color-glitch-yellow: theme('colors.glitch.yellow');
+}
+
+body {
+  font-family: theme('fontFamily.body');
+  background: radial-gradient(circle at top, color-mix(in srgb, var(--color-neon-400) 20%, transparent), transparent 55%),
+    radial-gradient(circle at bottom, color-mix(in srgb, var(--color-magenta-500) 12%, transparent), transparent 65%),
+    var(--color-night);
+  min-height: 100vh;
+}
+
+.glitch {
+  position: relative;
+  display: inline-block;
+  color: var(--color-neon-300);
+  text-shadow: 0 0 12px color-mix(in srgb, var(--color-neon-400) 80%, transparent);
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  mix-blend-mode: screen;
+}
+
+.glitch::before {
+  color: var(--color-glitch-cyan);
+  transform: translate(3px, -2px);
+  clip-path: polygon(0 2%, 100% 0, 100% 35%, 0 40%);
+  animation: glitch-shift 1.4s infinite;
+}
+
+.glitch::after {
+  color: var(--color-glitch-pink);
+  transform: translate(-3px, 2px);
+  clip-path: polygon(0 60%, 100% 55%, 100% 100%, 0 95%);
+  animation: glitch-shift 1.9s infinite reverse;
+}
+
+@keyframes glitch-shift {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-3px, 2px);
+  }
+  40% {
+    transform: translate(3px, -2px);
+  }
+  60% {
+    transform: translate(-3px, -1px);
+  }
+  80% {
+    transform: translate(1px, 3px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.section-wrapper {
+  @apply relative bg-void/70 backdrop-blur rounded-3xl shadow-panel p-8 lg:p-12 border border-neon-500/40;
+}
+
+.section-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--color-neon-400) 45%, transparent),
+    color-mix(in srgb, var(--color-magenta-500) 45%, transparent)
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+a {
+  @apply transition duration-200 ease-out;
+}
+
+a:hover {
+  @apply text-neon-300;
+}
+
+.btn-neon {
+  @apply relative inline-flex items-center justify-center px-6 py-3 font-semibold tracking-wider uppercase rounded-full border border-neon-400/60 text-neon-100 bg-void/60 shadow-neon overflow-hidden;
+}
+
+.btn-neon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--color-neon-400) 45%, transparent),
+    color-mix(in srgb, var(--color-magenta-500) 40%, transparent)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-neon:hover::after {
+  opacity: 0.9;
+}
+
+.card-neon {
+  @apply relative overflow-hidden bg-void/80 border border-neon-500/30 rounded-2xl shadow-panel transition transform hover:-translate-y-2 hover:shadow-neon;
+}
+
+.card-neon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-neon-400) 25%, transparent),
+    color-mix(in srgb, var(--color-magenta-500) 25%, transparent)
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.card-neon:hover::before {
+  opacity: 0.5;
+}
+
+.hero-gradient {
+  background: radial-gradient(
+      circle at top,
+      color-mix(in srgb, var(--color-neon-400) 30%, transparent),
+      color-mix(in srgb, var(--color-void) 90%, transparent)
+    ),
+    radial-gradient(
+      circle at bottom,
+      color-mix(in srgb, var(--color-magenta-600) 18%, transparent),
+      transparent 70%
+    ),
+    color-mix(in srgb, var(--color-void) 85%, transparent);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+input,
+textarea {
+  @apply bg-void/80 border-neon-500/30 text-neon-100 placeholder:text-neon-300/50 focus:border-neon-300 focus:ring-neon-300/40;
+}
+
+.logo-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  border: 2px dashed color-mix(in srgb, var(--color-neon-400) 40%, transparent);
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  color: color-mix(in srgb, var(--color-neon-300) 70%, transparent);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
