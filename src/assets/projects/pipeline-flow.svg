@@ -1,0 +1,15 @@
+<svg width="600" height="360" viewBox="0 0 600 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="360" rx="32" fill="#0f0a1a" />
+  <g opacity="0.8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 180h360" stroke="#0fd2ff" />
+    <path d="M180 120l60 60-60 60" stroke="#ff3fd7" />
+    <path d="M360 120l60 60-60 60" stroke="#ff3fd7" />
+    <circle cx="300" cy="180" r="54" fill="#0fd2ff22" stroke="#15f1ff" />
+    <circle cx="300" cy="180" r="28" stroke="#ffe066" stroke-dasharray="6 12" />
+    <path d="M300 140v80" stroke="#ffe066" />
+  </g>
+  <g opacity="0.4" stroke="#0fd2ff" stroke-width="1" stroke-dasharray="4 10">
+    <path d="M120 120h360" />
+    <path d="M120 240h360" />
+  </g>
+</svg>
