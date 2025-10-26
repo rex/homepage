@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Neon Cartographer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1B4hcj5iqvET/3C1h3P2N5UibX39j7fakFPskvXusvfa0b4v6YhJdJQh1z3d3r0eQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    :root {
+      --bg: #050507;
+      --neon-cyan: #00FFF7;
+      --neon-magenta: #FF2EFF;
+      --teal: #0FF1CE;
+      --graphite: #151515;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'IBM Plex Mono', monospace;
+      background: var(--bg);
+      color: #f1f5f9;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .layout {
+      display: flex;
+      width: 100%;
+    }
+
+    nav {
+      width: clamp(90px, 12vw, 140px);
+      background: linear-gradient(180deg, rgba(0, 255, 247, 0.1) 0%, rgba(255, 46, 255, 0.05) 100%);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 2.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      gap: 2rem;
+    }
+
+    .neon-strip {
+      width: 4px;
+      height: 160px;
+      background: linear-gradient(180deg, var(--neon-magenta), var(--neon-cyan));
+      border-radius: 4px;
+      box-shadow: 0 0 20px rgba(0, 255, 247, 0.75);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .logo {
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 0.75rem;
+      text-align: center;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0, 255, 247, 0.65);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+      width: 100%;
+    }
+
+    .nav-links a {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      border: 1px solid rgba(0, 255, 247, 0.35);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus {
+      color: var(--neon-cyan);
+      transform: translateZ(0) scale(1.05);
+      box-shadow: 0 0 12px rgba(0, 255, 247, 0.45);
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a:focus::after {
+      opacity: 1;
+      box-shadow: 0 0 20px rgba(0, 255, 247, 0.65);
+    }
+
+    .nav-links a:focus {
+      outline: none;
+    }
+
+    .socials {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-top: auto;
+      font-size: 1.1rem;
+    }
+
+    .socials a {
+      color: rgba(255, 255, 255, 0.75);
+      transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .socials a:hover,
+    .socials a:focus {
+      color: var(--neon-magenta);
+      text-shadow: 0 0 12px rgba(255, 46, 255, 0.75);
+      transform: translateY(-2px) scale(1.15);
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: radial-gradient(circle at 20% 20%, rgba(0, 255, 247, 0.1), transparent 40%),
+        radial-gradient(circle at 80% 30%, rgba(255, 46, 255, 0.08), transparent 45%),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 40px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0px, rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 40px),
+        var(--bg);
+    }
+
+    section {
+      padding: clamp(3rem, 5vw, 5rem) clamp(2rem, 5vw, 5rem);
+      position: relative;
+    }
+
+    .hero {
+      min-height: 70vh;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: center;
+    }
+
+    .hero-text {
+      z-index: 2;
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      line-height: 1.1;
+      margin: 0;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 20px rgba(0, 255, 247, 0.8);
+    }
+
+    .hero p {
+      color: rgba(241, 245, 249, 0.8);
+      margin: 1.5rem 0;
+      max-width: 32ch;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 247, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 0.75rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(0, 255, 247, 0.2), rgba(255, 46, 255, 0.2));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .cta:hover,
+    .cta:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(0, 255, 247, 0.35);
+    }
+
+    .cta:hover::before,
+    .cta:focus::before {
+      opacity: 1;
+    }
+
+    .node-field {
+      position: relative;
+      width: 100%;
+      min-height: 340px;
+    }
+
+    .node-field svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 15px rgba(0, 255, 247, 0.35));
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: clamp(1.5rem, 3vw, 2.5rem);
+      position: relative;
+    }
+
+    .projects::before {
+      content: '';
+      position: absolute;
+      top: -10%;
+      left: 5%;
+      width: 50%;
+      height: 50%;
+      background: radial-gradient(circle, rgba(255, 46, 255, 0.2), transparent 70%);
+      filter: blur(40px);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .project-card {
+      position: relative;
+      padding: 2.5rem 2rem;
+      background: rgba(21, 21, 21, 0.65);
+      border: 1px solid rgba(0, 255, 247, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      transition: transform 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 255, 247, 0.1), rgba(255, 46, 255, 0.15));
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .project-card:hover,
+    .project-card:focus-within {
+      transform: translateY(-6px) rotate3d(1, 1, 0, 4deg);
+      box-shadow: 0 0 35px rgba(0, 255, 247, 0.35);
+    }
+
+    .project-card:hover::before,
+    .project-card:focus-within::before {
+      opacity: 1;
+    }
+
+    .project-title {
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 0.12em;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+      margin-bottom: 1rem;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      color: rgba(241, 245, 249, 0.75);
+      line-height: 1.6;
+    }
+
+    .project-meta {
+      margin-top: 1.75rem;
+      display: flex;
+      gap: 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: clamp(2rem, 4vw, 3rem);
+      align-items: start;
+      position: relative;
+    }
+
+    .about-info {
+      padding: 2.5rem;
+      border-radius: 24px;
+      background: rgba(0, 255, 247, 0.06);
+      border: 1px solid rgba(0, 255, 247, 0.15);
+      box-shadow: 0 0 24px rgba(0, 255, 247, 0.2);
+      backdrop-filter: blur(6px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-info::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(135deg, rgba(0, 255, 247, 0.08) 0px, rgba(0, 255, 247, 0.08) 1px, transparent 1px, transparent 18px);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .about-info h2 {
+      margin-top: 0;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 0.2em;
+      color: var(--teal);
+      text-transform: uppercase;
+    }
+
+    .about-info p {
+      color: rgba(241, 245, 249, 0.8);
+      line-height: 1.7;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 1rem;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(0, 255, 247, 0.7), rgba(255, 46, 255, 0.7));
+      box-shadow: 0 0 20px rgba(0, 255, 247, 0.4);
+    }
+
+    .timeline-item {
+      padding-left: 3rem;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0.75rem;
+      top: 0.4rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 15px rgba(0, 255, 247, 0.8);
+    }
+
+    .timeline-item h3 {
+      margin: 0 0 0.5rem;
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--neon-cyan);
+    }
+
+    .timeline-item p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: rgba(241, 245, 249, 0.75);
+    }
+
+    footer {
+      padding: 2rem clamp(2rem, 5vw, 5rem);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, rgba(0, 255, 247, 0.9), rgba(255, 46, 255, 0.9));
+      box-shadow: 0 0 18px rgba(0, 255, 247, 0.5);
+    }
+
+    footer p {
+      margin: 1.5rem 0 0;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(241, 245, 249, 0.6);
+      text-align: center;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 247, 0.4); }
+      50% { box-shadow: 0 0 28px rgba(255, 46, 255, 0.7); }
+    }
+
+    @keyframes nodeGlow {
+      0%, 100% { opacity: 0.7; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-6px); }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      nav {
+        position: static;
+        flex-direction: row;
+        align-items: center;
+        height: auto;
+        width: 100%;
+        padding: 1.5rem;
+        gap: 1.5rem;
+        justify-content: space-between;
+      }
+
+      .neon-strip {
+        height: 60px;
+      }
+
+      .nav-links {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 0;
+      }
+
+      .nav-links a {
+        font-size: 0.65rem;
+      }
+
+      .socials {
+        flex-direction: row;
+        margin-top: 0;
+      }
+
+      main {
+        background-position: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      section {
+        padding: 2.5rem 1.5rem;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .project-card {
+        padding: 2rem 1.5rem;
+      }
+
+      .about-info {
+        padding: 2rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav>
+      <div class="logo" aria-label="The Neon Cartographer">Neon<br>Cartographer</div>
+      <div class="neon-strip" aria-hidden="true"></div>
+      <div class="nav-links">
+        <a href="#hero">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="socials" aria-label="Social links">
+        <a href="https://twitter.com" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+        <a href="https://github.com" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://dribbble.com" aria-label="Dribbble"><i class="fab fa-dribbble"></i></a>
+      </div>
+    </nav>
+    <main>
+      <section id="hero" class="hero" aria-labelledby="hero-title">
+        <div class="hero-text">
+          <h1 id="hero-title">Mapping the neon frontier</h1>
+          <p>Designing interfaces that chart new realities. The Neon Cartographer blends spatial intelligence with luminous storytelling to navigate future cities, networks, and human experiences.</p>
+          <a class="cta" href="#projects"><span>Explore the Atlas</span><i class="fas fa-arrow-right"></i></a>
+        </div>
+        <div class="node-field" aria-hidden="true">
+          <svg viewBox="0 0 500 400" role="presentation">
+            <defs>
+              <linearGradient id="linkGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--neon-cyan)" stop-opacity="0.6" />
+                <stop offset="100%" stop-color="var(--neon-magenta)" stop-opacity="0.6" />
+              </linearGradient>
+            </defs>
+            <g stroke="url(#linkGlow)" stroke-width="1.6" stroke-linecap="round" opacity="0.8">
+              <path d="M60 120 L180 60 L300 110 L420 70" />
+              <path d="M80 250 L200 200 L320 260 L450 210" />
+              <path d="M120 340 L260 310 L380 360" />
+              <path d="M160 160 L220 260 L320 150 L400 250" />
+              <path d="M90 190 L160 260 L230 130 L340 200" />
+            </g>
+            <g fill="var(--neon-cyan)" class="nodes">
+              <circle cx="60" cy="120" r="7" style="animation-delay: 0s;"></circle>
+              <circle cx="180" cy="60" r="6" style="animation-delay: 0.4s;"></circle>
+              <circle cx="300" cy="110" r="8" style="animation-delay: 0.8s;"></circle>
+              <circle cx="420" cy="70" r="5" style="animation-delay: 1.2s;"></circle>
+              <circle cx="80" cy="250" r="5" style="animation-delay: 0.6s;"></circle>
+              <circle cx="200" cy="200" r="7" style="animation-delay: 1s;"></circle>
+              <circle cx="320" cy="260" r="6" style="animation-delay: 1.4s;"></circle>
+              <circle cx="450" cy="210" r="5" style="animation-delay: 1.8s;"></circle>
+              <circle cx="120" cy="340" r="6" style="animation-delay: 1.1s;"></circle>
+              <circle cx="260" cy="310" r="8" style="animation-delay: 1.5s;"></circle>
+              <circle cx="380" cy="360" r="5" style="animation-delay: 1.9s;"></circle>
+              <circle cx="160" cy="160" r="5" style="animation-delay: 0.7s;"></circle>
+              <circle cx="220" cy="260" r="7" style="animation-delay: 1.3s;"></circle>
+              <circle cx="320" cy="150" r="6" style="animation-delay: 0.9s;"></circle>
+              <circle cx="400" cy="250" r="6" style="animation-delay: 1.6s;"></circle>
+              <circle cx="90" cy="190" r="6" style="animation-delay: 0.3s;"></circle>
+              <circle cx="160" cy="260" r="6" style="animation-delay: 0.5s;"></circle>
+              <circle cx="230" cy="130" r="7" style="animation-delay: 0.2s;"></circle>
+              <circle cx="340" cy="200" r="6" style="animation-delay: 1.7s;"></circle>
+            </g>
+          </svg>
+        </div>
+      </section>
+
+      <section id="projects" aria-labelledby="projects-title">
+        <h2 id="projects-title" class="section-heading" style="font-family: 'Orbitron', sans-serif; letter-spacing: 0.25em; text-transform: uppercase; color: var(--neon-magenta); margin-bottom: 2rem;">Cartographic Experiments</h2>
+        <div class="projects">
+          <article class="project-card" tabindex="0">
+            <h3 class="project-title">Luminous Transit Mesh</h3>
+            <p class="project-desc">Interactive metro visualization that maps nocturnal pulse flows. Dynamic rerouting illustrates how citizens migrate across glowing corridors.</p>
+            <div class="project-meta">
+              <span>UI Systems</span>
+              <span>Data Viz</span>
+            </div>
+          </article>
+          <article class="project-card" tabindex="0">
+            <h3 class="project-title">Aurora Geo Synth</h3>
+            <p class="project-desc">Immersive atlas exploring biosphere health metrics. Users explore layered terrain overlays with synesthetic audio cues for each biome.</p>
+            <div class="project-meta">
+              <span>XR Labs</span>
+              <span>Spatial Web</span>
+            </div>
+          </article>
+          <article class="project-card" tabindex="0">
+            <h3 class="project-title">Signal Drift Observatory</h3>
+            <p class="project-desc">Real-time monitoring surface for orbital satellites. Neon orbits trace telemetry vectors with predictive drift forecasting.</p>
+            <div class="project-meta">
+              <span>Ops</span>
+              <span>Telemetry</span>
+            </div>
+          </article>
+          <article class="project-card" tabindex="0">
+            <h3 class="project-title">Tidal Memory Lattice</h3>
+            <p class="project-desc">Generative storytelling map capturing coastal communities. Rippled cyan gradients reveal oral histories anchored to precise coordinates.</p>
+            <div class="project-meta">
+              <span>Story Lab</span>
+              <span>Generative</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="about" class="about" aria-labelledby="about-title">
+        <div class="about-info">
+          <h2 id="about-title">About</h2>
+          <p>Cartography has always been a dialogue between the known and the imagined. As the Neon Cartographer, I choreograph immersive data terrains for curious navigators. From planetary dashboards to speculative urban overlays, every interface is an invitation to orient, explore, and feel.</p>
+          <p>Working with research labs, civic futurists, and artists, I transform complexity into luminous clarity. Let's trace new coordinates together.</p>
+        </div>
+        <div class="timeline" aria-label="Experience timeline">
+          <div class="timeline-item">
+            <h3>2084 — Orbital City Mapping Guild</h3>
+            <p>Lead spatial composer designing adaptive guidance grids for floating boroughs.</p>
+          </div>
+          <div class="timeline-item">
+            <h3>2081 — Lumina Transit Authority</h3>
+            <p>Architected night-route command centers with responsive neon telemetry.</p>
+          </div>
+          <div class="timeline-item">
+            <h3>2077 — Synaptic Atlas Initiative</h3>
+            <p>Developed neural cartography toolkits for collaborative memory landscapes.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" aria-labelledby="contact-title">
+        <h2 id="contact-title" style="font-family: 'Orbitron', sans-serif; letter-spacing: 0.25em; text-transform: uppercase; color: var(--teal); margin-bottom: 1.5rem;">Signal Inbound</h2>
+        <p style="max-width: 36ch; color: rgba(241, 245, 249, 0.75);">Send encrypted coordinates, commission inquiries, or radiant ideas. I respond on the next lunar cycle.</p>
+        <a class="cta" href="mailto:signal@neoncartographer.io" style="margin-top: 2rem;"><span>Open channel</span><i class="fas fa-satellite"></i></a>
+      </section>
+
+      <footer>
+        <p>©2084 The Neon Cartographer — Crafted in vapor current</p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const nodeGroup = document.querySelectorAll('.nodes circle');
+
+    if (!prefersReducedMotion) {
+      nodeGroup.forEach(node => {
+        node.style.animation = 'nodeGlow 6s ease-in-out infinite';
+        node.style.animationDelay = node.style.animationDelay || '0s';
+      });
+    }
+
+    const main = document.querySelector('main');
+
+    function parallaxShift() {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      main.style.backgroundPosition = `center ${scrollY * -0.08}px, center ${scrollY * -0.04}px, 0 0, 0 0, 0 0`;
+    }
+
+    if (!prefersReducedMotion) {
+      document.addEventListener('scroll', parallaxShift, { passive: true });
+    }
+  </script>
+</body>
+</html>
