@@ -1,0 +1,85 @@
+/*
+ * Boot sequence — opacity-only animations, run on first page load per session.
+ * Inline script in <head> sets html.skip-boot when sessionStorage flag is present.
+ * The .boot animations only apply when html does NOT have .skip-boot.
+ *
+ * Boot owns OPACITY only. The hero cursor nudge owns transform.
+ * Sparkline draw uses stroke-dashoffset (SVG, not CSS transform).
+ */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes dotGlow {
+  0%   { opacity: 0; }
+  60%  { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes sparklineDraw {
+  from { stroke-dashoffset: var(--sparkline-len, 250); }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes endpointFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Default: animations only run when boot is active.
+   When skip-boot is set, jump to final state instantly. */
+html:not(.skip-boot) [data-boot] {
+  opacity: 0;
+  animation: fadeIn 280ms ease-out forwards;
+  animation-delay: var(--boot-delay, 0ms);
+}
+
+html:not(.skip-boot) .hero-letter {
+  opacity: 0;
+  animation: fadeIn 280ms ease-out forwards;
+  animation-delay: calc(180ms + var(--letter-i, 0) * 38ms);
+}
+
+html:not(.skip-boot) .status-dot[data-boot] {
+  animation: dotGlow 600ms ease-out forwards;
+}
+
+html:not(.skip-boot) .sparkline-path[data-boot] {
+  opacity: 1;
+  stroke-dasharray: var(--sparkline-len, 250);
+  stroke-dashoffset: var(--sparkline-len, 250);
+  animation: sparklineDraw 900ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+  animation-delay: var(--boot-delay, 0ms);
+}
+
+html:not(.skip-boot) .sparkline-end[data-boot] {
+  opacity: 0;
+  animation: endpointFade 200ms ease-out forwards;
+  animation-delay: calc(var(--boot-delay, 0ms) + 800ms);
+}
+
+/* When boot is skipped, all elements show instantly. */
+html.skip-boot [data-boot],
+html.skip-boot .hero-letter,
+html.skip-boot .sparkline-end[data-boot] {
+  opacity: 1;
+}
+
+html.skip-boot .sparkline-path[data-boot] {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html [data-boot],
+  html .hero-letter,
+  html .sparkline-end[data-boot] {
+    opacity: 1 !important;
+    animation: none !important;
+  }
+  html .sparkline-path[data-boot] {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+}
