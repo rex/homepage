@@ -1,0 +1,75 @@
+---
+import type { ContactContent } from '../lib/content';
+
+export interface Props {
+  contact: ContactContent;
+}
+
+const { contact } = Astro.props;
+---
+<section id="contact" class="page-gutter relative pt-24 pb-16 hairline-t" aria-labelledby="contact-heading">
+  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 96px; height: calc(100% - 192px);">
+    § 05 — contact
+  </div>
+
+  <header class="mb-10 max-w-prose">
+    <div class="label-mono mb-3">/ contact</div>
+    <h2 id="contact-heading" class="display-roman text-3xl text-ink leading-tight">
+      reach out — email is best.
+    </h2>
+    <p class="mt-4 text-base text-ink-muted leading-relaxed">
+      {contact.location} · {contact.availability}
+    </p>
+  </header>
+
+  <dl class="contact-list" data-boot style="--boot-delay: 1000ms;">
+    {contact.links.map((link) => (
+      <div class="contact-row">
+        <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">{link.label}</dt>
+        <dd>
+          <a
+            href={link.href}
+            class="contact-link text-ink"
+            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            target={link.href.startsWith('http') ? '_blank' : undefined}
+          >
+            {link.value}
+          </a>
+        </dd>
+      </div>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .contact-row {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .contact-row:last-child {
+    border-bottom: none;
+  }
+  .contact-link {
+    font-size: 1.125rem;
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 220ms ease-out;
+    padding-bottom: 2px;
+  }
+  .contact-link:hover,
+  .contact-link:focus-visible {
+    background-size: 100% 1px;
+  }
+</style>

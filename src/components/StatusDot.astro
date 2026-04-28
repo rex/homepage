@@ -1,0 +1,27 @@
+---
+export interface Props {
+  status: 'operational' | 'maintenance' | 'archived';
+  bootDelay?: number;
+}
+
+const { status, bootDelay = 0 } = Astro.props;
+
+const colorVar =
+  status === 'operational'
+    ? 'var(--status-op)'
+    : status === 'maintenance'
+      ? 'var(--status-maint)'
+      : 'var(--status-archived)';
+
+const glow =
+  status === 'archived'
+    ? 'none'
+    : `0 0 7px color-mix(in srgb, ${colorVar} 40%, transparent)`;
+---
+<span
+  class="status-dot inline-block align-middle"
+  data-boot
+  role="img"
+  aria-label={status}
+  style={`width: 6px; height: 6px; border-radius: 50%; background: ${colorVar}; box-shadow: ${glow}; --boot-delay: ${bootDelay}ms; color: ${colorVar};`}
+></span>

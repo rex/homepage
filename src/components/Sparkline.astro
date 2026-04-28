@@ -1,0 +1,41 @@
+---
+import { renderSparkline, trendLabel } from '../lib/sparkline';
+
+export interface Props {
+  values: number[];
+  bootDelay?: number;
+}
+
+const { values, bootDelay = 0 } = Astro.props;
+const sl = renderSparkline({ values });
+---
+<svg
+  class="sparkline w-full h-[30px] block"
+  viewBox={`0 0 ${sl.width} ${sl.height}`}
+  preserveAspectRatio="none"
+  role="img"
+  aria-label={trendLabel(sl.trend)}
+  width={sl.width}
+  height={sl.height}
+>
+  <path
+    class="sparkline-path"
+    d={sl.d}
+    fill="none"
+    stroke="var(--accent)"
+    stroke-width="1.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    data-boot
+    style={`--sparkline-len: ${sl.pathLength}; --boot-delay: ${bootDelay}ms;`}
+  />
+  <circle
+    class="sparkline-end"
+    cx={sl.end.x}
+    cy={sl.end.y}
+    r="2"
+    fill="var(--accent)"
+    data-boot
+    style={`--boot-delay: ${bootDelay}ms;`}
+  />
+</svg>

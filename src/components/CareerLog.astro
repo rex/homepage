@@ -1,0 +1,110 @@
+---
+import type { CareerEntry } from '../lib/content';
+
+export interface Props {
+  entries: CareerEntry[];
+}
+
+const { entries } = Astro.props;
+---
+<section id="career" class="page-gutter relative pt-24 pb-16 hairline-t" aria-labelledby="career-heading">
+  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 96px; height: calc(100% - 192px);">
+    § 03 — career log
+  </div>
+
+  <header class="mb-10 max-w-prose">
+    <div class="label-mono mb-3">/ career log</div>
+    <h2 id="career-heading" class="display-roman text-3xl text-ink leading-tight">
+      versions, in reverse chronological order.
+    </h2>
+    <p class="mt-4 text-base text-ink-muted leading-relaxed">
+      Twenty years across nine roles. The first three are expanded by default. The rest open on click.
+    </p>
+  </header>
+
+  <div class="career-log" data-boot style="--boot-delay: 900ms;">
+    {entries.map((e, i) => (
+      <details open={i < 3} class="career-row">
+        <summary>
+          <span class="col-version font-mono numeric-tabular text-accent">{e.version}</span>
+          <span class="col-period font-mono numeric-tabular text-ink-dim">{e.period}</span>
+          <span class="col-role font-mono text-ink">{e.role}</span>
+          <span class="col-employer font-mono text-ink-muted">
+            {e.employer}{e.location ? ` · ${e.location}` : ''}
+          </span>
+          <span class="col-toggle font-mono text-ink-faint" aria-hidden="true">+</span>
+        </summary>
+        <div class="career-summary display-italic text-ink-muted">
+          {e.summary}
+        </div>
+      </details>
+    ))}
+  </div>
+
+  <p class="mt-8 font-mono text-xs text-ink-dim italic">
+    <span class="text-accent">$ </span>git log --all --oneline --since=&quot;2007-01-01&quot;
+  </p>
+</section>
+
+<style>
+  .career-log {
+    border-top: 1px solid var(--hairline);
+  }
+  .career-row {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .career-row > summary {
+    display: grid;
+    grid-template-columns: 5ch 18ch 1fr;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 0.875rem 0;
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+  }
+  .career-row > summary::-webkit-details-marker { display: none; }
+  .career-row > summary::marker { display: none; }
+  .career-row > summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .col-employer { display: none; }
+  .col-toggle {
+    grid-column: 3;
+    justify-self: end;
+    transition: transform 200ms ease-out;
+  }
+  .career-row[open] .col-toggle { transform: rotate(45deg); }
+  @media (min-width: 1024px) {
+    .career-row > summary {
+      grid-template-columns: 5ch 18ch 1fr 1fr 2ch;
+      gap: 1.5rem;
+    }
+    .col-employer { display: block; }
+    .col-toggle { grid-column: 5; }
+  }
+  .career-summary {
+    padding: 0 0 1rem 0;
+    max-width: 70ch;
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+  @media (min-width: 1024px) {
+    .career-summary {
+      padding-left: calc(5ch + 18ch + 3rem);
+    }
+  }
+  details[open] > .career-summary {
+    animation: career-fade 200ms ease-out;
+  }
+  @keyframes career-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    details[open] > .career-summary { animation: none; }
+    .col-toggle { transition: none; }
+  }
+</style>

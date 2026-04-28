@@ -1,0 +1,33 @@
+---
+import type { PracticeArea } from '../lib/content';
+import PracticeTile from './PracticeTile.astro';
+
+export interface Props {
+  areas: PracticeArea[];
+}
+
+const { areas } = Astro.props;
+---
+<section id="practice-areas" class="page-gutter relative pt-24 pb-16" aria-labelledby="practice-areas-heading">
+  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 96px; height: calc(100% - 192px);">
+    § 02 — practice areas
+  </div>
+
+  <header class="mb-12 max-w-prose">
+    <div class="label-mono mb-3">/ practice areas</div>
+    <h2 id="practice-areas-heading" class="display-roman text-3xl text-ink leading-tight">
+      what i actually do, in nine pieces.
+    </h2>
+    <p class="mt-4 text-base text-ink-muted leading-relaxed">
+      Twenty years across infrastructure, platforms, and the interfaces on top of them. Some of these are still active; one is archived. All of them shape how I think about production.
+    </p>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[color:var(--hairline)]">
+    {areas.map((area, i) => (
+      <div class="bg-bg">
+        <PracticeTile area={area} index={i} />
+      </div>
+    ))}
+  </div>
+</section>

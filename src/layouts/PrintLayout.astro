@@ -1,0 +1,83 @@
+---
+import '../styles/fonts.css';
+import '../styles/globals.css';
+import { BUILD_COMMIT } from '../lib/build-info';
+
+export interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="build-commit" content={BUILD_COMMIT} />
+    <meta name="robots" content="index,follow" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var dark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+          document.documentElement.classList.add('skip-boot');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+          document.documentElement.classList.add('skip-boot');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">skip to content</a>
+    <main id="main">
+      <slot />
+    </main>
+    <style is:global>
+      @media print {
+        :root,
+        [data-theme='dark'] {
+          --bg: #ffffff !important;
+          --bg-elevated: #ffffff !important;
+          --ink: #0a0a0a !important;
+          --ink-muted: #2a2a2a !important;
+          --ink-dim: #4a4a4a !important;
+          --ink-faint: #6a6a6a !important;
+          --hairline: #cccccc !important;
+          --accent: #b07000 !important;
+          --accent-dim: #b0700033 !important;
+        }
+        @page {
+          margin: 0.5in 0.6in;
+        }
+        body {
+          background: #ffffff !important;
+          color: #0a0a0a !important;
+          font-size: 10pt !important;
+          line-height: 1.45 !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        a {
+          color: inherit !important;
+          text-decoration: none !important;
+        }
+        h1, h2, h3, h4 {
+          break-after: avoid;
+        }
+        section {
+          break-inside: avoid-page;
+        }
+      }
+    </style>
+  </body>
+</html>

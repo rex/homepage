@@ -1,0 +1,102 @@
+---
+import '../styles/fonts.css';
+import '../styles/globals.css';
+import '../styles/boot.css';
+import Footer from '../components/Footer.astro';
+import ThemeToggle from '../components/ThemeToggle.tsx';
+import SkipToContent from '../components/SkipToContent.astro';
+import { BUILD_COMMIT, BUILD_DATE } from '../lib/build-info';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  ogImage?: string;
+  jsonLd?: Record<string, unknown>;
+  bodyClass?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  ogImage = '/og-image.png',
+  jsonLd,
+  bodyClass = '',
+} = Astro.props;
+
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site ?? 'https://piercemoore.com').toString();
+const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toString();
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <meta name="build-commit" content={BUILD_COMMIT} />
+    <meta name="build-date" content={BUILD_DATE} />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0d0d10" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4f1ea" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="piercemoore.com" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Fraunces.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Supreme-Regular.woff2" crossorigin />
+
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var dark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+        try {
+          if (sessionStorage.getItem('boot-played') === 'true') {
+            document.documentElement.classList.add('skip-boot');
+          } else {
+            setTimeout(function () {
+              try {
+                sessionStorage.setItem('boot-played', 'true');
+              } catch (e) {}
+            }, 1500);
+          }
+        } catch (e) {
+          document.documentElement.classList.add('skip-boot');
+        }
+      })();
+    </script>
+
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body class={bodyClass}>
+    <SkipToContent />
+    <ThemeToggle client:load />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

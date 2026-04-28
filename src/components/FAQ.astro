@@ -1,0 +1,68 @@
+---
+import type { FaqContent } from '../lib/content';
+
+export interface Props {
+  faq: FaqContent;
+}
+
+const { faq } = Astro.props;
+---
+<section id="faq" class="page-gutter relative pt-24 pb-16 hairline-t" aria-labelledby="faq-heading">
+  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 96px; height: calc(100% - 192px);">
+    § 04 — questions
+  </div>
+
+  <header class="mb-12 max-w-prose">
+    <div class="label-mono mb-3">/ faq</div>
+    <h2 id="faq-heading" class="display-roman text-3xl text-ink leading-tight">
+      questions recruiters actually ask.
+    </h2>
+    <p class="mt-4 text-base text-ink-muted leading-relaxed">{faq.intro}</p>
+  </header>
+
+  <dl class="faq-grid" data-boot style="--boot-delay: 900ms;">
+    {faq.faqs.map((qa) => (
+      <>
+        <dt class="faq-q display-italic text-ink-muted">{qa.q}</dt>
+        <dd class="faq-a text-ink">{qa.a}</dd>
+      </>
+    ))}
+  </dl>
+</section>
+
+<style>
+  .faq-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem 2rem;
+  }
+  .faq-q {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    margin-top: 1.5rem;
+  }
+  .faq-q:first-of-type {
+    margin-top: 0;
+  }
+  .faq-a {
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 65ch;
+    margin-bottom: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    .faq-grid {
+      grid-template-columns: minmax(20ch, 28ch) 1fr;
+      column-gap: 4rem;
+      row-gap: 2.5rem;
+    }
+    .faq-q {
+      text-align: right;
+      margin-top: 0;
+      padding-top: 0.125rem;
+    }
+    .faq-a {
+      margin-bottom: 0;
+    }
+  }
+</style>
