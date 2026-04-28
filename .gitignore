@@ -1,0 +1,15 @@
+.DS_Store
+node_modules/
+dist/
+.astro/
+.cache/
+.env
+.env.local
+.env.*.local
+.vercel/
+.cloudflare/
+*.log
+npm-debug.log*
+.vscode/
+.idea/
+.claude/
