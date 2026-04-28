@@ -1,0 +1,25 @@
+name: pierce moore
+title: SENIOR DEVOPS ENGINEER
+tagline: human-centric infrastructure & automation
+status: SEEKING SENIOR PLATFORM ROLE · REMOTE OR DALLAS
+
+bio: >
+  Twenty years in and out of infrastructure. Currently running ten-plus
+  RKE2 clusters across physical venues for Drive Shack / Puttery, and
+  cleaning up etcd fires for fun. Spent the decade before this building
+  real-time gameplay systems at Topgolf — which is why my mental model
+  of "production" includes the guests, not just the pods.
+
+short_tagline: >
+  20 years across infrastructure, platforms, and the interfaces on top
+  of them. Currently: senior DevOps at Drive Shack / Puttery.
+
+meta_description: >-
+  Pierce Moore — Senior DevOps Engineer. Multi-venue Kubernetes,
+  Terraform, AWS, observability. Based in Dallas. Open to senior
+  platform roles.
+
+signal_sentence: >
+  Before DevOps: five years on real-time gameplay systems at Topgolf,
+  and a decade in front-end and interactive dev before that. I think
+  in both directions — up the stack and down it.

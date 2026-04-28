@@ -1,0 +1,62 @@
+primary_email: pierce@piercemoore.com
+
+links:
+  - label: email
+    href: "mailto:pierce@piercemoore.com"
+    value: pierce@piercemoore.com
+
+  - label: github
+    href: "https://github.com/rex"
+    value: /rex
+
+  - label: linkedin
+    href: "https://linkedin.com/in/piercemoore"
+    value: /in/piercemoore
+
+  - label: resume
+    href: "/resume.pdf"
+    value: resume.pdf
+
+location: Dallas / Fort Worth, TX
+availability: "seeking senior platform role · remote or dallas"
+
+humans_txt: |
+  /* TEAM */
+
+  Engineer: Pierce Moore
+  Contact: pierce [at] piercemoore.com
+  GitHub: /rex
+  From: Dallas / Fort Worth, TX
+
+  /* CTO */
+
+  Linus — Orange American Shorthair, b. 2014
+  Responsibilities: Emotional support, rodent security,
+  keyboard warmth, unscheduled code review via paw intervention.
+
+  /* THANKS */
+
+  Tiffany Sharp — partner, sounding board, patience.
+  The late-night crew at Drive Shack / Puttery.
+  Every engineer whose postmortem I've learned from.
+
+  /* SITE */
+
+  Last-updated: __BUILD_DATE__
+  Standards: HTML5, CSS3, ES2022
+  Components: Astro · MDX · Tailwind
+  Typography: Fraunces / Supreme / Cascadia Code
+  Hosting: Cloudflare Pages · Route 53 DNS
+  Source: https://github.com/rex/homepage
+
+  /* NOTES */
+
+  This site is hand-built, not templated. If you noticed the
+  typography, the margin-set metadata, or the boot sequence —
+  thank you. That's on purpose.
+
+security_txt: |
+  Contact: mailto:pierce@piercemoore.com
+  Preferred-Languages: en
+  Canonical: https://piercemoore.com/.well-known/security.txt
+  Expires: __SECURITY_EXPIRES__

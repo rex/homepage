@@ -1,0 +1,21 @@
+"404":
+  headline: "404 — route not found in this cluster"
+  body: >
+    The page you requested didn't resolve. Either the URL is wrong,
+    the page got moved during a refactor, or I haven't shipped it yet.
+  actions:
+    - label: return home
+      href: "/"
+    - label: view resume
+      href: "/cv"
+
+"500":
+  headline: "500 — internal server error"
+  body: >
+    Something broke on my end. This would be where I'd show you the
+    status page, but the status page is also my website.
+  actions:
+    - label: return home
+      href: "/"
+    - label: report this
+      href: "mailto:pierce@piercemoore.com?subject=site%20500"

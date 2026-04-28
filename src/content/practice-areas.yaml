@@ -1,0 +1,161 @@
+# Practice Areas — tile data
+# Status values: operational | maintenance | archived
+# Years: rough estimate, honest
+# Sparkline: 10 values between 0.0 and 1.0, representing activity over ~24 months
+# Last incident/artifact: most recent meaningful work in this domain
+# Placeholder postmortem links stub to /postmortems/[slug] — routes will 404 until v2
+
+areas:
+  - slug: kubernetes-orchestration
+    name: kubernetes & orchestration
+    status: operational
+    years: 7y
+    sparkline: [0.30, 0.42, 0.55, 0.60, 0.72, 0.78, 0.88, 0.94, 0.98, 1.00]
+    tools:
+      - rke1 / rke2
+      - rancher
+      - helm
+      - argocd
+    recent: "2026-03 — nyc etcd self-removal recovery"
+    recent_link: /postmortems/2026-03-nyc-etcd-self-removal
+    expanded: >
+      Multi-venue production Kubernetes across ten-plus Puttery
+      locations, with a central Rancher management plane in AWS.
+      RKE1 → RKE2 migration in flight. Day-2 ops, cert rotation,
+      etcd rescue, Longhorn rollout in progress.
+
+  - slug: iac-config
+    name: infrastructure as code
+    status: operational
+    years: 8y
+    sparkline: [0.48, 0.56, 0.62, 0.68, 0.78, 0.85, 0.92, 0.96, 0.88, 0.82]
+    tools:
+      - terraform
+      - ansible
+      - packer
+      - vagrant
+    recent: "2026-02 — venue provisioning pattern (infra → config → services)"
+    expanded: >
+      Full venue provisioning automated end to end: Terraform for
+      infrastructure, Ansible for configuration, Jenkins for
+      orchestration. Company-wide Ansible platform covering Windows
+      and Linux estates. Feature-flag patterns for controlled rollouts.
+
+  - slug: observability
+    name: observability
+    status: operational
+    years: 6y
+    sparkline: [0.22, 0.30, 0.42, 0.52, 0.60, 0.72, 0.82, 0.90, 0.98, 1.00]
+    tools:
+      - prometheus
+      - grafana
+      - victoriametrics
+      - icinga
+      - pushover
+    recent: "2026-01 — full observability stack on helm's deep"
+    expanded: >
+      End-to-end monitoring eliminating blind spots across venues:
+      Icinga for synthetic checks, Prometheus+VictoriaMetrics for
+      metrics, Grafana for dashboards, Pushover for paging. Designed
+      and runs the homelab observability stack as the testbed.
+
+  - slug: cloud-platforms
+    name: cloud & platforms
+    status: operational
+    years: 9y
+    sparkline: [0.60, 0.68, 0.75, 0.82, 0.88, 0.92, 0.85, 0.78, 0.72, 0.68]
+    tools:
+      - aws
+      - route53
+      - cloudflare
+      - vmware / proxmox
+    recent: "2024 — ~64% aws cost reduction (rightsizing + infra cleanup)"
+    expanded: >
+      AWS-primary with multi-cloud literacy (Azure, GCP, DigitalOcean).
+      Led a cost reduction taking monthly spend from ~$14k to ~$5k
+      through rightsizing, workload consolidation, and infra cleanup.
+      Certified Cloud Practitioner.
+
+  - slug: cicd-platform
+    name: ci/cd & delivery
+    status: operational
+    years: 8y
+    sparkline: [0.55, 0.62, 0.68, 0.75, 0.82, 0.88, 0.92, 0.95, 0.90, 0.85]
+    tools:
+      - jenkins
+      - github actions
+      - gitea actions
+      - helm repos
+    recent: "2025-12 — internal helm repo + enforced release path"
+    expanded: >
+      Built internal Helm repos and CI/CD pipelines with enforced
+      standards and controlled release paths. Standardized
+      containerization strategy across services — safe rollouts,
+      controlled change.
+
+  - slug: devsecops
+    name: devsecops & secrets
+    status: operational
+    years: 5y
+    sparkline: [0.30, 0.38, 0.48, 0.55, 0.62, 0.70, 0.75, 0.80, 0.85, 0.88]
+    tools:
+      - hashicorp vault
+      - ansible vault
+      - aws kms / secrets manager
+      - rbac
+    recent: "2025 — least-privilege rbac rollout across venue estate"
+    expanded: >
+      Secrets management, least-privilege access, DevSecOps practices
+      built into pipelines. RBAC enforcement across Kubernetes and AWS.
+
+  - slug: languages-backend
+    name: backend & languages
+    status: operational
+    years: 15y
+    sparkline: [0.92, 0.88, 0.82, 0.75, 0.68, 0.60, 0.55, 0.58, 0.62, 0.65]
+    tools:
+      - python
+      - node.js
+      - bash / zsh
+      - ruby / rails
+      - go (learning)
+    recent: "2026-03 — rancher mcp server (fastmcp, httpx, pydantic v2)"
+    expanded: >
+      Full-stack development background now focused on platform
+      tooling and automation. Python + Node primary. Recent work:
+      a Python-based Rancher MCP server covering 103 tools across
+      the Norman/Steve API split.
+
+  - slug: frontend-legacy
+    name: frontend & interfaces
+    status: archived
+    years: 10y
+    sparkline: [1.00, 0.95, 0.88, 0.75, 0.60, 0.45, 0.30, 0.25, 0.22, 0.20]
+    tools:
+      - vue / tailwind / vite
+      - typescript
+      - next.js
+      - react
+    recent: "2020 — topgolf gameplay ui (internationalized, multi-region)"
+    expanded: >
+      Decade of frontend work before the DevOps pivot. Still active
+      when building internal tools and the occasional side project.
+      Shipped the Virtual Courses game UI at Topgolf and
+      internationalized the gameplay platform across regions.
+
+  - slug: maker-hardware
+    name: maker & hardware
+    status: operational
+    years: 8y
+    sparkline: [0.40, 0.48, 0.55, 0.60, 0.65, 0.72, 0.75, 0.80, 0.85, 0.90]
+    tools:
+      - esp32 / arduino
+      - 3d printing
+      - home automation
+      - "pi cluster"
+    recent: "2026 — nfc fossil dig station (jurassic park party build)"
+    expanded: >
+      Hardware and home automation as the physical counterpart to the
+      DevOps work. ESP32, Arduino, 3D printing, home automation. The
+      maker work informs how I think about "hidden infrastructure" —
+      systems that work invisibly and well.

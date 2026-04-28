@@ -1,0 +1,100 @@
+# FAQ — v1 content
+# Replaces Claude chat interface in v1.
+# Rendered as a single section, questions in italic serif, answers in sans body.
+# 8-12 Q/A pairs. Written in Pierce's voice — peer-like, blunt, no fluff.
+
+intro: >
+  Questions recruiters and hiring managers actually ask. This is the
+  static version; a live query interface is planned for v2.
+
+faqs:
+  - q: What are you looking for?
+    a: >
+      A senior DevOps or Platform Engineering role. Remote or Dallas-based.
+      I'm most interested in teams running production infrastructure at
+      real scale — multi-region, multi-tenant, or multi-venue — where
+      reliability and developer experience both matter. I'm less
+      interested in pure cloud-native greenfield work and more interested
+      in the messy reality of production systems that have to serve
+      humans in physical spaces.
+
+  - q: Why are you leaving your current role?
+    a: >
+      I'm not in a rush. I've built something I'm proud of at Drive Shack /
+      Puttery — a multi-venue Kubernetes platform, company-wide Ansible,
+      major cost reductions, and a long list of incidents handled well.
+      I'm looking for the next tier of problem: more scale, more peers
+      who push me, and a team where platform engineering is funded as
+      a first-class function, not an afterthought.
+
+  - q: What's your strongest skill?
+    a: >
+      Diagnosing production problems under pressure and writing up what
+      happened afterwards. I'm good at the forensics — narrowing down
+      what actually went wrong vs. what looked wrong — and I'm a
+      stickler about postmortems that tell the truth, including the
+      uncomfortable parts.
+
+  - q: What about software development? You were a developer for a long time.
+    a: >
+      Fifteen years before the DevOps pivot. Full-stack, with real UI
+      and UX experience. I don't bill myself as a developer anymore —
+      DevOps is the title and the work — but that background is why
+      I care obsessively about developer experience in the platforms
+      I build. I can also write production Python, Node, or Bash
+      without needing to look it up.
+
+  - q: What's your stack, in one line?
+    a: >
+      Kubernetes (Rancher / RKE2) · Terraform · Ansible · AWS ·
+      Prometheus / Grafana · Python · Jenkins / GitHub Actions ·
+      Helm · VMware / Proxmox. Linux primary, Windows where needed.
+
+  - q: Are you open to relocating?
+    a: >
+      Remote-first is the strong preference. I'm open to hybrid if the
+      role is in the Dallas / Fort Worth metroplex. Not relocating.
+
+  - q: Contract vs. full-time?
+    a: >
+      Full-time primary. Open to senior contract work on the side where
+      it makes sense and doesn't conflict. Toptal-adjacent work
+      specifically is interesting.
+
+  - q: What does "human-centric infrastructure" mean?
+    a: >
+      Infrastructure decisions show up in developer velocity, on-call
+      burnout, and customer experience. "Human-centric" means I design
+      for the people on both ends of the pipe — engineers shipping code,
+      operators running it, and the guests using the thing we built.
+      It's a deliberate rejection of infrastructure as an abstract
+      exercise in elegance. Elegance is a means; the end is people.
+
+  - q: Biggest mistake you made in the last year?
+    a: >
+      Trusting that a cloud provider's default pod storage would be
+      fine for a low-traffic Postgres. It wasn't. We lost data on a
+      controller-manager failure and spent a long night rebuilding.
+      The postmortem is honest about that — emptyDir for stateful
+      workloads is indefensible and I should have caught it before
+      production.
+
+  - q: What do you not want to work on?
+    a: >
+      Adtech, gambling, crypto-as-the-product, surveillance, weapons.
+      I'm not especially moralistic but those are not how I want to
+      spend the next decade.
+
+  - q: Why the cat logo?
+    a: >
+      That's Linus — my cat. The lambda is for functional programming
+      and also because it fit inside him visually. He's been the
+      constant through twelve years of career changes, so he gets to
+      be on the logo.
+
+  - q: How should I reach out?
+    a: >
+      Email is best — pierce@piercemoore.com. GitHub is /rex. LinkedIn
+      is /in/piercemoore. I respond to all of them within a day or two.
+      No phone number on the website for now; happy to share it once
+      we're in a conversation.

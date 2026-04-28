@@ -1,0 +1,83 @@
+# Career Log
+# Format: reverse chronological, versioned, changelog-style
+# Each entry has version, date range, role, employer, 1-3 line summary
+# Render as monospace block, tabular-figures for versions, italic serif for descriptions
+
+entries:
+  - version: v8.x
+    period: 2020 — present
+    role: Senior DevOps Engineer
+    title_arc: Software Engineer → Senior DevOps Engineer
+    employer: Drive Shack / Puttery
+    location: Dallas, TX
+    summary: >
+      Lead DevOps owning automation, cloud, CI/CD, and reliable venue
+      platforms across the org. Built and scaled a multi-venue
+      Kubernetes/Rancher platform. Led ~64% AWS cost reduction.
+      Designed company-wide Ansible for Windows + Linux at scale.
+
+  - version: v7.x
+    period: 2015 — 2020
+    role: Software Engineer
+    employer: Topgolf
+    location: Dallas, TX
+    summary: >
+      Full-stack engineer on real-time gameplay, developer tooling,
+      and venue deployment workflows for 50+ locations. Shipped the
+      Virtual Courses game UI. Virtualized the venue software stack.
+      Internationalized the gameplay platform across regions.
+
+  - version: v6.x
+    period: 2014 — 2015
+    role: Platform Engineer
+    employer: Vinli
+    location: Dallas, TX
+    summary: >
+      Platform work on connected-vehicle infrastructure.
+
+  - version: v5.x
+    period: 2013 — 2014
+    role: Developer Operations
+    employer: YouToo
+    summary: >
+      DevOps-adjacent before "DevOps" was the word for it.
+
+  - version: v4.x
+    period: 2012 — 2013
+    role: Web Developer
+    employer: ZNGINE
+    summary: >
+      Web dev work. Era of Rails, jQuery, and learning the web stack end-to-end.
+
+  - version: v3.x
+    period: 2011 — 2012
+    role: Web Developer
+    employer: 70kft
+    summary: >
+      Agency front-end and back-end work.
+
+  - version: v2.x
+    period: 2010 — 2011
+    role: Interactive Developer → Web Developer → PHP Developer
+    employer: SQ1
+    summary: >
+      Three titles, one agency. Moved up the stack from Flash/interactive
+      into full-stack PHP as the web itself changed underneath.
+
+  - version: v1.x
+    period: 2008 — 2010
+    role: Angular.js Developer · Senior PHP Developer
+    employer: Ristken Software Services · Latimundo
+    summary: >
+      Early professional dev work. Learning on the job.
+
+  - version: v0.x
+    period: 2007 — 2008
+    role: Sales Specialist
+    employer: Limestone Networks
+    summary: >
+      Pre-career: hosting/datacenter sales. Where the infrastructure
+      curiosity started.
+
+# Tagline to display under the career log, small, italic, mono:
+# `git log --all --oneline --since="2007-01-01"`
