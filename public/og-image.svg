@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Background: deep espresso -->
+  <rect width="1200" height="630" fill="#1a0f08"/>
+
+  <!-- Subtle grid texture (1% opacity hairlines) -->
+  <g stroke="#f5efe1" stroke-width="0.5" opacity="0.04">
+    <line x1="0" y1="60" x2="1200" y2="60"/>
+    <line x1="0" y1="570" x2="1200" y2="570"/>
+    <line x1="60" y1="0" x2="60" y2="630"/>
+    <line x1="1140" y1="0" x2="1140" y2="630"/>
+  </g>
+
+  <!-- Top-left metadata, mono, letter-spaced -->
+  <text x="60" y="48" font-family="ui-monospace, 'SF Mono', 'Menlo', monospace"
+        font-size="11" fill="#8a7a68" letter-spacing="3" font-weight="500">
+    PIERCEMOORE.COM · V2.0.0
+  </text>
+
+  <!-- Top-right status pill -->
+  <g transform="translate(940, 32)">
+    <rect x="0" y="0" width="200" height="26" fill="none"
+          stroke="#c8952c" stroke-width="1" opacity="0.6"/>
+    <circle cx="14" cy="13" r="3.5" fill="#e8a838"/>
+    <text x="26" y="17" font-family="ui-monospace, 'SF Mono', 'Menlo', monospace"
+          font-size="10" fill="#e8a838" letter-spacing="2" font-weight="500">
+      SEEKING SENIOR ROLE
+    </text>
+  </g>
+
+  <!-- Main name — large italic serif -->
+  <text x="60" y="310" font-family="'Fraunces', 'GT Sectra', Georgia, serif"
+        font-size="172" fill="#f5efe1" font-style="italic" font-weight="400"
+        letter-spacing="-6">
+    pierce moore
+  </text>
+
+  <!-- Thin rule beneath name -->
+  <line x1="60" y1="350" x2="300" y2="350" stroke="#e8a838" stroke-width="1.5"/>
+
+  <!-- Subtitle — mono, letter-spaced -->
+  <text x="60" y="395" font-family="ui-monospace, 'SF Mono', 'Menlo', monospace"
+        font-size="18" fill="#f5efe1" letter-spacing="7" font-weight="500">
+    SENIOR DEVOPS ENGINEER
+  </text>
+
+  <!-- Tagline — italic serif, muted -->
+  <text x="60" y="440" font-family="'Fraunces', Georgia, serif"
+        font-size="26" fill="#c8b89f" font-style="italic" font-weight="350">
+    human-centric infrastructure &amp; automation
+  </text>
+
+  <!-- Bottom-left — signature footer, mono, dim -->
+  <text x="60" y="590" font-family="ui-monospace, 'SF Mono', 'Menlo', monospace"
+        font-size="10" fill="#8a7a68" letter-spacing="3" font-weight="500">
+    START WHERE YOU ARE.
+  </text>
+
+  <!-- Bottom-right — contact hint -->
+  <text x="1140" y="590" font-family="ui-monospace, 'SF Mono', 'Menlo', monospace"
+        font-size="10" fill="#8a7a68" letter-spacing="3" font-weight="500"
+        text-anchor="end">
+    PIERCE@PIERCEMOORE.COM
+  </text>
+</svg>
