@@ -1,0 +1,149 @@
+---
+import PrintLayout from '../layouts/PrintLayout.astro';
+import {
+  loadHero,
+  loadPracticeAreas,
+  loadCareer,
+  loadContact,
+} from '../lib/content';
+
+const [hero, areas, career, contact] = await Promise.all([
+  loadHero(),
+  loadPracticeAreas(),
+  loadCareer(),
+  loadContact(),
+]);
+
+const operationalAreas = areas.filter((a) => a.status === 'operational');
+const archivedAreas = areas.filter((a) => a.status === 'archived');
+---
+<PrintLayout
+  title="Pierce Moore — Résumé"
+  description="Pierce Moore — Senior DevOps Engineer. CV / résumé."
+>
+  <div class="cv-page">
+    <header class="cv-header">
+      <h1 class="display-italic text-3xl md:text-4xl text-ink">{hero.name}</h1>
+      <div class="mt-2 flex flex-wrap items-baseline gap-3">
+        <span class="font-mono text-xs uppercase tracking-[0.16em] text-ink">{hero.title}</span>
+        <span class="text-ink-faint">—</span>
+        <span class="display-italic text-ink-muted">{hero.tagline}</span>
+      </div>
+      <div class="mt-3 font-mono text-xs text-ink-dim">
+        {contact.location} · {contact.primary_email} · github /rex · /in/piercemoore
+      </div>
+      <a href="/resume.pdf" class="cv-download no-print" download>
+        download résumé as pdf →
+      </a>
+    </header>
+
+    <section class="cv-section">
+      <h2 class="cv-section-h">Summary</h2>
+      <p class="text-base text-ink leading-relaxed numeric-oldstyle">{hero.bio}</p>
+      <p class="mt-3 display-italic text-ink-muted text-base numeric-oldstyle">{hero.signal_sentence}</p>
+    </section>
+
+    <section class="cv-section">
+      <h2 class="cv-section-h">Experience</h2>
+      <ol class="cv-roles">
+        {career.map((e) => (
+          <li class="cv-role">
+            <div class="cv-role-row">
+              <div class="cv-role-meta">
+                <span class="font-mono numeric-tabular text-accent">{e.version}</span>
+                <span class="font-mono numeric-tabular text-ink-dim ml-3">{e.period}</span>
+              </div>
+              <div class="cv-role-detail">
+                <div class="cv-role-title">
+                  <span class="font-medium text-ink">{e.role}</span>
+                  <span class="text-ink-muted"> · </span>
+                  <span class="text-ink-muted">{e.employer}</span>
+                  {e.location ? <span class="text-ink-dim"> · {e.location}</span> : null}
+                </div>
+                <p class="mt-1 text-sm text-ink-muted leading-relaxed">{e.summary}</p>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <section class="cv-section">
+      <h2 class="cv-section-h">Practice Areas</h2>
+      <ul class="cv-areas">
+        {operationalAreas.map((a) => (
+          <li class="cv-area">
+            <span class="display-italic text-ink">{a.name}</span>
+            <span class="font-mono text-xs text-ink-dim ml-2 numeric-tabular">({a.years})</span>
+            <span class="font-mono text-xs text-ink-muted ml-2">— {a.tools.join(' · ')}</span>
+          </li>
+        ))}
+      </ul>
+      {archivedAreas.length > 0 && (
+        <p class="mt-3 font-mono text-xs text-ink-dim">
+          archived: {archivedAreas.map((a) => `${a.name} (${a.tools.join(', ')})`).join(' · ')}
+        </p>
+      )}
+    </section>
+
+    <section class="cv-section">
+      <h2 class="cv-section-h">Contact</h2>
+      <ul class="font-mono text-sm space-y-1">
+        {contact.links.map((l) => (
+          <li>
+            <span class="text-ink-dim">{l.label}: </span>
+            <a class="text-ink" href={l.href}>{l.value}</a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  </div>
+</PrintLayout>
+
+<style>
+  .cv-page {
+    max-width: 70ch;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+  @media (min-width: 768px) {
+    .cv-page { padding: 96px 48px; }
+  }
+  .cv-header { margin-bottom: 2.5rem; }
+  .cv-download {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    padding: 0.5rem 0.875rem;
+  }
+  .cv-download:hover { border-color: var(--accent); }
+  .cv-section {
+    border-top: 1px solid var(--hairline);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .cv-section-h {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--ink-dim);
+    margin-bottom: 1rem;
+  }
+  .cv-roles { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.25rem; }
+  .cv-role-row { display: grid; grid-template-columns: 1fr; gap: 0.25rem; }
+  @media (min-width: 768px) {
+    .cv-role-row { grid-template-columns: 16rem 1fr; gap: 1.25rem; align-items: baseline; }
+  }
+  .cv-role-meta { font-size: 0.8125rem; }
+  .cv-areas { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.375rem; }
+  @media print {
+    .cv-page { padding: 0 !important; max-width: none; }
+    .cv-section { break-inside: avoid; }
+  }
+</style>

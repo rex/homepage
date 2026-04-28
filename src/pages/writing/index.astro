@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Pierce Moore — Writing"
+  description="Postmortems and notes from a senior DevOps engineer. Currently archiving the inbox; new entries shipping soon."
+>
+  <section class="page-gutter pt-32 pb-24 max-w-prose">
+    <div class="label-mono mb-3">/ writing</div>
+    <h1 class="display-roman text-3xl text-ink leading-tight">postmortems and notes — coming soon.</h1>
+    <p class="mt-6 text-base text-ink-muted leading-relaxed">
+      I'm pulling postmortems forward from the last two years and rewriting the
+      ones worth sharing. They'll land here as I clear them. Pieces in flight:
+    </p>
+    <ul class="mt-6 space-y-3 font-mono text-sm text-ink-dim">
+      <li>· nyc etcd self-removal recovery (rke2, multi-node)</li>
+      <li>· emptyDir + postgres: how it actually fails</li>
+      <li>· venue provisioning pattern: terraform → ansible → jenkins</li>
+      <li>· ~64% aws cost reduction, in three passes</li>
+    </ul>
+    <p class="mt-8 display-italic text-ink-muted">
+      Until then, the FAQ on the home page is the static version of <q>what i think.</q>
+    </p>
+    <div class="mt-10">
+      <a href="/" class="font-mono text-xs uppercase tracking-[0.16em] text-accent border border-[color:var(--accent-dim)] px-4 py-2 hover:border-[color:var(--accent)]">← return home</a>
+    </div>
+  </section>
+</BaseLayout>

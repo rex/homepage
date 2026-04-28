@@ -1,0 +1,14 @@
+---
+// Postmortems route — v1 has no content.
+// At build time, no slugs resolve, so any /postmortems/anything 404s.
+
+export function getStaticPaths() {
+  return [];
+}
+
+const { slug } = Astro.params;
+---
+<html lang="en">
+  <head><title>{slug}</title></head>
+  <body>not built</body>
+</html>

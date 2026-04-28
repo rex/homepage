@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import PracticeAreas from '../components/PracticeAreas.astro';
+import CareerLog from '../components/CareerLog.astro';
+import FAQ from '../components/FAQ.astro';
+import Contact from '../components/Contact.astro';
+import {
+  loadHero,
+  loadPracticeAreas,
+  loadCareer,
+  loadFaq,
+  loadContact,
+} from '../lib/content';
+
+const [hero, areas, career, faq, contact] = await Promise.all([
+  loadHero(),
+  loadPracticeAreas(),
+  loadCareer(),
+  loadFaq(),
+  loadContact(),
+]);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Pierce Moore',
+  alternateName: 'Anthony Pierce Moore',
+  jobTitle: 'Senior DevOps Engineer',
+  url: 'https://piercemoore.com',
+  sameAs: ['https://github.com/rex', 'https://linkedin.com/in/piercemoore'],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Dallas',
+    addressRegion: 'TX',
+    addressCountry: 'US',
+  },
+  email: 'pierce@piercemoore.com',
+  knowsAbout: [
+    'Kubernetes',
+    'Rancher',
+    'Terraform',
+    'Ansible',
+    'AWS',
+    'Prometheus',
+    'Grafana',
+    'DevOps',
+    'Platform Engineering',
+    'Site Reliability Engineering',
+  ],
+};
+---
+<BaseLayout
+  title="Pierce Moore — Senior DevOps Engineer"
+  description={hero.meta_description.replace(/\s+/g, ' ').trim()}
+  jsonLd={jsonLd}
+>
+  <Hero hero={hero} />
+  <PracticeAreas areas={areas} />
+  <CareerLog entries={career} />
+  <FAQ faq={faq} />
+  <Contact contact={contact} />
+</BaseLayout>

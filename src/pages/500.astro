@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { loadErrorPages } from '../lib/content';
+
+const pages = await loadErrorPages();
+const page = pages['500'];
+---
+<BaseLayout
+  title="500 — Pierce Moore"
+  description="Internal server error. Even the status page is this site."
+>
+  <section class="page-gutter pt-32 pb-24 max-w-prose">
+    <div class="label-mono mb-3">/ 500</div>
+    <h1 class="display-roman text-3xl text-ink leading-tight">{page.headline}</h1>
+    <p class="mt-6 text-base text-ink-muted leading-relaxed">{page.body}</p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      {page.actions.map((a) => (
+        <a
+          href={a.href}
+          class="font-mono text-xs uppercase tracking-[0.16em] text-accent border border-[color:var(--accent-dim)] px-4 py-2 hover:border-[color:var(--accent)]"
+        >
+          {a.label} →
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
