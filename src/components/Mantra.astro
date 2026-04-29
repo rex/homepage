@@ -1,0 +1,24 @@
+---
+/*
+ * Option B comp: full-width "pull quote" treatment of the mantra,
+ * placed between the last content section and the footer. Removable —
+ * delete the import + tag from index.astro and this file together.
+ */
+---
+<section class="page-gutter pt-32 pb-24" aria-label="closing thought">
+  <p
+    class="display-italic text-ink leading-[1.05] mantra-text"
+    data-boot
+    style="--boot-delay: 1100ms;"
+  >
+    start where you are.
+  </p>
+</section>
+
+<style>
+  .mantra-text {
+    font-size: clamp(3rem, 9vw, 7rem);
+    letter-spacing: -0.02em;
+    max-width: 18ch;
+  }
+</style>
