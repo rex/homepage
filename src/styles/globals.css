@@ -178,8 +178,8 @@
 
   .margin-mark {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 24px;
+    top: 24px;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
     font-family: 'Cascadia Code', monospace;
@@ -189,6 +189,8 @@
     text-transform: uppercase;
     white-space: nowrap;
     pointer-events: none;
+    /* Anchor at the top of the section; the rotated text reads downward
+       from there so the section number sits visually at the top. */
   }
   .margin-mark .num {
     color: var(--accent);
@@ -198,11 +200,15 @@
     font-family: 'Fraunces', Georgia, serif;
     font-style: italic;
     font-weight: 400;
+    /* ss02 = swashy alternate ampersand (the curly one).
+       Explicit "1" so the feature can't be ambiguously parsed. */
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss02' 1;
   }
 
   .display-roman {
     font-family: 'Fraunces', Georgia, serif;
     font-weight: 400;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1, 'ss02' 1;
   }
 }
 
@@ -244,15 +250,17 @@
   }
 
   .opsz-display {
-    font-variation-settings: 'opsz' 144, 'SOFT' 0, 'wght' 900;
+    /* SOFT 50 picks up some of the rounder feel from the design probe
+       without losing the heavy display character. Adjust 0 (crisp) → 100 (round). */
+    font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 900;
     font-weight: 900;
   }
 
   .opsz-tile {
-    font-variation-settings: 'opsz' 72, 'SOFT' 0;
+    font-variation-settings: 'opsz' 72, 'SOFT' 30;
   }
 
   .opsz-body {
-    font-variation-settings: 'opsz' 36, 'SOFT' 30;
+    font-variation-settings: 'opsz' 36, 'SOFT' 50;
   }
 }

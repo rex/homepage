@@ -3,7 +3,8 @@ import '../styles/fonts.css';
 import '../styles/globals.css';
 import '../styles/boot.css';
 import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
+// Header is intentionally NOT imported — file retained per spec but the bar is disabled.
+// import Header from '../components/Header.astro';
 import SkipToContent from '../components/SkipToContent.astro';
 import { BUILD_COMMIT, BUILD_DATE } from '../lib/build-info';
 
@@ -93,7 +94,7 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toS
   </head>
   <body class={bodyClass}>
     <SkipToContent />
-    <Header />
+    {/* Header.astro retained but disabled — status indicator now lives in the hero content area, top-right. */}
     <main id="main">
       <slot />
     </main>

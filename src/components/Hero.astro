@@ -8,42 +8,57 @@ export interface Props {
 
 const { hero } = Astro.props;
 const letters = [...hero.name];
+
+// Take only the first phrase of status for the small top-right indicator.
+const statusShort = hero.status.split('·')[0].trim();
 ---
-<section class="hero relative overflow-x-clip pt-12 pb-20 hairline-b" aria-labelledby="hero-name">
-  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 48px; height: calc(100% - 96px);">
+<section class="hero relative overflow-x-clip pt-12 pb-20" aria-labelledby="hero-name">
+  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms;">
     § <span class="num">01</span> — identity
   </div>
 
-  <div class="page-gutter">
-    <div class="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted" data-boot style="--boot-delay: 700ms;">
-      {hero.title}
+  <div class="page-gutter relative">
+    <div
+      class="hero-status hidden md:flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-accent absolute right-[var(--gutter-r,0)] top-0"
+      data-boot
+      style="--boot-delay: 700ms;"
+    >
+      <span aria-hidden="true" class="status-dot-inline"></span>
+      <span>{statusShort}</span>
     </div>
   </div>
 
   <h1
     id="hero-name"
-    class="hero-name display-italic text-hero whitespace-nowrap leading-none opsz-display mt-4 page-gutter"
+    class="hero-name display-italic text-hero whitespace-nowrap leading-none opsz-display mt-12 page-gutter"
     aria-label="Pierce Moore"
     style="letter-spacing: -0.04em;"
   >
-    {letters.map((ch, i) => (
-      <span
-        class="hero-letter inline-block"
-        style={`--letter-i: ${i}; will-change: transform; transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);`}
-        aria-hidden="true"
-      >{ch === ' ' ? ' ' : ch}</span>
-    ))}
+    {letters.map((ch, i) => {
+      const isSpace = ch === ' ';
+      const baseStyle = `--letter-i: ${i}; will-change: transform; transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);`;
+      const spaceStyle = isSpace ? ' width: 0.45em;' : '';
+      return (
+        <span
+          class="hero-letter inline-block"
+          style={`${baseStyle}${spaceStyle}`}
+          aria-hidden="true"
+        >{isSpace ? ' ' : ch}</span>
+      );
+    })}
   </h1>
 
   <div class="page-gutter mt-10">
     <div class="hairline-rule" data-boot style="--boot-delay: 820ms;" aria-hidden="true"></div>
 
-    <p class="display-italic text-base md:text-lg text-ink-muted mt-6 leading-snug max-w-md" data-boot style="--boot-delay: 850ms;">
-      {hero.tagline}
-    </p>
-
-    <div class="mt-8" data-boot style="--boot-delay: 900ms;">
-      <span class="pill numeric-tabular">{hero.status}</span>
+    <div class="mt-6 flex flex-col md:flex-row md:items-baseline md:gap-5" data-boot style="--boot-delay: 850ms;">
+      <span class="font-mono text-sm md:text-base uppercase tracking-[0.18em] text-ink whitespace-nowrap">
+        {hero.title}
+      </span>
+      <span class="text-ink-faint hidden md:inline" aria-hidden="true">—</span>
+      <span class="display-italic text-lg md:text-xl text-ink-muted leading-snug">
+        {hero.tagline}
+      </span>
     </div>
 
     <p
@@ -72,5 +87,19 @@ const letters = [...hero.name];
     max-width: 100%;
     height: 1px;
     background: var(--ink-faint);
+  }
+  /* Match the page-gutter padding for the status indicator's right offset */
+  .hero-status { right: 24px; }
+  @media (min-width: 768px)  { .hero-status { right: 64px; } }
+  @media (min-width: 1024px) { .hero-status { right: 96px; } }
+  @media (min-width: 1536px) { .hero-status { right: 144px; } }
+
+  .status-dot-inline {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 7px color-mix(in srgb, var(--accent) 40%, transparent);
   }
 </style>
