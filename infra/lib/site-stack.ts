@@ -178,47 +178,45 @@ export class SiteStack extends Stack {
       new targets.CloudFrontTarget(this.distribution),
     );
 
-    // deleteExisting: take ownership of any pre-existing record at the
-    // same name+type. Safe here because we want CDK to be the single
-    // source of truth for these specific A/AAAA records — any record
-    // they collide with is from a previous site and is being replaced.
-    // Other record types in the same zones (MX, TXT, CNAME, etc.) are
-    // untouched.
-    const recordOpts = { target: cfTarget, deleteExisting: true };
+    // Plain ARecord/AaaaRecord. If a name+type collides with a
+    // pre-existing record, the deploy fails — the operator surgically
+    // deletes the colliding record out-of-band, then re-runs the deploy.
+    // We do NOT use deleteExisting (deprecated, dangerous on partial
+    // deploy failures).
 
     // Canonical zone: apex + www
     new route53.ARecord(this, 'CanonicalApexA', {
-      ...recordOpts,
       zone: canonicalZone,
       recordName: domainName,
+      target: cfTarget,
     });
     new route53.AaaaRecord(this, 'CanonicalApexAAAA', {
-      ...recordOpts,
       zone: canonicalZone,
       recordName: domainName,
+      target: cfTarget,
     });
     new route53.ARecord(this, 'CanonicalWwwA', {
-      ...recordOpts,
       zone: canonicalZone,
       recordName: wwwDomain,
+      target: cfTarget,
     });
     new route53.AaaaRecord(this, 'CanonicalWwwAAAA', {
-      ...recordOpts,
       zone: canonicalZone,
       recordName: wwwDomain,
+      target: cfTarget,
     });
 
     // Vanity zones: apex only.
     vanityDomains.forEach((d, i) => {
       new route53.ARecord(this, `VanityApexA${i}`, {
-        ...recordOpts,
         zone: vanityZones[i],
         recordName: d,
+        target: cfTarget,
       });
       new route53.AaaaRecord(this, `VanityApexAAAA${i}`, {
-        ...recordOpts,
         zone: vanityZones[i],
         recordName: d,
+        target: cfTarget,
       });
     });
 
