@@ -179,7 +179,7 @@
   .margin-mark {
     position: absolute;
     left: 24px;
-    top: 24px;
+    top: 120px;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
     font-family: 'Cascadia Code', monospace;
@@ -189,8 +189,8 @@
     text-transform: uppercase;
     white-space: nowrap;
     pointer-events: none;
-    /* Anchor at the top of the section; the rotated text reads downward
-       from there so the section number sits visually at the top. */
+    /* Section number visible toward the top of the rotated text;
+       full label aligns roughly with the body content of its section. */
   }
   .margin-mark .num {
     color: var(--accent);
