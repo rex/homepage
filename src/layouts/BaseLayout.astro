@@ -56,6 +56,7 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toS
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -125,5 +126,36 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toS
       <slot />
     </main>
     <Footer />
+
+    <script is:inline>
+      // Console easter egg — fires once per session for the curious.
+      (function () {
+        try {
+          if (sessionStorage.getItem('console-egg-played') === 'true') return;
+          sessionStorage.setItem('console-egg-played', 'true');
+        } catch (e) {}
+        var amber = 'color: #ffb000; font-family: Cascadia Code, monospace;';
+        var dim = 'color: #8d877f; font-family: Cascadia Code, monospace;';
+        var ink = 'color: #f2ede4; font-family: Cascadia Code, monospace; font-weight: 600;';
+        console.log(
+          '\n' +
+            '%c       /\\_/\\\n' +
+            '%c      ( %cλ.λ%c )\n' +
+            '%c       ) λ (\n' +
+            '%c                                              \n' +
+            '%cpiercemoore.com %c- hand-built, opinionated, slow web.\n' +
+            '%cstart where you are.\n\n' +
+            '%csource:  %chttps://github.com/rex/homepage\n' +
+            '%ccto:     %clinus, b. 2014\n',
+          ink, ink, amber, ink,
+          ink,
+          ink,
+          ink, dim,
+          ink,
+          dim, ink,
+          dim, ink
+        );
+      })();
+    </script>
   </body>
 </html>

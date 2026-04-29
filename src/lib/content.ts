@@ -6,6 +6,7 @@ import careerYaml from '../content/career-log.yaml?raw';
 import faqYaml from '../content/faq.yaml?raw';
 import contactYaml from '../content/contact.yaml?raw';
 import errorYaml from '../content/error-pages.yaml?raw';
+import offTheClockYaml from '../content/off-the-clock.yaml?raw';
 
 export interface HeroContent {
   name: string;
@@ -32,6 +33,7 @@ export interface PracticeArea {
 
 export interface CareerEntry {
   version: string;
+  kind?: 'volunteer';
   period: string;
   role: string;
   title_arc?: string;
@@ -42,7 +44,19 @@ export interface CareerEntry {
 
 export interface FaqContent {
   intro: string;
-  faqs: { q: string; a: string }[];
+  faqs: { q: string; a: string; image?: string }[];
+}
+
+export interface OffTheClockContent {
+  intro: string;
+  certified: string[];
+  volunteer: {
+    org: string;
+    role: string;
+    period: string;
+    body: string;
+  };
+  elsewhere: string;
 }
 
 export interface ContactContent {
@@ -65,6 +79,7 @@ const careerData = yaml.parse(careerYaml) as { entries: CareerEntry[] };
 const faqData = yaml.parse(faqYaml) as FaqContent;
 const contactData = yaml.parse(contactYaml) as ContactContent;
 const errorData = yaml.parse(errorYaml) as ErrorPagesContent;
+const offTheClockData = yaml.parse(offTheClockYaml) as OffTheClockContent;
 
 export const loadHero = async (): Promise<HeroContent> => heroData;
 export const loadPracticeAreas = async (): Promise<PracticeArea[]> => practiceData.areas;
@@ -72,3 +87,4 @@ export const loadCareer = async (): Promise<CareerEntry[]> => careerData.entries
 export const loadFaq = async (): Promise<FaqContent> => faqData;
 export const loadContact = async (): Promise<ContactContent> => contactData;
 export const loadErrorPages = async (): Promise<ErrorPagesContent> => errorData;
+export const loadOffTheClock = async (): Promise<OffTheClockContent> => offTheClockData;

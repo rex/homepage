@@ -16,6 +16,18 @@ entries:
       Kubernetes/Rancher platform. Led ~64% AWS cost reduction.
       Designed company-wide Ansible for Windows + Linux at scale.
 
+  - version: vol/22
+    kind: volunteer
+    period: 2022 — 2024
+    role: Director of Communications
+    employer: DFW Curling Club
+    location: Farmers Branch, TX
+    summary: >
+      Volunteer leadership of communications, member engagement, and
+      event coordination for one of the Dallas-Fort Worth area's
+      curling clubs. Significant work over two-plus years; full
+      write-up pending.
+
   - version: v7.x
     period: 2015 — 2020
     role: Software Engineer

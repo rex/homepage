@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import PracticeAreas from '../components/PracticeAreas.astro';
 import CareerLog from '../components/CareerLog.astro';
+import OffTheClock from '../components/OffTheClock.astro';
 import FAQ from '../components/FAQ.astro';
 import Contact from '../components/Contact.astro';
 import Mantra from '../components/Mantra.astro';
@@ -12,14 +13,16 @@ import {
   loadCareer,
   loadFaq,
   loadContact,
+  loadOffTheClock,
 } from '../lib/content';
 
-const [hero, areas, career, faq, contact] = await Promise.all([
+const [hero, areas, career, faq, contact, offTheClock] = await Promise.all([
   loadHero(),
   loadPracticeAreas(),
   loadCareer(),
   loadFaq(),
   loadContact(),
+  loadOffTheClock(),
 ]);
 
 const jsonLd = {
@@ -32,7 +35,7 @@ const jsonLd = {
   sameAs: ['https://github.com/rex', 'https://linkedin.com/in/piercemoore'],
   address: {
     '@type': 'PostalAddress',
-    addressLocality: 'Dallas',
+    addressLocality: 'Addison',
     addressRegion: 'TX',
     addressCountry: 'US',
   },
@@ -59,6 +62,7 @@ const jsonLd = {
   <Hero hero={hero} />
   <PracticeAreas areas={areas} />
   <CareerLog entries={career} />
+  <OffTheClock content={offTheClock} />
   <FAQ faq={faq} />
   <Contact contact={contact} />
   <Mantra />

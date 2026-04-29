@@ -1,0 +1,89 @@
+---
+import type { OffTheClockContent } from '../lib/content';
+
+export interface Props {
+  content: OffTheClockContent;
+}
+
+const { content } = Astro.props;
+---
+<section id="off-the-clock" class="page-gutter relative pt-24 pb-16" aria-labelledby="off-the-clock-heading">
+  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms;">
+    § <span class="num">04</span> — off the clock
+  </div>
+
+  <header class="mb-10 max-w-prose">
+    <div class="label-mono mb-3">/ off the clock</div>
+    <h2 id="off-the-clock-heading" class="display-roman text-3xl text-ink leading-tight">
+      the rest of it.
+    </h2>
+    <p class="mt-6 display-italic text-base md:text-lg text-ink-muted leading-relaxed numeric-oldstyle">
+      {content.intro}
+    </p>
+  </header>
+
+  <dl class="otc-list" data-boot style="--boot-delay: 900ms;">
+    <div class="otc-row">
+      <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Certified</dt>
+      <dd>
+        <ul class="otc-cert-list">
+          {content.certified.map((c) => <li class="text-ink">{c}</li>)}
+        </ul>
+      </dd>
+    </div>
+
+    <div class="otc-row">
+      <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Volunteering</dt>
+      <dd>
+        <div class="text-ink">
+          <span class="display-italic">{content.volunteer.role}</span>
+          <span class="text-ink-faint mx-2" aria-hidden="true">·</span>
+          <span>{content.volunteer.org}</span>
+        </div>
+        <div class="font-mono text-xs numeric-tabular text-ink-dim mt-1">
+          {content.volunteer.period}
+        </div>
+        <p class="mt-3 display-italic text-base md:text-lg text-ink-muted leading-relaxed max-w-[60ch]">
+          {content.volunteer.body}
+        </p>
+      </dd>
+    </div>
+
+    <div class="otc-row">
+      <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Elsewhere</dt>
+      <dd>
+        <p class="display-italic text-base md:text-lg text-ink leading-relaxed max-w-[60ch]">
+          {content.elsewhere}
+        </p>
+      </dd>
+    </div>
+  </dl>
+</section>
+
+<style>
+  .otc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .otc-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+  @media (min-width: 768px) {
+    .otc-row {
+      grid-template-columns: 8rem 1fr;
+      gap: 2rem;
+      align-items: baseline;
+    }
+  }
+  .otc-cert-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+</style>

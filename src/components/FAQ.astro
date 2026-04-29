@@ -9,7 +9,7 @@ const { faq } = Astro.props;
 ---
 <section id="faq" class="page-gutter relative pt-24 pb-16" aria-labelledby="faq-heading">
   <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms;">
-    § <span class="num">04</span> — questions
+    § <span class="num">05</span> — questions
   </div>
 
   <header class="mb-12 max-w-prose">
@@ -24,7 +24,20 @@ const { faq } = Astro.props;
     {faq.faqs.map((qa) => (
       <>
         <dt class="faq-q display-italic text-ink-muted">{qa.q}</dt>
-        <dd class="faq-a text-ink">{qa.a}</dd>
+        <dd class="faq-a text-ink">
+          {qa.image && (
+            <img
+              src={qa.image}
+              alt=""
+              class="faq-image"
+              width="80"
+              height="100"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          {qa.a}
+        </dd>
       </>
     ))}
   </dl>
@@ -49,6 +62,18 @@ const { faq } = Astro.props;
     line-height: 1.7;
     max-width: 65ch;
     margin-bottom: 1.5rem;
+  }
+  .faq-image {
+    float: left;
+    width: 64px;
+    height: auto;
+    margin: 0.125rem 1rem 0.5rem 0;
+    opacity: 0.85;
+    /* render the black PNG in current ink color */
+    filter: brightness(0) saturate(0) invert(0.94);
+  }
+  [data-theme='light'] .faq-image {
+    filter: brightness(0);
   }
   @media (min-width: 1024px) {
     .faq-grid {

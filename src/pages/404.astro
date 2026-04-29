@@ -6,7 +6,7 @@ const pages = await loadErrorPages();
 const page = pages['404'];
 ---
 <BaseLayout
-  title="404 — Pierce Moore"
+  title="404 - Pierce Moore"
   description="Route not found in this cluster."
 >
   <section class="page-gutter pt-32 pb-24 max-w-prose">
@@ -23,5 +23,38 @@ const page = pages['404'];
         </a>
       ))}
     </div>
+
+    <div class="mt-24 linus-egg" title="linus doesn't know where it went either.">
+      <img
+        src="/lambda-linus.png"
+        alt=""
+        width="80"
+        height="100"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .linus-egg {
+    width: 80px;
+    opacity: 0.4;
+    transition: opacity 320ms ease-out;
+    cursor: help;
+  }
+  .linus-egg:hover {
+    opacity: 0.85;
+  }
+  .linus-egg img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* Black PNG -> render in current ink color via filter */
+    filter: brightness(0) saturate(0) invert(0.94);
+  }
+  [data-theme='light'] .linus-egg img {
+    filter: brightness(0);
+  }
+</style>

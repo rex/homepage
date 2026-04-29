@@ -2,12 +2,17 @@
 
 Things deliberately out of v0.1.0. Captured here so they don't pile up in the head. (Originally numbered "v2" against the spec; this site is alpha-launched at v0.1.0 — v1.0.0 is reserved for "actually finished.")
 
+## Awaiting Pierce
+
+- **Off-the-clock VOLUNTEERING paragraph** — currently a placeholder in [`src/content/off-the-clock.yaml`](src/content/off-the-clock.yaml) under `volunteer.body`. Pierce explicitly asked to be reminded; this is the reminder. The DFW Curling Club work was significant to him over 2022–2024 and deserves a real paragraph, not a stub.
+
 ## Big rocks
 
 - **`/ask` query interface** — model-backed Q&A, replacing the FAQ as the primary "what i think" surface. Stub returns 501 from the CloudFront Function in [`infra/functions/edge.js`](infra/functions/edge.js).
 - **Postmortems** — MDX content under `src/content/postmortems/`. Template route at `src/pages/postmortems/[slug].astro` is built but `getStaticPaths()` returns `[]` until content lands.
 - **Knowledge section** — technology-scoped runbooks (kubernetes, etcd, longhorn, observability). Different shape from postmortems; closer to "small reference cards."
 - **Tools / projects showcase** — the rancher mcp server, the homelab observability stack, the nfc fossil dig station. Each gets a card with status, repo link, postmortem link.
+- **Boot-sequence Linus grace note** — Pierce loves the idea of a tiny Linus fading in at the end of boot for one subtle pulse, then settling. Approved in concept; gated on getting the motion *exactly* right (not cheesy, must be intentional). Specific design TBD.
 - **HeroNudge motion** — the cursor-pull effect is parked. `src/components/HeroNudge.tsx` is retained; `<HeroNudge client:idle />` is commented out in `Hero.astro`. Pierce wants to revisit motion with a better idea, not the v0.1.0 implementation.
 - **Reaper migration to `eye/` org** — separate concern; tracking here so it doesn't get folded into site work.
 

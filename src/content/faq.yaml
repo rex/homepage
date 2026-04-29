@@ -85,12 +85,14 @@ faqs:
       I'm not especially moralistic but those are not how I want to
       spend the next decade.
 
-  - q: Why the cat logo?
+  - q: Why haven't you told me about your cat yet?
+    image: /lambda-linus.png
     a: >
-      That's Linus — my cat. The lambda is for functional programming
-      and also because it fit inside him visually. He's been the
-      constant through twelve years of career changes, so he gets to
-      be on the logo.
+      You didn't ask. This is Linus — orange American shorthair, b. 2014,
+      official CTO. The lambda is for functional programming and also
+      because it fit inside him visually. He's been the constant through
+      twelve years of career changes, so he gets to be on every important
+      thing I make.
 
   - q: How should I reach out?
     a: >

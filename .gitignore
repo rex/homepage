@@ -17,3 +17,7 @@ npm-debug.log*
 # CDK
 infra/cdk.out/
 infra/.cdk.staging/
+
+# Pierce-to-Claude scratch folder (résumé sources, logos, etc.)
+# Useful artifacts get copied into public/ explicitly.
+stuff-for-claude/
