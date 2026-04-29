@@ -5,9 +5,9 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 
 export interface CiStackProps extends StackProps {
-  /** Site bucket — granted ReadWrite on this role. */
+  /** Site bucket - granted ReadWrite on this role. */
   bucket: s3.IBucket;
-  /** Distribution — granted CreateInvalidation on this role only. */
+  /** Distribution - granted CreateInvalidation on this role only. */
   distribution: cloudfront.IDistribution;
   /** GitHub repository in `owner/repo` form. */
   githubRepo: string;
@@ -30,7 +30,7 @@ export class CiStack extends Stack {
     super(scope, id, props);
 
     // OIDC provider for token.actions.githubusercontent.com.
-    // Singleton per account — if you have other GitHub-OIDC roles in
+    // Singleton per account - if you have other GitHub-OIDC roles in
     // the same account, refactor to use a shared provider.
     const provider = new iam.OpenIdConnectProvider(this, 'GitHubOidcProvider', {
       url: 'https://token.actions.githubusercontent.com',
@@ -56,14 +56,14 @@ export class CiStack extends Stack {
         },
         'sts:AssumeRoleWithWebIdentity',
       ),
-      description: `Deploy role for ${props.githubRepo} (${props.branches.join(',')}) — site sync + CF invalidation only`,
+      description: `Deploy role for ${props.githubRepo} (${props.branches.join(',')}) - site sync + CF invalidation only`,
       maxSessionDuration: Stack.of(this).node.tryGetContext('maxSessionDurationSeconds')
         ? undefined
         : undefined,
     });
 
     // Permission 1: read/write on the site bucket. Includes List, Get, Put,
-    // Delete, MultipartUpload — everything `aws s3 sync --delete` needs.
+    // Delete, MultipartUpload - everything `aws s3 sync --delete` needs.
     props.bucket.grantReadWrite(role);
     props.bucket.grantDelete(role);
 

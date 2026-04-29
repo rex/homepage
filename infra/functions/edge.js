@@ -6,12 +6,12 @@
  *
  * Responsibilities, in order:
  *   1. Vanity-domain 301 redirects:
- *        piercemoore.cv  → piercemoore.com/cv
- *        piercemoore.dev → piercemoore.com/writing
- *   2. www → apex 301 redirect (canonical URL).
- *   3. POST /api/ask → 501 JSON; other methods → 405. The /api/ask path
- *      is reserved for v2 — this stub keeps the route claimed.
- *   4. Clean-URL rewriting so /cv → /cv/index.html for the S3 origin.
+ *        piercemoore.cv  -> piercemoore.com/cv
+ *        piercemoore.dev -> piercemoore.com/writing
+ *   2. www -> apex 301 redirect (canonical URL).
+ *   3. POST /api/ask -> 501 JSON; other methods -> 405. The /api/ask path
+ *      is reserved for v2 - this stub keeps the route claimed.
+ *   4. Clean-URL rewriting so /cv -> /cv/index.html for the S3 origin.
  */
 
 function handler(event) {
@@ -36,7 +36,7 @@ function handler(event) {
     };
   }
 
-  // 2. www.piercemoore.com → piercemoore.com (preserve path + query).
+  // 2. www.piercemoore.com -> piercemoore.com (preserve path + query).
   if (host === 'www.piercemoore.com') {
     var qs = '';
     if (request.querystring) {
@@ -54,7 +54,7 @@ function handler(event) {
     };
   }
 
-  // 3. /api/ask — reserved for v2. Returns 501 on POST, 405 otherwise.
+  // 3. /api/ask - reserved for v2. Returns 501 on POST, 405 otherwise.
   if (uri === '/api/ask') {
     if (request.method === 'POST') {
       return {
@@ -64,7 +64,7 @@ function handler(event) {
           'content-type': { value: 'application/json; charset=utf-8' },
           'cache-control': { value: 'no-store' }
         },
-        body: '{"status":"not_implemented","note":"v2 — query interface"}'
+        body: '{"status":"not_implemented","note":"v2 - query interface"}'
       };
     }
     return {
@@ -79,12 +79,12 @@ function handler(event) {
   }
 
   // 4. Clean-URL rewrite.
-  //    Astro builds paths like /cv → dist/cv/index.html. CloudFront/S3
+  //    Astro builds paths like /cv -> dist/cv/index.html. CloudFront/S3
   //    won't auto-resolve a directory listing, so we map:
-  //       /            → /index.html         (defaultRootObject handles this)
-  //       /cv          → /cv/index.html
-  //       /cv/         → /cv/index.html
-  //       /humans.txt  → /humans.txt         (has dot, pass through)
+  //       /            -> /index.html         (defaultRootObject handles this)
+  //       /cv          -> /cv/index.html
+  //       /cv/         -> /cv/index.html
+  //       /humans.txt  -> /humans.txt         (has dot, pass through)
   if (uri.length > 0 && uri[uri.length - 1] === '/') {
     request.uri = uri + 'index.html';
   } else if (uri.indexOf('.') === -1) {

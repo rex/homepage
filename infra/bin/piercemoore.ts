@@ -16,7 +16,7 @@ const env: cdk.Environment = {
 
 const site = new SiteStack(app, 'PiercemooreSiteStack', {
   env,
-  description: 'piercemoore.com — S3 + CloudFront + CloudFront Functions + Route 53',
+  description: 'piercemoore.com - S3 + CloudFront + CloudFront Functions + Route 53',
   domainName: 'piercemoore.com',
   vanityDomains: ['piercemoore.cv', 'piercemoore.dev'],
 });

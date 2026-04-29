@@ -15,7 +15,7 @@ import * as route53 from 'aws-cdk-lib/aws-route53';
 import * as targets from 'aws-cdk-lib/aws-route53-targets';
 
 export interface SiteStackProps extends StackProps {
-  /** Canonical domain — gets the apex + www records and serves all paths. */
+  /** Canonical domain - gets the apex + www records and serves all paths. */
   domainName: string;
   /** Vanity domains that 301-redirect to specific paths on the canonical domain. */
   vanityDomains: string[];
@@ -26,11 +26,11 @@ export interface SiteStackProps extends StackProps {
  *   - S3 bucket (private, OAC-only access from CloudFront)
  *   - ACM certificate covering apex + www + every vanity domain
  *   - CloudFront distribution with a viewer-request Function that handles
- *     URL rewriting for clean URLs, www→apex canonical redirects,
+ *     URL rewriting for clean URLs, www->apex canonical redirects,
  *     vanity-domain 301s, and the POST /api/ask 501 stub
  *   - Route 53 A + AAAA ALIAS records on every hosted zone
  *
- * The S3 bucket is filled by GitHub Actions on push to main — the stack
+ * The S3 bucket is filled by GitHub Actions on push to main - the stack
  * never deploys site content itself. That keeps infra changes (rare) and
  * content changes (constant) on different paths.
  */
@@ -44,7 +44,7 @@ export class SiteStack extends Stack {
     const { domainName, vanityDomains } = props;
     const wwwDomain = `www.${domainName}`;
 
-    // 1. Hosted zones — must already exist in Route 53.
+    // 1. Hosted zones - must already exist in Route 53.
     const canonicalZone = route53.HostedZone.fromLookup(this, 'CanonicalZone', {
       domainName,
     });
@@ -52,7 +52,7 @@ export class SiteStack extends Stack {
       route53.HostedZone.fromLookup(this, `VanityZone${i}`, { domainName: d }),
     );
 
-    // 2. Site bucket — private, encrypted, retained on stack delete.
+    // 2. Site bucket - private, encrypted, retained on stack delete.
     this.bucket = new s3.Bucket(this, 'SiteBucket', {
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
@@ -79,13 +79,13 @@ export class SiteStack extends Stack {
     });
 
     // 4. CloudFront viewer-request function.
-    //    JS 2.0 runtime — supports response bodies up to 40KB and
+    //    JS 2.0 runtime - supports response bodies up to 40KB and
     //    most ES6+ syntax. ES5 compat still required for some constructs.
     const edgeFunctionPath = path.join(__dirname, '..', 'functions', 'edge.js');
     const edgeFunction = new cloudfront.Function(this, 'EdgeFunction', {
       code: cloudfront.FunctionCode.fromFile({ filePath: edgeFunctionPath }),
       runtime: cloudfront.FunctionRuntime.JS_2_0,
-      comment: 'piercemoore.com — URL rewrite + canonical/vanity redirects + /api/ask stub',
+      comment: 'piercemoore.com - URL rewrite + canonical/vanity redirects + /api/ask stub',
     });
 
     // 5. CloudFront distribution.
@@ -173,13 +173,13 @@ export class SiteStack extends Stack {
       comment: 'piercemoore.com',
     });
 
-    // 6. Route 53 records — A + AAAA ALIAS to the distribution.
+    // 6. Route 53 records - A + AAAA ALIAS to the distribution.
     const cfTarget = route53.RecordTarget.fromAlias(
       new targets.CloudFrontTarget(this.distribution),
     );
 
     // Plain ARecord/AaaaRecord. If a name+type collides with a
-    // pre-existing record, the deploy fails — the operator surgically
+    // pre-existing record, the deploy fails - the operator surgically
     // deletes the colliding record out-of-band, then re-runs the deploy.
     // We do NOT use deleteExisting (deprecated, dangerous on partial
     // deploy failures).
@@ -220,7 +220,7 @@ export class SiteStack extends Stack {
       });
     });
 
-    // 7. Outputs — used by GitHub Actions secrets.
+    // 7. Outputs - used by GitHub Actions secrets.
     new CfnOutput(this, 'SiteBucketName', {
       value: this.bucket.bucketName,
       description: 'S3 bucket holding the built site. Set as AWS_SITE_BUCKET in GitHub secrets.',
