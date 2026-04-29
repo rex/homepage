@@ -29,6 +29,6 @@ Things deliberately out of v1 per `claude-code-prompt.md` §15. Captured here so
 
 ## Architectural deviations from v1 spec (worth revisiting)
 
-- **`functions/api/ask.ts` instead of `src/pages/api/ask.ts`** — the spec listed the API stub under Astro's `pages/`, which would force a server adapter for one route. Cloudflare Pages Functions is the cleaner path for a 99% static site. Move it back to Astro if the API ever grows beyond stubs.
+- **`src/worker.ts` (Cloudflare Workers Static Assets) instead of `src/pages/api/ask.ts`** — the spec listed the API stub under Astro's `pages/`, which would force a server adapter for one route. Cloudflare consolidated Pages into Workers Builds; the modern path is a tiny Worker that proxies to `env.ASSETS` for everything except `/api/ask` and the vanity-domain redirects. Move /api/ask into Astro server routes if the API ever grows beyond stubs.
 - **No `BootController.tsx` React island** — the boot-sequence sessionStorage gate is a 14-line inline `<script is:inline>` in `BaseLayout.astro`. Ship more state into the boot orchestration in v2 if it ever needs it.
 - **Career log expand has fade transition only**, not the spec's smoother height animation. Native `<details>` doesn't animate height portably; the trade-off is worth a v2 polish pass with `interpolate-size` once browser support is universal.

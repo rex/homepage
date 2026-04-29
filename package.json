@@ -10,7 +10,10 @@
     "build": "astro check && astro build",
     "build:fast": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "npm run build && wrangler deploy",
+    "cf:preview": "npm run build && wrangler dev --local"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -27,7 +30,9 @@
   },
   "devDependencies": {
     "@axe-core/cli": "^4.10.0",
+    "@cloudflare/workers-types": "^4.20260426.1",
     "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0"
+    "@types/react-dom": "^18.3.0",
+    "wrangler": "^4.86.0"
   }
 }

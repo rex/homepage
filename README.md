@@ -12,7 +12,7 @@ Hand-built. Long-scroll home, /cv, /writing, /ask. Typography-driven minimalism.
 - **React** for the two interactive islands (`HeroNudge`, `ThemeToggle`); everything else is static `.astro`
 - **MDX** integration installed for postmortems (no content ships in v1)
 - **@astrojs/sitemap** for `sitemap-index.xml`
-- **Cloudflare Pages** for hosting; **Cloudflare Pages Functions** for the `/api/ask` 501 stub
+- **Cloudflare Workers (Static Assets)** for hosting — config in [wrangler.jsonc](wrangler.jsonc); a tiny [src/worker.ts](src/worker.ts) handles vanity-domain redirects and the `/api/ask` 501 stub, everything else is served by the `ASSETS` binding
 - **Self-hosted fonts**: Fraunces (display), Supreme (body), Cascadia Code (mono)
 
 No framework beyond Astro, no analytics SDK, no client-side router. Total client JS is **~47KB gzipped**, total CSS is **~5KB gzipped**.
@@ -38,7 +38,8 @@ npm run preview    # serve dist/
 - `src/styles/` — `globals.css` (tokens + base + utilities), `fonts.css` (`@font-face`), `boot.css` (boot-sequence keyframes)
 - `src/lib/` — `build-info.ts`, `sparkline.ts`, `content.ts`
 - `public/` — fonts, favicons, OG image, monogram, wordmark, robots.txt, site.webmanifest
-- `functions/api/ask.ts` — Cloudflare Pages Function returning HTTP 501 for `POST /api/ask`. Lives outside `src/` because the rest of the site is pure static.
+- `src/worker.ts` — Cloudflare Worker entry: 301-redirects `piercemoore.cv` → `/cv` and `piercemoore.dev` → `/writing`, returns 501 on `POST /api/ask`, falls through to the `ASSETS` binding for everything else
+- `wrangler.jsonc` — Workers config: build output dir, asset binding, `not_found_handling: "404-page"`
 
 ## Fonts
 
@@ -63,39 +64,56 @@ Both surface in the page footer, `<meta name="build-commit">`, `humans.txt` last
 
 No runtime env vars in v1.
 
-## Deploying to Cloudflare Pages
+## Deploying to Cloudflare Workers
 
-1. Create the GitHub repo (e.g. `github.com/rex/homepage`) and push:
+Cloudflare consolidated Pages into **Workers Builds** + **Static Assets**. Almost all configuration is in-repo (`wrangler.jsonc`, `package.json`, `src/worker.ts`); the dashboard is just where you connect the repo and add the custom domains.
+
+### One-time setup
+
+1. Create the GitHub repo and push:
    ```sh
    git remote add origin git@github.com:rex/homepage.git
    git push -u origin main
    ```
-2. In Cloudflare Pages dashboard → **Create application** → **Pages** → **Connect to Git** → select the repo.
-3. Build settings:
-   - **Framework preset**: `Astro`
-   - **Build command**: `npm run build`
-   - **Output directory**: `dist`
-   - **Node version**: `22` (matches `.nvmrc`)
-4. Functions: the `functions/` directory is auto-detected. `POST /api/ask` will return HTTP 501.
-5. Add Cloudflare Web Analytics (Pages → Analytics → Web Analytics → enable). Drop the beacon `<script>` snippet into `src/layouts/BaseLayout.astro` near the closing `</body>` (or set `data-cf-beacon`).
+2. In the Cloudflare dashboard → **Workers & Pages** → **Create** → **Import a repository** → select the repo.
+3. Cloudflare auto-detects the framework from `wrangler.jsonc` + `package.json`. The defaults are correct: build runs `npm run build`, deploy runs `npx wrangler deploy`. No need to set output dir or Node version in the dashboard — they live in [wrangler.jsonc](wrangler.jsonc) and `.nvmrc`.
+4. Click **Deploy**. First build takes ~1 min.
+5. After the first deploy, add the three custom domains under the Worker → **Settings** → **Domains & Routes** → **Add**:
+   - `piercemoore.com` (canonical)
+   - `piercemoore.cv` (vanity → /cv)
+   - `piercemoore.dev` (vanity → /writing)
 
-### Custom domains
+   Cloudflare gives you a CNAME target per domain (e.g. `piercemoore-com.<account>.workers.dev`). Add a corresponding `CNAME` record in Route 53 for each.
 
-Three domains, all on Route 53. Cloudflare Pages handles the apex and the redirects.
+   The 301 redirects for `.cv` and `.dev` are baked into [src/worker.ts](src/worker.ts) — no Bulk Redirects rule needed.
 
-| Domain | Behavior | Cloudflare config |
-|--------|----------|-------------------|
-| `piercemoore.com` | canonical | Add as primary custom domain. Set Route 53 ALIAS / CNAME to the Pages target. |
-| `piercemoore.cv` | 301 → `piercemoore.com/cv` | Add as custom domain on the same project. Then create a **Bulk Redirect** rule: `https://piercemoore.cv/*` → `https://piercemoore.com/cv$1` (status 301). |
-| `piercemoore.dev` | 301 → `piercemoore.com/writing` | Same pattern: redirect rule `https://piercemoore.dev/*` → `https://piercemoore.com/writing$1` (status 301). |
+6. Cloudflare Web Analytics: **Workers** → **your Worker** → **Settings** → **Observability** is already on (`observability.enabled: true` in `wrangler.jsonc`). For the visitor-side analytics beacon, enable **Web Analytics** and paste its `<script>` snippet into [src/layouts/BaseLayout.astro](src/layouts/BaseLayout.astro) near the closing `</body>`.
 
-DNS records (Route 53):
+### Local deploy
 
+If you want to deploy from your laptop instead of waiting on the GitHub-triggered build:
+
+```sh
+npm run cf:deploy   # builds astro, then wrangler deploy
 ```
-piercemoore.com   ALIAS  pages-dev.com.cdn.cloudflare.net   (or whatever Pages assigns)
-piercemoore.cv    CNAME  pages-dev.com.cdn.cloudflare.net
-piercemoore.dev   CNAME  pages-dev.com.cdn.cloudflare.net
+
+Authenticate first with `npx wrangler login`. The build env injects `VITE_BUILD_COMMIT` from your local `git rev-parse --short HEAD`.
+
+### Local Worker runtime
+
+To run the Worker (with redirects + /api/ask) end-to-end against the built site:
+
+```sh
+npm run cf:preview   # builds astro, then wrangler dev --local
 ```
+
+Plain `npm run dev` is faster for content/style iteration but doesn't run the Worker layer.
+
+### Node version on Cloudflare Builds
+
+`.nvmrc` is **not** auto-respected by Workers Builds the way it was by Pages. To pin Node, add a build environment variable in the dashboard:
+
+- Worker → **Settings** → **Build** → **Variables and Secrets** → add `NODE_VERSION` = `22`
 
 ## Content updates
 
