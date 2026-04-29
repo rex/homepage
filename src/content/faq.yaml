@@ -1,11 +1,9 @@
 # FAQ — v1 content
-# Replaces Claude chat interface in v1.
 # Rendered as a single section, questions in italic serif, answers in sans body.
 # 8-12 Q/A pairs. Written in Pierce's voice — peer-like, blunt, no fluff.
+# intro: empty until Pierce writes a real one. See docs/voice-todos.md.
 
-intro: >
-  Questions recruiters and hiring managers actually ask. This is the
-  static version; a live query interface is planned for v2.
+intro: ""
 
 faqs:
   - q: What are you looking for?
@@ -89,10 +87,10 @@ faqs:
     image: /lambda-linus.png
     a: >
       You didn't ask. This is Linus — orange American shorthair, b. 2014,
-      official CTO. The lambda is for functional programming and also
-      because it fit inside him visually. He's been the constant through
-      twelve years of career changes, so he gets to be on every important
-      thing I make.
+      official CTO. He's been the constant through twelve years of career
+      changes, so he gets to be on every important thing I make. Why the
+      lambda? Because Half-Life 2 is one of the greatest games of all
+      time. And it looks kickass.
 
   - q: How should I reach out?
     a: >

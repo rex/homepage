@@ -17,9 +17,11 @@ const { content } = Astro.props;
     <h2 id="off-the-clock-heading" class="display-roman text-3xl text-ink leading-tight">
       the rest of it.
     </h2>
-    <p class="mt-6 display-italic text-base md:text-lg text-ink-muted leading-relaxed numeric-oldstyle">
-      {content.intro}
-    </p>
+    {content.intro && content.intro.trim().length > 0 && (
+      <p class="mt-6 display-italic text-base md:text-lg text-ink-muted leading-relaxed numeric-oldstyle">
+        {content.intro}
+      </p>
+    )}
   </header>
 
   <dl class="otc-list" data-boot style="--boot-delay: 900ms;">
@@ -43,9 +45,11 @@ const { content } = Astro.props;
         <div class="font-mono text-xs numeric-tabular text-ink-dim mt-1">
           {content.volunteer.period}
         </div>
-        <p class="mt-3 display-italic text-base md:text-lg text-ink-muted leading-relaxed max-w-[60ch]">
-          {content.volunteer.body}
-        </p>
+        {content.volunteer.body && content.volunteer.body.trim().length > 0 && (
+          <p class="mt-3 display-italic text-base md:text-lg text-ink-muted leading-relaxed max-w-[60ch]">
+            {content.volunteer.body}
+          </p>
+        )}
       </dd>
     </div>
 

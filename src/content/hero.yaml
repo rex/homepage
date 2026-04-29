@@ -6,9 +6,8 @@ status: SEEKING SENIOR PLATFORM ROLE · REMOTE OR DALLAS
 bio: >
   Twenty years in and out of infrastructure. Currently running ten-plus
   RKE2 clusters across physical venues for Drive Shack / Puttery, and
-  cleaning up etcd fires for fun. Spent the decade before this building
-  real-time gameplay systems at Topgolf — which is why my mental model
-  of "production" includes the guests, not just the pods.
+  cleaning up etcd fires for fun. My mental model of "production"
+  includes the guests, not just the pods.
 
 short_tagline: >
   20 years across infrastructure, platforms, and the interfaces on top

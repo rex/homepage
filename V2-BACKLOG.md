@@ -4,7 +4,11 @@ Things deliberately out of v0.1.0. Captured here so they don't pile up in the he
 
 ## Awaiting Pierce
 
-- **Off-the-clock VOLUNTEERING paragraph** — currently a placeholder in [`src/content/off-the-clock.yaml`](src/content/off-the-clock.yaml) under `volunteer.body`. Pierce explicitly asked to be reminded; this is the reminder. The DFW Curling Club work was significant to him over 2022–2024 and deserves a real paragraph, not a stub.
+- **Voice TODOs** — see [`docs/voice-todos.md`](docs/voice-todos.md) for the full audited list of AI-slop placeholder text + AI-buffed Pierce copy that needs his words. Hard blocks currently render empty (per Pierce's "empty > slop" rule). Borderline items need a Pierce read-through.
+
+## High priority
+
+- **Navigation design + UX** — currently the entire site is a single long-scroll page with no nav. As more routes appear (postmortems, knowledge, tools/projects), this stops scaling. Needs a deliberate design pass: anchor links? thin top nav that appears on scroll? sidebar? table-of-contents in the margin? Pierce wants to think this through, not bolt it on.
 
 ## Big rocks
 

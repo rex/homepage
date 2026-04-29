@@ -15,9 +15,11 @@ const { faq } = Astro.props;
   <header class="mb-12 max-w-prose">
     <div class="label-mono mb-3">/ faq</div>
     <h2 id="faq-heading" class="display-roman text-3xl text-ink leading-tight">
-      questions recruiters actually ask.
+      questions recruiters (you?) always ask me.
     </h2>
-    <p class="mt-4 text-base text-ink-muted leading-relaxed">{faq.intro}</p>
+    {faq.intro && faq.intro.trim().length > 0 && (
+      <p class="mt-4 text-base text-ink-muted leading-relaxed">{faq.intro}</p>
+    )}
   </header>
 
   <dl class="faq-grid" data-boot style="--boot-delay: 900ms;">

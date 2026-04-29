@@ -128,7 +128,7 @@ areas:
 
   - slug: frontend-legacy
     name: frontend & interfaces
-    status: archived
+    status: operational
     years: 10y
     sparkline: [1.00, 0.95, 0.88, 0.75, 0.60, 0.45, 0.30, 0.25, 0.22, 0.20]
     tools:
