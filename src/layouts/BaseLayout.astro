@@ -67,15 +67,38 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toS
 
     <script is:inline>
       (function () {
-        try {
-          var stored = localStorage.getItem('theme');
-          var dark = stored
-            ? stored === 'dark'
-            : window.matchMedia('(prefers-color-scheme: dark)').matches;
-          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-        } catch (e) {
-          document.documentElement.setAttribute('data-theme', 'dark');
+        // Theme precedence:
+        //   1. Explicit user toggle (localStorage.theme) wins.
+        //   2. Otherwise: system says light → light. Anything else
+        //      (system says dark, no preference, API absent) → dark.
+        function preferredTheme() {
+          try {
+            var stored = localStorage.getItem('theme');
+            if (stored === 'dark' || stored === 'light') return stored;
+          } catch (e) {}
+          try {
+            if (window.matchMedia('(prefers-color-scheme: light)').matches) return 'light';
+          } catch (e) {}
+          return 'dark';
         }
+        document.documentElement.setAttribute('data-theme', preferredTheme());
+
+        // Reactively follow OS theme changes — only when the user has
+        // not made an explicit choice. Once they toggle the page's
+        // [dark]/[light] control, localStorage takes over and we stop
+        // tracking the OS.
+        try {
+          var mq = window.matchMedia('(prefers-color-scheme: light)');
+          var listener = function (e) {
+            try {
+              if (localStorage.getItem('theme')) return;
+            } catch (err) {}
+            document.documentElement.setAttribute('data-theme', e.matches ? 'light' : 'dark');
+          };
+          if (mq.addEventListener) mq.addEventListener('change', listener);
+          else if (mq.addListener) mq.addListener(listener);
+        } catch (e) {}
+
         try {
           if (sessionStorage.getItem('boot-played') === 'true') {
             document.documentElement.classList.add('skip-boot');
