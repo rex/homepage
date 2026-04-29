@@ -1,0 +1,14 @@
+{
+  "hosted-zone:account=034854667226:domainName=piercemoore.com:region=us-east-1": {
+    "Id": "/hostedzone/Z2VT1RC2HYUMWY",
+    "Name": "piercemoore.com."
+  },
+  "hosted-zone:account=034854667226:domainName=piercemoore.cv:region=us-east-1": {
+    "Id": "/hostedzone/Z02225363TQLDFG53CGP0",
+    "Name": "piercemoore.cv."
+  },
+  "hosted-zone:account=034854667226:domainName=piercemoore.dev:region=us-east-1": {
+    "Id": "/hostedzone/Z08430231ZS5Q90XZLB4Q",
+    "Name": "piercemoore.dev."
+  }
+}

@@ -13,3 +13,7 @@ npm-debug.log*
 .vscode/
 .idea/
 .claude/
+
+# CDK
+infra/cdk.out/
+infra/.cdk.staging/

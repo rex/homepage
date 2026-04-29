@@ -1,0 +1,28 @@
+{
+  "name": "piercemoore-infra",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CDK app for piercemoore.com — S3 + CloudFront + Route 53",
+  "bin": {
+    "piercemoore-infra": "bin/piercemoore.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "synth": "cdk synth",
+    "diff": "cdk diff",
+    "deploy": "cdk deploy --all --require-approval=never",
+    "destroy": "cdk destroy --all"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "aws-cdk": "^2.180.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.0"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.180.0",
+    "constructs": "^10.4.2",
+    "source-map-support": "^0.5.21"
+  }
+}

@@ -1,0 +1,74 @@
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# OIDC token for AWS auth + read repo contents to build.
+permissions:
+  id-token: write
+  contents: read
+
+# Don't pile up overlapping deploys, but don't cancel one in flight either —
+# we want the latest commit to land cleanly.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: build, sync, invalidate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build (astro check + astro build)
+        run: npm run build
+        env:
+          # Inject the short commit hash so the footer shows the deployed build.
+          VITE_BUILD_COMMIT: ${{ github.sha }}
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      # Two-pass sync so we can apply different cache headers without an
+      # extra metadata-rewrite step. _astro/* and fonts/* are content-hashed
+      # by Astro, so a year-long immutable cache is safe. Everything else
+      # gets a 10-minute browser cache plus the post-deploy invalidation.
+      - name: Sync long-lived assets to S3
+        run: |
+          aws s3 sync dist/_astro/ s3://${{ secrets.AWS_SITE_BUCKET }}/_astro/ \
+            --cache-control "public, max-age=31536000, immutable" \
+            --delete
+
+          aws s3 sync dist/fonts/ s3://${{ secrets.AWS_SITE_BUCKET }}/fonts/ \
+            --cache-control "public, max-age=31536000, immutable" \
+            --delete
+
+      - name: Sync the rest to S3
+        run: |
+          aws s3 sync dist/ s3://${{ secrets.AWS_SITE_BUCKET }}/ \
+            --cache-control "public, max-age=600" \
+            --delete \
+            --exclude "_astro/*" \
+            --exclude "fonts/*"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} \
+            --paths "/*"
