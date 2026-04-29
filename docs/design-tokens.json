@@ -1,0 +1,215 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "piercemoore.com design tokens (W3C DTCG format). Importable by Figma's Tokens Studio plugin, Penpot, Style Dictionary, and any DTCG-aware tool.",
+  "color": {
+    "dark": {
+      "bg":              { "$value": "#0d0d10", "$type": "color", "$description": "page background — warm near-black, never pure black" },
+      "bg-elevated":     { "$value": "#f2ede403", "$type": "color", "$description": "subtle elevation overlay (alpha 0.012 over bg)" },
+      "ink":             { "$value": "#f2ede4", "$type": "color", "$description": "primary text — warm off-white" },
+      "ink-muted":       { "$value": "#a8a095", "$type": "color", "$description": "secondary text, taglines" },
+      "ink-dim":         { "$value": "#8d877f", "$type": "color", "$description": "timestamps, mono labels, sidebar text" },
+      "ink-faint":       { "$value": "#5a5a5a", "$type": "color", "$description": "borders, rules, decorative em-dashes" },
+      "hairline":        { "$value": "#f2ede412", "$type": "color", "$description": "section dividers (alpha 0.07)" },
+      "accent":          { "$value": "#ffb000", "$type": "color", "$description": "amber — used only for signal: status, sidebar number, hero rule" },
+      "accent-dim":      { "$value": "#ffb00047", "$type": "color", "$description": "amber at alpha 0.28 — pill border, glow" },
+      "status-op":       { "$value": "#4ade80", "$type": "color", "$description": "operational green" },
+      "status-maint":    { "$value": "#ffb000", "$type": "color", "$description": "maintenance — same amber as accent" },
+      "status-archived": { "$value": "#6b6b6b", "$type": "color", "$description": "archived gray" }
+    },
+    "light": {
+      "bg":              { "$value": "#f4f1ea", "$type": "color", "$description": "warm off-white" },
+      "bg-elevated":     { "$value": "#0d0d1005", "$type": "color", "$description": "alpha 0.02 over bg" },
+      "ink":             { "$value": "#1a1a1a", "$type": "color" },
+      "ink-muted":       { "$value": "#4a4a4a", "$type": "color" },
+      "ink-dim":         { "$value": "#5e5852", "$type": "color" },
+      "ink-faint":       { "$value": "#a0a0a0", "$type": "color" },
+      "hairline":        { "$value": "#0d0d1014", "$type": "color", "$description": "alpha 0.08" },
+      "accent":          { "$value": "#8a5d0c", "$type": "color", "$description": "amber, darkened for contrast on cream (passes WCAG AA)" },
+      "accent-dim":      { "$value": "#8a5d0c52", "$type": "color", "$description": "alpha 0.32" },
+      "status-op":       { "$value": "#16a34a", "$type": "color" },
+      "status-maint":    { "$value": "#8a5d0c", "$type": "color" },
+      "status-archived": { "$value": "#5e5852", "$type": "color" }
+    }
+  },
+  "fontFamily": {
+    "display": { "$value": "Fraunces, Georgia, serif", "$type": "fontFamily", "$description": "variable font with opsz, SOFT, WONK, wght axes; italic is a separate variable file" },
+    "body":    { "$value": "Supreme, -apple-system, BlinkMacSystemFont, system-ui, sans-serif", "$type": "fontFamily", "$description": "static; Regular (400) + Medium (500)" },
+    "mono":    { "$value": "Cascadia Code, Cascadia Mono, SF Mono, Menlo, Consolas, monospace", "$type": "fontFamily", "$description": "variable weight" }
+  },
+  "fontWeight": {
+    "regular": { "$value": 400, "$type": "fontWeight" },
+    "medium":  { "$value": 500, "$type": "fontWeight" },
+    "black":   { "$value": 900, "$type": "fontWeight", "$description": "Fraunces wght:900 for the hero wordmark only" }
+  },
+  "size": {
+    "xs":   { "$value": "0.6875rem", "$type": "dimension", "$description": "11px — mono labels, sidebar margin marks, pills" },
+    "sm":   { "$value": "0.875rem",  "$type": "dimension", "$description": "14px" },
+    "base": { "$value": "1rem",      "$type": "dimension", "$description": "16px" },
+    "lg":   { "$value": "1.125rem",  "$type": "dimension", "$description": "18px" },
+    "xl":   { "$value": "1.5rem",    "$type": "dimension", "$description": "24px — subheadings" },
+    "2xl":  { "$value": "2rem",      "$type": "dimension", "$description": "32px — tile titles" },
+    "3xl":  { "$value": "3rem",      "$type": "dimension", "$description": "48px — section headlines" },
+    "hero": { "$value": "clamp(4rem, 14vw, 14rem)", "$type": "dimension", "$description": "fluid 64px–224px — hero wordmark" }
+  },
+  "lineHeight": {
+    "tight":   { "$value": 0.85, "$type": "number", "$description": "hero wordmark" },
+    "snug":    { "$value": 1.1,  "$type": "number", "$description": "section headlines, tile titles" },
+    "comfort": { "$value": 1.4,  "$type": "number", "$description": "subheadings, mono blocks" },
+    "relaxed": { "$value": 1.6,  "$type": "number", "$description": "body" }
+  },
+  "letterSpacing": {
+    "hero":      { "$value": "-0.04em", "$type": "dimension", "$description": "hero wordmark — tight" },
+    "label":     { "$value": "0.12em",  "$type": "dimension", "$description": "mono label letter-spacing" },
+    "label-mono":{ "$value": "0.16em",  "$type": "dimension", "$description": "mono caps spread for headers/footers" },
+    "label-sidebar":{ "$value": "0.18em", "$type": "dimension", "$description": "vertical sidebar labels" }
+  },
+  "spacing": {
+    "0":  { "$value": "0",     "$type": "dimension" },
+    "1":  { "$value": "0.25rem", "$type": "dimension" },
+    "2":  { "$value": "0.5rem",  "$type": "dimension" },
+    "3":  { "$value": "0.75rem", "$type": "dimension" },
+    "4":  { "$value": "1rem",    "$type": "dimension" },
+    "6":  { "$value": "1.5rem",  "$type": "dimension" },
+    "8":  { "$value": "2rem",    "$type": "dimension" },
+    "12": { "$value": "3rem",    "$type": "dimension" },
+    "16": { "$value": "4rem",    "$type": "dimension" },
+    "24": { "$value": "6rem",    "$type": "dimension", "$description": "section vertical rhythm" },
+    "32": { "$value": "8rem",    "$type": "dimension", "$description": "between-major-section spacing (mantra → footer)" }
+  },
+  "pageGutter": {
+    "mobile":  { "$value": "24px",  "$type": "dimension" },
+    "tablet":  { "$value": "64px",  "$type": "dimension", "$description": "≥768px" },
+    "desktop": { "$value": "96px",  "$type": "dimension", "$description": "≥1024px" },
+    "wide":    { "$value": "144px", "$type": "dimension", "$description": "≥1536px" }
+  },
+  "breakpoint": {
+    "md": { "$value": "768px",  "$type": "dimension" },
+    "lg": { "$value": "1024px", "$type": "dimension" },
+    "xl": { "$value": "1280px", "$type": "dimension" },
+    "2xl":{ "$value": "1536px", "$type": "dimension" }
+  },
+  "borderWidth": {
+    "hairline": { "$value": "1px", "$type": "dimension" }
+  },
+  "radius": {
+    "pill": { "$value": "999px", "$type": "dimension" }
+  },
+  "fraunces": {
+    "axis": {
+      "opsz-display": { "$value": 144, "$type": "number", "$description": "optical size for hero wordmark" },
+      "opsz-tile":    { "$value": 72,  "$type": "number", "$description": "tile titles, section headlines" },
+      "opsz-body":    { "$value": 36,  "$type": "number", "$description": "bio, signal, FAQ answers" },
+      "soft-display": { "$value": 50,  "$type": "number", "$description": "0=crisp corners, 100=round; 50 picks up the design-probe roundness" },
+      "soft-tile":    { "$value": 30,  "$type": "number" },
+      "soft-body":    { "$value": 50,  "$type": "number" },
+      "wght-hero":    { "$value": 900, "$type": "number" },
+      "wght-body":    { "$value": 400, "$type": "number" }
+    },
+    "feature": {
+      "ss02": { "$value": 1, "$type": "number", "$description": "swashy alternate ampersand — the curly italic & form" }
+    }
+  },
+  "typography": {
+    "hero": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":   "{fontFamily.display}",
+        "fontWeight":   "{fontWeight.black}",
+        "fontStyle":    "italic",
+        "fontSize":     "{size.hero}",
+        "lineHeight":   "{lineHeight.tight}",
+        "letterSpacing":"{letterSpacing.hero}"
+      },
+      "$description": "Hero wordmark — Fraunces italic, opsz:144, SOFT:50, ss02 on. Heavy by design."
+    },
+    "section-headline": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":  "{fontFamily.display}",
+        "fontWeight":  "{fontWeight.regular}",
+        "fontSize":    "{size.3xl}",
+        "lineHeight":  "{lineHeight.snug}"
+      },
+      "$description": "Roman Fraunces, used for section h2 (\"versions, in reverse chronological order.\")"
+    },
+    "tile-title": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":  "{fontFamily.display}",
+        "fontWeight":  "{fontWeight.regular}",
+        "fontStyle":   "italic",
+        "fontSize":    "{size.2xl}",
+        "lineHeight":  "{lineHeight.snug}"
+      },
+      "$description": "Italic Fraunces, opsz:72, used for practice tile names and FAQ-answer-adjacent emphasis"
+    },
+    "tagline": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":  "{fontFamily.display}",
+        "fontWeight":  "{fontWeight.regular}",
+        "fontStyle":   "italic",
+        "fontSize":    "{size.xl}",
+        "lineHeight":  "{lineHeight.comfort}"
+      },
+      "$description": "Hero tagline (\"human-centric infrastructure & automation\") and FAQ questions"
+    },
+    "body-prose": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":  "{fontFamily.display}",
+        "fontWeight":  "{fontWeight.regular}",
+        "fontStyle":   "italic",
+        "fontSize":    "{size.2xl}",
+        "lineHeight":  "{lineHeight.comfort}"
+      },
+      "$description": "Hero bio paragraph — italic Fraunces at scale"
+    },
+    "body-signal": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":  "{fontFamily.display}",
+        "fontWeight":  "{fontWeight.regular}",
+        "fontStyle":   "italic",
+        "fontSize":    "{size.lg}",
+        "lineHeight":  "{lineHeight.relaxed}"
+      },
+      "$description": "Signal sentence and other secondary italic prose, ink-muted"
+    },
+    "label-mono": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":   "{fontFamily.mono}",
+        "fontWeight":   "{fontWeight.regular}",
+        "fontSize":     "{size.xs}",
+        "lineHeight":   "{lineHeight.comfort}",
+        "letterSpacing":"{letterSpacing.label-mono}",
+        "textTransform":"uppercase"
+      },
+      "$description": "/ section markers, status pill, footer build line"
+    },
+    "label-sidebar": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":   "{fontFamily.mono}",
+        "fontWeight":   "{fontWeight.regular}",
+        "fontSize":     "{size.xs}",
+        "letterSpacing":"{letterSpacing.label-sidebar}",
+        "textTransform":"uppercase"
+      },
+      "$description": "Vertical margin labels — number in accent, rest in ink-dim. writing-mode: vertical-rl + rotate(180deg)."
+    },
+    "mantra": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily":   "{fontFamily.display}",
+        "fontWeight":   "{fontWeight.regular}",
+        "fontStyle":    "italic",
+        "fontSize":     "clamp(3rem, 9vw, 7rem)",
+        "lineHeight":   "1.05",
+        "letterSpacing":"-0.02em"
+      },
+      "$description": "\"start where you are.\" — full-width pre-footer band. Italic Fraunces at scale, ink color, max-width 18ch."
+    }
+  }
+}
