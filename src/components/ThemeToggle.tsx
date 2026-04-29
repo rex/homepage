@@ -64,6 +64,7 @@ export default function ThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={`switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+      className="theme-toggle"
       style={{
         background: 'transparent',
         border: 'none',
@@ -72,8 +73,7 @@ export default function ThemeToggle() {
         fontSize: '0.6875rem',
         letterSpacing: '0.12em',
         textTransform: 'uppercase',
-        padding: '0',
-        display: 'inline-flex',
+        padding: '0.25rem 0.5rem',
         gap: '0.5rem',
       }}
     >

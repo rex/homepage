@@ -1,6 +1,5 @@
 ---
 import { BUILD_COMMIT, buildDateTimeCST } from '../lib/build-info';
-import ThemeToggle from './ThemeToggle.tsx';
 
 const datetime = buildDateTimeCST();
 ---
@@ -15,9 +14,6 @@ const datetime = buildDateTimeCST();
       <span aria-hidden="true" class="text-ink-faint mx-2">·</span>
       <span class="text-ink-muted">{datetime}</span>
     </div>
-    <div class="flex items-center gap-6">
-      <span class="display-italic text-ink-muted text-sm md:text-base">start where you are.</span>
-      <ThemeToggle client:load />
-    </div>
+    <span class="display-italic text-ink-muted text-sm md:text-base">start where you are.</span>
   </div>
 </footer>

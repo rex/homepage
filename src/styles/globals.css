@@ -212,6 +212,22 @@
   }
 }
 
+@layer components {
+  /* Theme toggle: hidden on mobile, fixed top-right on tablet/desktop. */
+  .theme-toggle {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .theme-toggle {
+      display: inline-flex;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 50;
+    }
+  }
+}
+
 @layer utilities {
   .numeric-tabular {
     font-variant-numeric: tabular-nums;

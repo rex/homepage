@@ -1,6 +1,8 @@
 ---
 import type { HeroContent } from '../lib/content';
-import HeroNudge from './HeroNudge.tsx';
+// HeroNudge import retained — the cursor-pull effect is parked, not removed.
+// Pierce wants to revisit it with a better idea later.
+// import HeroNudge from './HeroNudge.tsx';
 
 export interface Props {
   hero: HeroContent;
@@ -69,7 +71,7 @@ const letters = [...hero.name];
     </p>
   </div>
 
-  <HeroNudge client:idle />
+  {/* <HeroNudge client:idle />  — disabled per Pierce. Revisit with a better motion idea. */}
 </section>
 
 <style>
