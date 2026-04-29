@@ -3,7 +3,7 @@ import '../styles/fonts.css';
 import '../styles/globals.css';
 import '../styles/boot.css';
 import Footer from '../components/Footer.astro';
-import ThemeToggle from '../components/ThemeToggle.tsx';
+import Header from '../components/Header.astro';
 import SkipToContent from '../components/SkipToContent.astro';
 import { BUILD_COMMIT, BUILD_DATE } from '../lib/build-info';
 
@@ -93,7 +93,7 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toS
   </head>
   <body class={bodyClass}>
     <SkipToContent />
-    <ThemeToggle client:load />
+    <Header />
     <main id="main">
       <slot />
     </main>

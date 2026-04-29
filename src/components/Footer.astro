@@ -1,13 +1,23 @@
 ---
-import { BUILD_COMMIT, buildDateShort } from '../lib/build-info';
+import { BUILD_COMMIT, buildDateTimeCST } from '../lib/build-info';
+import ThemeToggle from './ThemeToggle.tsx';
 
-const date = buildDateShort();
+const datetime = buildDateTimeCST();
 ---
-<footer class="page-gutter hairline-t mt-24 py-10" data-boot style="--boot-delay: 1200ms;">
+<footer class="page-gutter top-bar hairline-t mt-24 py-4" data-boot style="--boot-delay: 1200ms;">
   <div class="flex flex-col items-start gap-3 md:flex-row md:items-center md:justify-between">
-    <div class="font-mono text-xs tracking-wider text-ink-dim numeric-tabular">
-      piercemoore.com · v2.0.0 · build <span class="text-ink-muted">{BUILD_COMMIT}</span> · <span class="text-ink-muted">{date}</span>
+    <div class="font-mono text-xs uppercase tracking-[0.16em] text-ink-muted numeric-tabular">
+      <span class="text-ink">piercemoore.com</span>
+      <span aria-hidden="true" class="text-ink-faint mx-2">@</span>
+      <span class="numeric-tabular">v2.0.0</span>
+      <span aria-hidden="true" class="text-ink-faint mx-2">·</span>
+      <span class="text-ink-muted">build {BUILD_COMMIT}</span>
+      <span aria-hidden="true" class="text-ink-faint mx-2">·</span>
+      <span class="text-ink-muted">{datetime}</span>
     </div>
-    <div class="display-italic text-ink-muted text-sm md:text-base">start where you are.</div>
+    <div class="flex items-center gap-6">
+      <span class="display-italic text-ink-muted text-sm md:text-base">start where you are.</span>
+      <ThemeToggle client:load />
+    </div>
   </div>
 </footer>

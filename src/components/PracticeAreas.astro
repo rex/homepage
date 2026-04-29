@@ -8,12 +8,12 @@ export interface Props {
 
 const { areas } = Astro.props;
 ---
-<section id="practice-areas" class="page-gutter relative pt-24 pb-16" aria-labelledby="practice-areas-heading">
+<section id="practice-areas" class="page-gutter relative pt-24 pb-20" aria-labelledby="practice-areas-heading">
   <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 96px; height: calc(100% - 192px);">
-    § 02 — practice areas
+    § <span class="num">02</span> — practice areas
   </div>
 
-  <header class="mb-12 max-w-prose">
+  <header class="mb-14 max-w-prose">
     <div class="label-mono mb-3">/ practice areas</div>
     <h2 id="practice-areas-heading" class="display-roman text-3xl text-ink leading-tight">
       what i actually do, in nine pieces.
@@ -23,11 +23,23 @@ const { areas } = Astro.props;
     </p>
   </header>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[color:var(--hairline)]">
+  <div class="practice-grid">
     {areas.map((area, i) => (
-      <div class="bg-bg">
-        <PracticeTile area={area} index={i} />
-      </div>
+      <PracticeTile area={area} index={i} />
     ))}
   </div>
 </section>
+
+<style>
+  .practice-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: 3rem;
+  }
+  @media (min-width: 768px) {
+    .practice-grid { grid-template-columns: 1fr 1fr; column-gap: 3rem; }
+  }
+  @media (min-width: 1024px) {
+    .practice-grid { grid-template-columns: 1fr 1fr 1fr; column-gap: 4rem; }
+  }
+</style>

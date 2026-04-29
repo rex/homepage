@@ -1,0 +1,32 @@
+---
+import { loadHero } from '../lib/content';
+
+const hero = await loadHero();
+---
+<header class="page-gutter top-bar hairline-b" data-boot style="--boot-delay: 600ms;">
+  <div class="flex items-center justify-between gap-4 py-3">
+    <div class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.16em] text-ink-muted">
+      <span class="text-ink">piercemoore.com</span>
+      <span aria-hidden="true" class="text-ink-faint">·</span>
+      <span class="numeric-tabular">v2.0.0</span>
+    </div>
+    <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-accent">
+      <span aria-hidden="true" class="status-dot-inline"></span>
+      <span>{hero.status.split('·')[0].trim()}</span>
+    </div>
+  </div>
+</header>
+
+<style>
+  .top-bar {
+    position: relative;
+  }
+  .status-dot-inline {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 7px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+</style>

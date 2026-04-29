@@ -9,16 +9,22 @@ export interface Props {
 const { hero } = Astro.props;
 const letters = [...hero.name];
 ---
-<section class="hero relative page-gutter pt-32 pb-20 overflow-x-clip hairline-b" aria-labelledby="hero-name">
-  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 96px; height: calc(100% - 192px);">
-    § 01 — identity
+<section class="hero relative overflow-x-clip pt-12 pb-20 hairline-b" aria-labelledby="hero-name">
+  <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms; left: 24px; top: 48px; height: calc(100% - 96px);">
+    § <span class="num">01</span> — identity
+  </div>
+
+  <div class="page-gutter">
+    <div class="font-mono text-xs uppercase tracking-[0.18em] text-ink-muted" data-boot style="--boot-delay: 700ms;">
+      {hero.title}
+    </div>
   </div>
 
   <h1
     id="hero-name"
-    class="hero-name display-italic text-hero whitespace-nowrap leading-none opsz-display"
+    class="hero-name display-italic text-hero whitespace-nowrap leading-none opsz-display mt-4 page-gutter"
     aria-label="Pierce Moore"
-    style="letter-spacing: -0.035em; margin-left: -0.045em;"
+    style="letter-spacing: -0.04em;"
   >
     {letters.map((ch, i) => (
       <span
@@ -29,33 +35,42 @@ const letters = [...hero.name];
     ))}
   </h1>
 
-  <div class="mt-8 flex flex-wrap items-baseline gap-x-4 gap-y-2" data-boot style="--boot-delay: 720ms;">
-    <span class="font-mono text-xs uppercase tracking-[0.16em] text-ink">
-      {hero.title}
-    </span>
-    <span class="text-ink-faint" aria-hidden="true">—</span>
-    <span class="display-italic text-ink-muted text-base md:text-lg">{hero.tagline}</span>
+  <div class="page-gutter mt-10">
+    <div class="hairline-rule" data-boot style="--boot-delay: 820ms;" aria-hidden="true"></div>
+
+    <p class="display-italic text-base md:text-lg text-ink-muted mt-6 leading-snug max-w-md" data-boot style="--boot-delay: 850ms;">
+      {hero.tagline}
+    </p>
+
+    <div class="mt-8" data-boot style="--boot-delay: 900ms;">
+      <span class="pill numeric-tabular">{hero.status}</span>
+    </div>
+
+    <p
+      class="mt-12 max-w-prose text-base md:text-lg text-ink numeric-oldstyle opsz-body leading-relaxed"
+      data-boot
+      style="--boot-delay: 950ms;"
+    >
+      {hero.bio}
+    </p>
+
+    <p
+      class="mt-8 max-w-prose display-italic text-ink-muted text-base numeric-oldstyle leading-relaxed"
+      data-boot
+      style="--boot-delay: 1000ms;"
+    >
+      {hero.signal_sentence}
+    </p>
   </div>
-
-  <div class="mt-6" data-boot style="--boot-delay: 820ms;">
-    <span class="pill numeric-tabular">{hero.status}</span>
-  </div>
-
-  <p
-    class="mt-14 max-w-prose text-base md:text-lg text-ink numeric-oldstyle opsz-body leading-relaxed"
-    data-boot
-    style="--boot-delay: 900ms;"
-  >
-    {hero.bio}
-  </p>
-
-  <p
-    class="mt-8 max-w-prose display-italic text-ink-muted text-base numeric-oldstyle leading-relaxed"
-    data-boot
-    style="--boot-delay: 950ms;"
-  >
-    {hero.signal_sentence}
-  </p>
 
   <HeroNudge client:idle />
 </section>
+
+<style>
+  .hairline-rule {
+    width: 320px;
+    max-width: 100%;
+    height: 1px;
+    background: var(--ink-faint);
+  }
+</style>

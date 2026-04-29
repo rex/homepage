@@ -14,61 +14,74 @@ const dotDelay = 900 + index * 90 + 120;
 const sparkDelay = 900 + index * 90 + 280;
 const tileDelay = 900 + index * 90;
 
-const Wrapper = area.recent_link ? 'a' : 'div';
-const wrapperProps = area.recent_link
-  ? { href: area.recent_link, class: 'tile' }
-  : { class: 'tile' };
+const isLink = !!area.recent_link;
 ---
-<Wrapper
-  {...wrapperProps}
-  data-boot
-  style={`--boot-delay: ${tileDelay}ms;`}
->
-  <article class="tile-inner">
-    <div class="flex items-center justify-between">
-      <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
-        <StatusDot status={area.status} bootDelay={dotDelay} />
-        <span>{area.status}</span>
+{isLink ? (
+  <a href={area.recent_link} class="tile" data-boot style={`--boot-delay: ${tileDelay}ms;`}>
+    <article class="tile-inner">
+      <div class="flex items-baseline justify-between mb-6">
+        <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
+          <StatusDot status={area.status} bootDelay={dotDelay} />
+          <span>{area.status}</span>
+        </div>
+        <div class="font-mono text-xs text-ink-dim numeric-tabular">{area.years}</div>
       </div>
-      <div class="font-mono text-xs text-ink-dim numeric-tabular">{area.years}</div>
-    </div>
-
-    <h3 class="display-italic mt-5 text-2xl text-ink leading-tight opsz-tile">
-      {area.name}
-    </h3>
-
-    <div class="mt-4">
-      <Sparkline values={area.sparkline} bootDelay={sparkDelay} />
-    </div>
-
-    <ul class="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.12em] text-ink-dim">
-      {area.tools.map((tool) => <li>{tool}</li>)}
-    </ul>
-
-    <p class="mt-6 font-mono text-xs text-ink-dim">
-      <span class="text-accent" aria-hidden="true">↳ </span>{area.recent}
-    </p>
-  </article>
-</Wrapper>
+      <h3 class="display-italic text-2xl text-ink leading-tight opsz-tile">{area.name}</h3>
+      <div class="mt-5">
+        <Sparkline values={area.sparkline} bootDelay={sparkDelay} />
+      </div>
+      <ul class="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.12em] text-ink-dim">
+        {area.tools.map((tool) => <li>{tool}</li>)}
+      </ul>
+      <p class="mt-6 font-mono text-xs text-ink-dim leading-relaxed">
+        <span class="text-accent" aria-hidden="true">↳ </span>{area.recent}
+      </p>
+    </article>
+  </a>
+) : (
+  <div class="tile" data-boot style={`--boot-delay: ${tileDelay}ms;`}>
+    <article class="tile-inner">
+      <div class="flex items-baseline justify-between mb-6">
+        <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
+          <StatusDot status={area.status} bootDelay={dotDelay} />
+          <span>{area.status}</span>
+        </div>
+        <div class="font-mono text-xs text-ink-dim numeric-tabular">{area.years}</div>
+      </div>
+      <h3 class="display-italic text-2xl text-ink leading-tight opsz-tile">{area.name}</h3>
+      <div class="mt-5">
+        <Sparkline values={area.sparkline} bootDelay={sparkDelay} />
+      </div>
+      <ul class="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.12em] text-ink-dim">
+        {area.tools.map((tool) => <li>{tool}</li>)}
+      </ul>
+      <p class="mt-6 font-mono text-xs text-ink-dim leading-relaxed">
+        <span class="text-accent" aria-hidden="true">↳ </span>{area.recent}
+      </p>
+    </article>
+  </div>
+)}
 
 <style>
   .tile {
     display: block;
-    padding: 28px 24px 24px;
-    background: var(--bg-elevated);
-    border: 1px solid var(--hairline);
-    transition: border-color 200ms ease-out;
+    padding: 24px 0 32px 0;
+    border-top: 1px solid var(--hairline);
+    transition: opacity 200ms ease-out;
     text-decoration: none;
     color: inherit;
     height: 100%;
   }
-  a.tile:hover,
-  a.tile:focus-visible {
-    border-color: var(--ink-muted);
+  a.tile:hover {
+    opacity: 1;
+  }
+  a.tile:hover h3 {
+    color: var(--accent);
+    transition: color 200ms ease-out;
   }
   a.tile:focus-visible {
     outline: 2px solid var(--accent);
-    outline-offset: 2px;
+    outline-offset: 6px;
   }
   .tile-inner {
     display: flex;

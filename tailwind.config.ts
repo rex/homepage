@@ -32,7 +32,7 @@ export default {
         xl: ['1.5rem', { lineHeight: '1.4' }],
         '2xl': ['2rem', { lineHeight: '1.2' }],
         '3xl': ['3rem', { lineHeight: '1.1' }],
-        hero: ['clamp(4.5rem, 17vw, 15rem)', { lineHeight: '0.9' }],
+        hero: ['clamp(4rem, 14vw, 14rem)', { lineHeight: '0.85' }],
       },
       maxWidth: {
         prose: '60ch',

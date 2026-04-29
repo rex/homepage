@@ -65,19 +65,15 @@ export default function ThemeToggle() {
       onClick={toggle}
       aria-label={`switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
       style={{
-        position: 'fixed',
-        top: '1rem',
-        right: '1rem',
-        zIndex: 50,
         background: 'transparent',
         border: 'none',
         cursor: 'pointer',
         fontFamily: 'Cascadia Code, monospace',
-        fontSize: '0.625rem',
+        fontSize: '0.6875rem',
         letterSpacing: '0.12em',
         textTransform: 'uppercase',
-        padding: '0.25rem 0.5rem',
-        display: 'flex',
+        padding: '0',
+        display: 'inline-flex',
         gap: '0.5rem',
       }}
     >

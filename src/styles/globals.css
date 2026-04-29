@@ -190,16 +190,19 @@
     white-space: nowrap;
     pointer-events: none;
   }
+  .margin-mark .num {
+    color: var(--accent);
+  }
 
   .display-italic {
     font-family: 'Fraunces', Georgia, serif;
     font-style: italic;
-    font-weight: 350;
+    font-weight: 400;
   }
 
   .display-roman {
     font-family: 'Fraunces', Georgia, serif;
-    font-weight: 350;
+    font-weight: 400;
   }
 }
 
@@ -241,7 +244,8 @@
   }
 
   .opsz-display {
-    font-variation-settings: 'opsz' 144, 'SOFT' 0;
+    font-variation-settings: 'opsz' 144, 'SOFT' 0, 'wght' 900;
+    font-weight: 900;
   }
 
   .opsz-tile {
