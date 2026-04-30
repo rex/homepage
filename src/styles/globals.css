@@ -266,9 +266,8 @@
   }
 
   .opsz-display {
-    /* SOFT 50 picks up some of the rounder feel from the design probe
-       without losing the heavy display character. Adjust 0 (crisp) → 100 (round). */
-    font-variation-settings: 'opsz' 144, 'SOFT' 50, 'wght' 900;
+    /* SOFT 0 = crisp display corners. Per Pierce. */
+    font-variation-settings: 'opsz' 144, 'SOFT' 0, 'wght' 900;
     font-weight: 900;
   }
 
