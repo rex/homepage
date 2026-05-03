@@ -1,0 +1,66 @@
+kind: vibe-policy
+schema_version: 1
+
+project:
+  name: piercemoore.com
+  lifecycle: brownfield
+  stack: astro5-typescript
+  decisions: []
+
+workflow:
+  default_autonomy_mode: interactive
+  validation_command: npm run build
+  final_verification_command: npm run build
+  ask_before_dockerizing: true
+
+quality_gates:
+  lint:
+    required: true
+    command: npm run build
+  typecheck:
+    required: true
+    command: npm run build
+  tests:
+    mode: deferred
+    command: null
+    required_suites: []
+    coverage:
+      enabled: false
+      minimum_percentage: null
+  clean_worktree_required_on_completion: true
+
+architecture:
+  check_command: npm run build
+  scope_globs:
+    - "src/**/*"
+  exclude_globs:
+    - "**/*.generated.*"
+    - "**/node_modules/**"
+    - "dist/**"
+  max_lines_per_file:
+    soft: 250
+    hard: 400
+
+docs:
+  agents_md_required: true
+  claude_md_required: true
+  task_state_required: false
+  vibe_yaml_required: true
+
+reporting:
+  completion_report:
+    required: true
+    format: markdown-table
+    detail_level: compact
+
+security:
+  secrets_in_files: forbidden
+
+versioning:
+  enabled: true
+  style: semver
+  file: package.json
+  initial: "1.0.0"
+  bump_required_per_commit: false
+  changelog_path: CHANGELOG.md
+  tag_prefix: "v"
