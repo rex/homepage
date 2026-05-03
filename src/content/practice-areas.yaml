@@ -9,7 +9,7 @@ areas:
   - slug: kubernetes-orchestration
     name: kubernetes & orchestration
     status: operational
-    years: 7y
+    years: 9y
     sparkline: [0.30, 0.42, 0.55, 0.60, 0.72, 0.78, 0.88, 0.94, 0.98, 1.00]
     tools:
       - rke1 / rke2
@@ -19,15 +19,16 @@ areas:
     recent: "2026-03 — nyc etcd self-removal recovery"
     recent_link: /postmortems/2026-03-nyc-etcd-self-removal
     expanded: >
-      Multi-venue production Kubernetes across ten-plus Puttery
-      locations, with a central Rancher management plane in AWS.
-      RKE1 → RKE2 migration in flight. Day-2 ops, cert rotation,
-      etcd rescue, Longhorn rollout in progress.
+      Production Kubernetes across ten-plus physical venues, managed through
+      a central Rancher control plane in AWS. I handle the unglamorous day-2
+      work: RKE1 → RKE2 migration, cert rotation, workload cleanup, etcd
+      recovery, Longhorn rollout, and upgrades that need to happen without
+      turning venue operations into a sacrifice ritual.
 
   - slug: iac-config
     name: infrastructure as code
     status: operational
-    years: 8y
+    years: 9y
     sparkline: [0.48, 0.56, 0.62, 0.68, 0.78, 0.85, 0.92, 0.96, 0.88, 0.82]
     tools:
       - terraform
@@ -36,15 +37,16 @@ areas:
       - vagrant
     recent: "2026-02 — venue provisioning pattern (infra → config → services)"
     expanded: >
-      Full venue provisioning automated end to end: Terraform for
-      infrastructure, Ansible for configuration, Jenkins for
-      orchestration. Company-wide Ansible platform covering Windows
-      and Linux estates. Feature-flag patterns for controlled rollouts.
+      Venue provisioning built as a repeatable pipeline: Terraform for
+      infrastructure, Ansible for configuration, Jenkins for orchestration,
+      and feature flags for controlled rollout. The goal is boring:
+      fewer snowflakes, fewer tribal incantations, and a path from blank
+      environment to running services that someone else can actually follow.
 
   - slug: observability
     name: observability
     status: operational
-    years: 6y
+    years: 10y
     sparkline: [0.22, 0.30, 0.42, 0.52, 0.60, 0.72, 0.82, 0.90, 0.98, 1.00]
     tools:
       - prometheus
@@ -54,15 +56,16 @@ areas:
       - pushover
     recent: "2026-01 — full observability stack on helm's deep"
     expanded: >
-      End-to-end monitoring eliminating blind spots across venues:
-      Icinga for synthetic checks, Prometheus+VictoriaMetrics for
-      metrics, Grafana for dashboards, Pushover for paging. Designed
-      and runs the homelab observability stack as the testbed.
+      Monitoring built for action, not dashboard cosplay. I use synthetic
+      checks, metrics, alerting, and runbooks to close blind spots across
+      venues and infrastructure. Prometheus, VictoriaMetrics, Grafana,
+      Icinga, and Pushover where they make sense — with the homelab as the
+      test range before production gets touched.
 
   - slug: cloud-platforms
     name: cloud & platforms
     status: operational
-    years: 9y
+    years: 15y
     sparkline: [0.60, 0.68, 0.75, 0.82, 0.88, 0.92, 0.85, 0.78, 0.72, 0.68]
     tools:
       - aws
@@ -71,15 +74,16 @@ areas:
       - vmware / proxmox
     recent: "2024 — ~64% aws cost reduction (rightsizing + infra cleanup)"
     expanded: >
-      AWS-primary with multi-cloud literacy (Azure, GCP, DigitalOcean).
-      Led a cost reduction taking monthly spend from ~$14k to ~$5k
-      through rightsizing, workload consolidation, and infra cleanup.
-      Certified Cloud Practitioner.
+      AWS-primary platform work with enough multi-cloud literacy to avoid
+      treating one provider as a religion. Led a cloud cost reduction from
+      roughly $14k/month to $5k/month through rightsizing, consolidation,
+      and cleanup — without making reliability worse, which is the part
+      that actually matters. Certified Cloud Practitioner.
 
   - slug: cicd-platform
     name: ci/cd & delivery
     status: operational
-    years: 8y
+    years: 12y
     sparkline: [0.55, 0.62, 0.68, 0.75, 0.82, 0.88, 0.92, 0.95, 0.90, 0.85]
     tools:
       - jenkins
@@ -88,15 +92,16 @@ areas:
       - helm repos
     recent: "2025-12 — internal helm repo + enforced release path"
     expanded: >
-      Built internal Helm repos and CI/CD pipelines with enforced
-      standards and controlled release paths. Standardized
-      containerization strategy across services — safe rollouts,
-      controlled change.
+      Release paths should make the safe thing easy and the dangerous thing
+      obvious. I build CI/CD systems, internal Helm repos, deployment
+      standards, and controlled rollout patterns that reduce heroics and
+      make production change less dependent on whoever remembers the magic
+      command.
 
   - slug: devsecops
     name: devsecops & secrets
     status: operational
-    years: 5y
+    years: 8y
     sparkline: [0.30, 0.38, 0.48, 0.55, 0.62, 0.70, 0.75, 0.80, 0.85, 0.88]
     tools:
       - hashicorp vault
@@ -105,13 +110,15 @@ areas:
       - rbac
     recent: "2025 — least-privilege rbac rollout across venue estate"
     expanded: >
-      Secrets management, least-privilege access, DevSecOps practices
-      built into pipelines. RBAC enforcement across Kubernetes and AWS.
+      Secrets, access, and permissions handled as operational systems, not
+      vibes. Vault, KMS, Secrets Manager, Ansible Vault, Kubernetes RBAC,
+      AWS IAM, and least-privilege cleanup baked into delivery workflows
+      instead of bolted on after the audit panic starts.
 
   - slug: languages-backend
     name: backend & languages
     status: operational
-    years: 15y
+    years: 19y
     sparkline: [0.92, 0.88, 0.82, 0.75, 0.68, 0.60, 0.55, 0.58, 0.62, 0.65]
     tools:
       - python
@@ -121,10 +128,11 @@ areas:
       - go (learning)
     recent: "2026-03 — rancher mcp server (fastmcp, httpx, pydantic v2)"
     expanded: >
-      Full-stack development background now focused on platform
-      tooling and automation. Python + Node primary. Recent work:
-      a Python-based Rancher MCP server covering 103 tools across
-      the Norman/Steve API split.
+      Long software background now aimed at platform tooling and automation.
+      Python, Node/Javascript/Typescript, PHP, Bash, and enough Ruby/Rails to be dangerous in the
+      useful way. I build the glue: CLIs, integrations, deployment tools,
+      reporting scripts, API wrappers, and internal systems that remove
+      repetitive human nonsense.
 
   - slug: frontend-legacy
     name: frontend & interfaces
@@ -142,6 +150,9 @@ areas:
       when building internal tools and the occasional side project.
       Shipped the Virtual Courses game UI at Topgolf and
       internationalized the gameplay platform across regions.
+      internal tools deserve usable interfaces,
+      developer platforms have users, and operational dashboards should
+      answer questions instead of becoming decorative telemetry wallpaper.
 
   - slug: maker-hardware
     name: maker & hardware

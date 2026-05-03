@@ -11,10 +11,11 @@ entries:
     employer: Drive Shack / Puttery
     location: Dallas, TX
     summary: >
-      Lead DevOps owning automation, cloud, CI/CD, and reliable venue
-      platforms across the org. Built and scaled a multi-venue
-      Kubernetes/Rancher platform. Led ~64% AWS cost reduction.
-      Designed company-wide Ansible for Windows + Linux at scale.
+      Own DevOps, automation, cloud, CI/CD, and venue platform reliability
+      across the org. Built and scaled a multi-venue Kubernetes/Rancher
+      platform, designed company-wide Ansible for Windows + Linux, and led
+      an AWS cleanup that cut spend by roughly 64% without sacrificing
+      reliability.
 
   - version: vol/22
     kind: volunteer
@@ -24,9 +25,8 @@ entries:
     location: Farmers Branch, TX
     summary: >
       Volunteer leadership of communications, member engagement, and
-      event coordination for one of the Dallas-Fort Worth area's
-      curling clubs. Significant work over two-plus years; full
-      write-up pending.
+      event coordination for the Dallas-Fort Worth area's
+      curling club. Significant work over two-plus years.
 
   - version: v7.x
     period: 2015 — 2020
@@ -34,10 +34,10 @@ entries:
     employer: Topgolf
     location: Dallas, TX
     summary: >
-      Full-stack engineer on real-time gameplay, developer tooling,
-      and venue deployment workflows for 50+ locations. Shipped the
-      Virtual Courses game UI. Virtualized the venue software stack.
-      Internationalized the gameplay platform across regions.
+      Full-stack engineer on real-time gameplay systems, developer tooling,
+      and venue deployment workflows for 50+ locations. Shipped the Virtual
+      Courses game UI, helped virtualize the venue software stack, and
+      internationalized gameplay across regions.
 
   - version: v6.x
     period: 2014 — 2015

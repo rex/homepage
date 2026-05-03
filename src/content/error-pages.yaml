@@ -2,7 +2,7 @@
   headline: "404 — route not found in this cluster"
   body: >
     The page you requested didn't resolve. Either the URL is wrong,
-    the page got moved during a refactor, or I haven't shipped it yet.
+    the page moved during a refactor, or I haven't shipped it yet.
   actions:
     - label: return home
       href: "/"
