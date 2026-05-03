@@ -16,7 +16,6 @@ Do NOT touch `infra/` or `src/content/*.yaml` until Phase 1 contracts are frozen
 ## Standing user directives
 
 - Use Serena tools for all operations; built-in Read/Edit forbidden on code files
-- continue-until-blocked autonomy mode
 
 ## 1. Phases
 
@@ -67,8 +66,7 @@ Do NOT touch `infra/` or `src/content/*.yaml` until Phase 1 contracts are frozen
 
 ## 3. Blockers / open questions
 
-- Which section IDs to use (confirm with Pierce before Slice 1.1)
-- Does Header.astro already exist? If so, extend it; if placeholder, rewrite
+- 🔴 Planning not complete — Pierce has indicated more planning is needed before any implementation begins. Do not start Slice 1.1 without explicit direction.
 
 ## 4. Recent decisions (append-only, newest first)
 
@@ -76,11 +74,12 @@ Do NOT touch `infra/` or `src/content/*.yaml` until Phase 1 contracts are frozen
 
 ## 5. Next actions (ordered)
 
-1. Finish PR4 commit (this file + PROGRESS.md + specs/)
-2. Finish PR5 (delegation hooks)
-3. Open `chore/add-navigation` branch and begin Slice 1.1
+1. Complete planning with Pierce before any implementation
+2. Resolve blockers in §3
+3. Only then: open `chore/add-navigation` branch and begin Slice 1.1
 
 ## 6. Handoff note (fill when ending a session)
 
-2026-05-03 (Claude): Retrofit PRs 1–4 landing now. PR5 pending. After PR5 merges,
-open `chore/add-navigation` and start Slice 1.1 per TASK_STATE §2.
+2026-05-03 (Claude): All 5 retrofit PRs merged. Navigation feature is specced but NOT ready
+to implement — Pierce wants more planning before Slice 1.1 starts. Do not begin implementation
+without explicit direction from Pierce.
