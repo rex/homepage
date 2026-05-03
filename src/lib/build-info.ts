@@ -1,3 +1,6 @@
+import { version } from '../../package.json';
+export const PACKAGE_VERSION: string = version;
+
 export const BUILD_COMMIT: string =
   import.meta.env.VITE_BUILD_COMMIT || 'dev';
 

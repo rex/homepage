@@ -1,5 +1,5 @@
 ---
-import { BUILD_COMMIT, buildDateTimeCST } from '../lib/build-info';
+import { BUILD_COMMIT, buildDateTimeCST, PACKAGE_VERSION } from '../lib/build-info';
 
 const datetime = buildDateTimeCST();
 ---
@@ -7,7 +7,7 @@ const datetime = buildDateTimeCST();
   <div class="font-mono text-xs uppercase tracking-[0.16em] text-ink-muted numeric-tabular">
     <span class="text-ink">piercemoore.com</span>
     <span aria-hidden="true" class="text-ink-faint mx-2">@</span>
-    <span class="numeric-tabular">v0.1.0</span>
+    <span class="numeric-tabular">v{PACKAGE_VERSION}</span>
     <span aria-hidden="true" class="text-ink-faint mx-2">·</span>
     <span class="text-ink-muted">build {BUILD_COMMIT}</span>
     <span aria-hidden="true" class="text-ink-faint mx-2">·</span>
