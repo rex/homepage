@@ -117,8 +117,128 @@ jobs:
             --cache-control "private, max-age=31536000, immutable" \
             --content-type "application/json; charset=utf-8"
 
+      - name: Build trends page from historical rollups
+        run: |
+          # Pull every per-day rollup we've ever produced. Tiny payload
+          # (each JSON is single-digit KB), so we re-fetch all of them
+          # daily rather than maintaining incremental state.
+          mkdir -p history
+          aws s3 sync "s3://${{ secrets.AWS_SITE_BUCKET }}/admin/data/daily/" ./history/ \
+            --no-progress \
+            --exclude "*" --include "*.json" || true
+
+          if ! ls history/*.json >/dev/null 2>&1; then
+            echo "No historical rollups yet (first run?); skipping trends page."
+            exit 0
+          fi
+
+          python3 - <<'PY' > out/trends.html
+          import datetime, glob, html, json, os, sys
+
+          rows = []
+          for path in sorted(glob.glob('history/*.json')):
+              date = os.path.splitext(os.path.basename(path))[0]
+              try:
+                  with open(path) as f:
+                      data = json.load(f)
+                  general = data.get('general', {}) if isinstance(data, dict) else {}
+                  total = int(general.get('total_requests') or 0)
+                  uniq = int(general.get('unique_visitors') or 0)
+                  failed = int(general.get('failed_requests') or 0)
+              except Exception:
+                  total = uniq = failed = 0
+              rows.append((date, total, uniq, failed))
+
+          if not rows:
+              print('<!doctype html><title>no data</title><body>no rollups yet</body>')
+              sys.exit(0)
+
+          totals = [r[1] for r in rows]
+          peak = max(totals) or 1
+          n = len(rows)
+          width = 600
+          height = 80
+          step = width / max(1, n - 1) if n > 1 else 0
+          points = ' '.join(
+              f'{i * step:.1f},{height - (totals[i] / peak) * (height - 6) - 3:.1f}'
+              for i in range(n)
+          )
+
+          last_date = rows[-1][0]
+          today_iso = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
+          row_html = '\n'.join(
+              f'<tr><td>{html.escape(d)}</td>'
+              f'<td class="num">{t:,}</td>'
+              f'<td class="num">{u:,}</td>'
+              f'<td class="num dim">{f:,}</td></tr>'
+              for d, t, u, f in reversed(rows)
+          )
+
+          print(f'''<!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta name="robots" content="noindex,nofollow">
+          <title>piercemoore - analytics trends</title>
+          <style>
+            html, body {{ margin: 0; background: #0d0d10; color: #f2ede4; }}
+            body {{ font-family: 'Cascadia Code', ui-monospace, monospace; padding: 2.5rem 1.5rem; max-width: 760px; margin: 0 auto; }}
+            h1 {{ font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 900; font-size: 2.5rem; margin: 0 0 0.5rem; letter-spacing: -0.02em; }}
+            .subtitle {{ color: #8d877f; font-size: 0.875rem; }}
+            .nav {{ margin: 1.5rem 0 2.5rem; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; }}
+            .nav a {{ color: #ffb000; text-decoration: none; margin-right: 1.5rem; }}
+            .nav a:hover {{ text-decoration: underline; }}
+            svg {{ display: block; margin: 0 0 0.5rem; max-width: 100%; }}
+            .sparkline {{ stroke: #ffb000; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }}
+            table {{ width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: 0.8125rem; }}
+            th, td {{ text-align: left; padding: 0.5rem 1rem 0.5rem 0; border-bottom: 1px solid rgba(242, 237, 228, 0.07); }}
+            th {{ color: #8d877f; font-weight: 400; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.6875rem; }}
+            .num {{ font-variant-numeric: tabular-nums; text-align: right; padding-right: 1.25rem; }}
+            .dim {{ color: #8d877f; }}
+            .meta {{ color: #5a5a5a; font-size: 0.75rem; margin-top: 3rem; }}
+          </style>
+          </head>
+          <body>
+            <h1>analytics - trends</h1>
+            <div class="subtitle">{n} days of rollups, last update {html.escape(last_date)}</div>
+
+            <div class="nav">
+              <a href="/admin/stats/">latest goaccess report</a>
+              <a href="/">return home</a>
+            </div>
+
+            <svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img" aria-label="total requests per day, last {n} days">
+              <polyline class="sparkline" points="{points}" />
+            </svg>
+            <div class="subtitle">total requests / day &middot; peak {peak:,}</div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>date</th>
+                  <th class="num">requests</th>
+                  <th class="num">unique</th>
+                  <th class="num">failed</th>
+                </tr>
+              </thead>
+              <tbody>
+              {row_html}
+              </tbody>
+            </table>
+
+            <div class="meta">generated {html.escape(today_iso)} - server-side rollup, no client-side js, ips anonymized at /24</div>
+          </body>
+          </html>''')
+          PY
+
+          aws s3 cp out/trends.html "s3://${{ secrets.AWS_SITE_BUCKET }}/admin/trends/index.html" \
+            --cache-control "private, max-age=300" \
+            --content-type "text/html; charset=utf-8"
+
       - name: Invalidate /admin/* on CloudFront
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} \
-            --paths "/admin/stats/*" "/admin/data/*"
+            --paths "/admin/stats/*" "/admin/data/*" "/admin/trends/*"

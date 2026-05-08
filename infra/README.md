@@ -72,10 +72,22 @@ without surfacing identifying IPs.
 4. Writes a daily rollup JSON to `s3://<SiteBucket>/admin/data/daily/YYYY-MM-DD.json`
    (raw logs auto-expire at 30 days; rollups live forever — that's the
    "longitudinal data without keeping per-request data" tradeoff)
-5. Invalidates `/admin/*` on CloudFront
+5. Reads every historical daily rollup from S3 and renders a
+   trends page (sparkline + table) at
+   `s3://<SiteBucket>/admin/trends/index.html`
+6. Invalidates `/admin/*` on CloudFront
 
-Visit the dashboard at <https://piercemoore.com/admin/stats/>. The
-CloudFront Function gates `/admin/*` behind HTTP Basic Auth.
+Three pages live behind the admin gate:
+
+- <https://piercemoore.com/admin/stats/> — most recent goaccess report
+  generated from the last 30 days of raw logs
+- <https://piercemoore.com/admin/trends/> — longitudinal view: all
+  historical daily rollups as a sparkline + table
+- <https://piercemoore.com/admin/data/latest.json> — raw JSON of the
+  most recent rollup (also exposed at `daily/YYYY-MM-DD.json` per day)
+
+The CloudFront Function gates everything under `/admin/*` behind HTTP
+Basic Auth.
 
 ### Configuring the admin password
 
