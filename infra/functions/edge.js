@@ -11,8 +11,18 @@
  *   2. www -> apex 301 redirect (canonical URL).
  *   3. POST /api/ask -> 501 JSON; other methods -> 405. The /api/ask path
  *      is reserved for v2 - this stub keeps the route claimed.
- *   4. Clean-URL rewriting so /cv -> /cv/index.html for the S3 origin.
+ *   4. /admin/* HTTP Basic Auth gate. The expected header value is
+ *      injected at synth time from the PIERCEMOORE_ADMIN_AUTH env var
+ *      (or computed from PIERCEMOORE_ADMIN_USER + PIERCEMOORE_ADMIN_PASS).
+ *      If the env var is unset, the placeholder remains and the gate
+ *      returns 503 for every /admin/* request - admin is locked by
+ *      default, you have to opt in by setting the env var at deploy.
+ *   5. Clean-URL rewriting so /cv -> /cv/index.html for the S3 origin.
  */
+
+// __ADMIN_AUTH__ is replaced at CDK synth time. If left as the literal
+// placeholder string, the admin gate stays closed (503).
+var ADMIN_AUTH = '__ADMIN_AUTH__';
 
 function handler(event) {
   var request = event.request;
@@ -78,7 +88,37 @@ function handler(event) {
     };
   }
 
-  // 4. Clean-URL rewrite.
+  // 4. /admin/* gate. Closed by default; opens only when ADMIN_AUTH was
+  //    populated at deploy time and the request carries a matching header.
+  if (uri === '/admin' || uri.indexOf('/admin/') === 0) {
+    if (ADMIN_AUTH === '__ADMIN_AUTH__' || ADMIN_AUTH === '') {
+      return {
+        statusCode: 503,
+        statusDescription: 'Service Unavailable',
+        headers: {
+          'content-type': { value: 'text/plain; charset=utf-8' },
+          'cache-control': { value: 'no-store' }
+        },
+        body: 'admin endpoint not configured at deploy time'
+      };
+    }
+    var auth = request.headers.authorization;
+    if (!auth || !auth.value || auth.value !== ADMIN_AUTH) {
+      return {
+        statusCode: 401,
+        statusDescription: 'Unauthorized',
+        headers: {
+          'www-authenticate': { value: 'Basic realm="piercemoore admin"' },
+          'cache-control': { value: 'no-store' }
+        }
+      };
+    }
+    // Authorized - fall through to the URL rewrite below so /admin/stats
+    // resolves to /admin/stats/index.html the same way / resolves to
+    // /index.html.
+  }
+
+  // 5. Clean-URL rewrite.
   //    Astro builds paths like /cv -> dist/cv/index.html. CloudFront/S3
   //    won't auto-resolve a directory listing, so we map:
   //       /            -> /index.html         (defaultRootObject handles this)

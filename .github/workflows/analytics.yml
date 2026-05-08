@@ -1,0 +1,124 @@
+name: analytics
+
+# Daily run that:
+#   - Pulls CloudFront access logs from the log bucket
+#   - Runs goaccess to produce an HTML report
+#   - Uploads the report to s3://<site-bucket>/admin/stats/
+#   - (Phase 3) writes a per-day rollup JSON to s3://<site-bucket>/admin/data/
+#   - Invalidates /admin/* on CloudFront so the new files are visible
+#
+# /admin/* is gated by HTTP Basic Auth in the CloudFront Function. The
+# expected header value is baked into the function at `cdk deploy` time.
+#
+# Required GitHub repository secrets:
+#   - AWS_DEPLOY_ROLE_ARN  : OIDC deploy role (already used by deploy.yml)
+#   - AWS_LOG_BUCKET       : Name of the CloudFront access-log bucket
+#                            (CDK output: PiercemooreSiteStack.LogBucketName)
+#   - AWS_SITE_BUCKET      : Site content bucket (already used by deploy.yml)
+#   - AWS_DISTRIBUTION_ID  : CloudFront distribution id (already used by deploy.yml)
+
+on:
+  schedule:
+    # 08:00 UTC daily = 03:00 CDT / 02:00 CST. After yesterday's logs
+    # have stopped trickling in.
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: analytics
+  cancel-in-progress: false
+
+jobs:
+  rollup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Install goaccess + jq
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends goaccess jq
+
+      - name: Sync CloudFront access logs locally
+        run: |
+          mkdir -p logs
+          aws s3 sync "s3://${{ secrets.AWS_LOG_BUCKET }}/cf-logs/" ./logs/ \
+            --no-progress \
+            --exclude "*" --include "*.gz"
+
+          echo "Log files retrieved:"
+          ls -la logs/ | head -20
+          echo "Total: $(ls logs/*.gz 2>/dev/null | wc -l) gz files"
+
+      - name: Generate HTML report
+        run: |
+          mkdir -p out
+          if ls logs/*.gz >/dev/null 2>&1; then
+            zcat logs/*.gz | goaccess - \
+              --log-format=CLOUDFRONT \
+              --anonymize-ip \
+              --no-progress \
+              --output=out/index.html
+          else
+            echo "No logs yet; emitting placeholder report."
+            cat > out/index.html <<'HTML'
+          <!doctype html><html><head><meta charset="utf-8"><title>analytics — no data yet</title></head>
+          <body style="font-family:Cascadia Code,monospace;padding:2rem;background:#0d0d10;color:#f2ede4">
+          <h1>no log data yet</h1>
+          <p>The log bucket is empty. CloudFront standard logs deliver in batches every few minutes; first delivery can take an hour after enable.</p>
+          </body></html>
+          HTML
+          fi
+
+      - name: Generate daily rollup JSON
+        run: |
+          if ls logs/*.gz >/dev/null 2>&1; then
+            # goaccess --output with .json gives a structured summary.
+            zcat logs/*.gz | goaccess - \
+              --log-format=CLOUDFRONT \
+              --anonymize-ip \
+              --no-progress \
+              --output=out/today.json
+          else
+            echo '{"generated_at":"'"$(date -u +%FT%TZ)"'","note":"no log data yet"}' > out/today.json
+          fi
+
+          # Tag with today's date so historical rollups don't overwrite each other.
+          DATESTAMP="$(date -u +%F)"
+          cp out/today.json "out/${DATESTAMP}.json"
+          ls -la out/
+
+      - name: Upload report + rollup to site bucket
+        run: |
+          DATESTAMP="$(date -u +%F)"
+
+          # Latest report (overwritten daily):
+          aws s3 cp out/index.html "s3://${{ secrets.AWS_SITE_BUCKET }}/admin/stats/index.html" \
+            --cache-control "private, max-age=300" \
+            --content-type "text/html; charset=utf-8"
+
+          # Latest rollup (overwritten daily, used by trends page):
+          aws s3 cp out/today.json "s3://${{ secrets.AWS_SITE_BUCKET }}/admin/data/latest.json" \
+            --cache-control "private, max-age=300" \
+            --content-type "application/json; charset=utf-8"
+
+          # Per-day rollup (immutable once written, retained forever):
+          aws s3 cp "out/${DATESTAMP}.json" "s3://${{ secrets.AWS_SITE_BUCKET }}/admin/data/daily/${DATESTAMP}.json" \
+            --cache-control "private, max-age=31536000, immutable" \
+            --content-type "application/json; charset=utf-8"
+
+      - name: Invalidate /admin/* on CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} \
+            --paths "/admin/stats/*" "/admin/data/*"

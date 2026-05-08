@@ -1,3 +1,4 @@
+import * as fs from 'node:fs';
 import * as path from 'node:path';
 import {
   Stack,
@@ -107,11 +108,42 @@ export class SiteStack extends Stack {
     // 4. CloudFront viewer-request function.
     //    JS 2.0 runtime - supports response bodies up to 40KB and
     //    most ES6+ syntax. ES5 compat still required for some constructs.
+    //
+    //    The /admin/* HTTP Basic Auth value is injected here at synth
+    //    time. Source of the value, in priority order:
+    //      1. process.env.PIERCEMOORE_ADMIN_AUTH (a full "Basic xxxx"
+    //         header value, base64-encoded user:pass).
+    //      2. process.env.PIERCEMOORE_ADMIN_USER + _PASS (computed).
+    //      3. Nothing - the placeholder stays, the admin gate is closed.
+    //
+    //    The value ends up in the synthesized CFn template, the CDK
+    //    asset bucket, and the deployed CloudFront function source.
+    //    All admin-only access paths. Acceptable for a personal site;
+    //    rotate by re-deploying with a new env var.
     const edgeFunctionPath = path.join(__dirname, '..', 'functions', 'edge.js');
+    const edgeFunctionRaw = fs.readFileSync(edgeFunctionPath, 'utf-8');
+
+    const adminAuthEnv = process.env.PIERCEMOORE_ADMIN_AUTH;
+    const adminUser = process.env.PIERCEMOORE_ADMIN_USER;
+    const adminPass = process.env.PIERCEMOORE_ADMIN_PASS;
+    let resolvedAdminAuth = '__ADMIN_AUTH__';
+    if (adminAuthEnv && adminAuthEnv.startsWith('Basic ')) {
+      resolvedAdminAuth = adminAuthEnv;
+    } else if (adminUser && adminPass) {
+      const encoded = Buffer.from(`${adminUser}:${adminPass}`, 'utf-8').toString('base64');
+      resolvedAdminAuth = `Basic ${encoded}`;
+    }
+    // Escape any single-quote so the JS string literal stays valid.
+    const escaped = resolvedAdminAuth.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const edgeFunctionSource = edgeFunctionRaw.replace(
+      "var ADMIN_AUTH = '__ADMIN_AUTH__';",
+      `var ADMIN_AUTH = '${escaped}';`,
+    );
+
     const edgeFunction = new cloudfront.Function(this, 'EdgeFunction', {
-      code: cloudfront.FunctionCode.fromFile({ filePath: edgeFunctionPath }),
+      code: cloudfront.FunctionCode.fromInline(edgeFunctionSource),
       runtime: cloudfront.FunctionRuntime.JS_2_0,
-      comment: 'piercemoore.com - URL rewrite + canonical/vanity redirects + /api/ask stub',
+      comment: 'piercemoore.com - URL rewrite + canonical/vanity redirects + /api/ask stub + admin gate',
     });
 
     // 5. CloudFront distribution.

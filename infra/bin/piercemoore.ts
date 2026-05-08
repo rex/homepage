@@ -25,6 +25,7 @@ new CiStack(app, 'PiercemooreCiStack', {
   env,
   description: 'GitHub Actions OIDC + IAM deploy role for piercemoore.com',
   bucket: site.bucket,
+  logBucket: site.logBucket,
   distribution: site.distribution,
   githubRepo: 'rex/homepage',
   branches: ['main'],

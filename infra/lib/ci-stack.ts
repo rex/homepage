@@ -9,6 +9,8 @@ export interface CiStackProps extends StackProps {
   bucket: s3.IBucket;
   /** Distribution - granted CreateInvalidation on this role only. */
   distribution: cloudfront.IDistribution;
+  /** Log bucket - granted Read on this role for the analytics workflow. */
+  logBucket: s3.IBucket;
   /** GitHub repository in `owner/repo` form. */
   githubRepo: string;
   /** Branches allowed to assume this role (e.g. ["main"]). */
@@ -19,6 +21,9 @@ export interface CiStackProps extends StackProps {
  * GitHub Actions OIDC integration. The role assumed by the deploy
  * workflow has only:
  *   - ReadWrite on the site bucket (so `aws s3 sync --delete` works)
+ *   - Read on the log bucket (so the analytics workflow can pull
+ *     CloudFront access logs and write derived reports back to the
+ *     site bucket under /admin/)
  *   - CreateInvalidation on the specific distribution (path /*)
  *
  * No long-lived AWS keys are stored anywhere. The OIDC token from
@@ -67,7 +72,13 @@ export class CiStack extends Stack {
     props.bucket.grantReadWrite(role);
     props.bucket.grantDelete(role);
 
-    // Permission 2: invalidate this specific distribution only.
+    // Permission 2: read access on the log bucket. The analytics workflow
+    // syncs CloudFront access logs locally, runs goaccess against them,
+    // and writes the resulting HTML report back to the site bucket under
+    // /admin/. The log bucket itself is read-only for this role.
+    props.logBucket.grantRead(role);
+
+    // Permission 3: invalidate this specific distribution only.
     role.addToPolicy(
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,

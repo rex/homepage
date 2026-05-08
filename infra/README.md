@@ -62,6 +62,53 @@ open report.html
 `--anonymize-ip` zero-pads the last octet so the report stays useful
 without surfacing identifying IPs.
 
+## Daily analytics workflow + protected dashboard
+
+`.github/workflows/analytics.yml` runs on a daily cron and:
+
+1. Pulls CloudFront access logs from `LogBucket`
+2. Runs goaccess against them (`--anonymize-ip`)
+3. Writes the HTML report to `s3://<SiteBucket>/admin/stats/index.html`
+4. Writes a daily rollup JSON to `s3://<SiteBucket>/admin/data/daily/YYYY-MM-DD.json`
+   (raw logs auto-expire at 30 days; rollups live forever — that's the
+   "longitudinal data without keeping per-request data" tradeoff)
+5. Invalidates `/admin/*` on CloudFront
+
+Visit the dashboard at <https://piercemoore.com/admin/stats/>. The
+CloudFront Function gates `/admin/*` behind HTTP Basic Auth.
+
+### Configuring the admin password
+
+Before `cdk deploy`, set one of the following env-var pairs in your
+shell:
+
+```sh
+# Option A: full Authorization header value (you've pre-encoded it)
+export PIERCEMOORE_ADMIN_AUTH='Basic dXNlcjpzb21lcGFzc3dvcmQ='
+
+# Option B: plaintext user + pass (CDK will base64-encode)
+export PIERCEMOORE_ADMIN_USER='admin'
+export PIERCEMOORE_ADMIN_PASS='something-long-and-random'
+```
+
+CDK substitutes the resolved value into the CloudFront Function source
+at synth time. The value ends up in the synthesized CloudFormation
+template, the CDK assets bucket, and the deployed CF function source —
+all admin-only access paths in the AWS account. Acceptable for a
+personal stats page; rotate by re-deploying with a new value.
+
+If neither env var is set at deploy time, the placeholder remains and
+the function returns 503 for every `/admin/*` request — admin is
+locked-by-default. There is no way to "open" admin without redeploying
+with credentials.
+
+### Required GitHub secrets (analytics workflow)
+
+In addition to the deploy secrets (`AWS_DEPLOY_ROLE_ARN`,
+`AWS_SITE_BUCKET`, `AWS_DISTRIBUTION_ID`), add:
+
+- `AWS_LOG_BUCKET` — the CFn output `PiercemooreSiteStack.LogBucketName`
+
 ## Invariants
 
 - Deploy role is scoped to one bucket + one distribution — never widen scope
