@@ -1,0 +1,28 @@
+title: Pierce Moore - animation lab
+description: A duplicated homepage route for comparing quiet motion treatments before anything moves on the live index.
+controls_label: motion lab
+options:
+  - key: ambient
+    label: ambient
+    description: Long, low-contrast motion on rules and margin marks.
+    default_enabled: true
+  - key: scroll
+    label: scroll
+    description: Small section settles tied to viewport entry and page progress.
+    default_enabled: true
+  - key: signal
+    label: signal
+    description: Slow breathing on status dots, pills, and live indicators.
+    default_enabled: true
+  - key: hover
+    label: hover
+    description: Two-pixel response on links, tiles, and expandable rows.
+    default_enabled: true
+  - key: type
+    label: type
+    description: Variable-font breathing without per-letter nudging.
+    default_enabled: true
+  - key: traces
+    label: traces
+    description: Brief accent traces across tile edges and sparklines.
+    default_enabled: true

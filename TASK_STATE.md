@@ -83,3 +83,6 @@ Do NOT touch `infra/` or `src/content/*.yaml` until Phase 1 contracts are frozen
 2026-05-03 (Claude): All 5 retrofit PRs merged. Navigation feature is specced but NOT ready
 to implement — Pierce wants more planning before Slice 1.1 starts. Do not begin implementation
 without explicit direction from Pierce.
+
+2026-05-03 (Codex): Added an independent `/animation-lab` experiment route for subtle homepage
+motion studies. This did not start or change the pending navigation work.

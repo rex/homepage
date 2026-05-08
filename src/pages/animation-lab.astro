@@ -1,0 +1,357 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import PracticeAreas from '../components/PracticeAreas.astro';
+import CareerLog from '../components/CareerLog.astro';
+import OffTheClock from '../components/OffTheClock.astro';
+import FAQ from '../components/FAQ.astro';
+import Contact from '../components/Contact.astro';
+import Mantra from '../components/Mantra.astro';
+import AnimationLabControls from '../components/AnimationLabControls.tsx';
+import {
+  loadHero,
+  loadPracticeAreas,
+  loadCareer,
+  loadFaq,
+  loadContact,
+  loadOffTheClock,
+  loadAnimationLab,
+} from '../lib/content';
+
+const [hero, areas, career, faq, contact, offTheClock, animationLab] = await Promise.all([
+  loadHero(),
+  loadPracticeAreas(),
+  loadCareer(),
+  loadFaq(),
+  loadContact(),
+  loadOffTheClock(),
+  loadAnimationLab(),
+]);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Pierce Moore',
+  alternateName: 'Anthony Pierce Moore',
+  jobTitle: 'Senior DevOps Engineer',
+  url: 'https://piercemoore.com',
+  sameAs: ['https://github.com/rex', 'https://linkedin.com/in/piercemoore'],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Addison',
+    addressRegion: 'TX',
+    addressCountry: 'US',
+  },
+  email: 'pierce@piercemoore.com',
+  knowsAbout: [
+    'Kubernetes',
+    'Rancher',
+    'Terraform',
+    'Ansible',
+    'AWS',
+    'Prometheus',
+    'Grafana',
+    'DevOps',
+    'Platform Engineering',
+    'Site Reliability Engineering',
+  ],
+};
+---
+<BaseLayout
+  title={animationLab.title}
+  description={animationLab.description}
+  jsonLd={jsonLd}
+  bodyClass="motion-lab motion-lab--ambient motion-lab--scroll motion-lab--signal motion-lab--hover motion-lab--type motion-lab--traces"
+>
+  <AnimationLabControls content={animationLab} client:idle />
+  <Hero hero={hero} />
+  <PracticeAreas areas={areas} />
+  <CareerLog entries={career} />
+  <OffTheClock content={offTheClock} />
+  <FAQ faq={faq} />
+  <Contact contact={contact} />
+  <Mantra />
+</BaseLayout>
+
+<style is:global>
+  body.motion-lab {
+    --motion-scroll: 0;
+    --motion-scroll-shift: 0px;
+    --motion-pointer-x: 0.5;
+    --motion-pointer-y: 0.5;
+    --motion-pointer-x-shift: 0px;
+    --motion-pointer-y-shift: 0px;
+    --motion-hero-shift: 0px;
+  }
+
+  body.motion-lab main {
+    position: relative;
+    padding-bottom: 5.5rem;
+  }
+
+  body.motion-lab main > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  body.motion-lab.motion-lab--ambient main::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 95px,
+      color-mix(in srgb, var(--ink) 6%, transparent) 96px
+    );
+    mask-image: linear-gradient(to bottom, transparent, black 18%, black 76%, transparent);
+    opacity: 0.16;
+    transform: translateY(var(--motion-scroll-shift));
+  }
+
+  body.motion-lab.motion-lab--ambient .margin-mark {
+    transform: rotate(180deg) translate3d(var(--motion-pointer-y-shift), 0, 0);
+    transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease-out;
+  }
+
+  body.motion-lab.motion-lab--ambient .label-mono,
+  body.motion-lab.motion-lab--ambient .margin-mark .num {
+    animation: motion-lab-ink-drift 12s ease-in-out infinite;
+  }
+
+  body.motion-lab.motion-lab--scroll main > section {
+    opacity: 0.86;
+    transform: translateY(8px);
+    transition: opacity 520ms ease-out, transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  body.motion-lab.motion-lab--scroll main > section.motion-lab-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  body.motion-lab.motion-lab--scroll .hero-name {
+    transform: translateY(var(--motion-hero-shift));
+    transition: transform 120ms linear;
+  }
+
+  body.motion-lab.motion-lab--signal .status-dot,
+  body.motion-lab.motion-lab--signal .pill::before {
+    animation: motion-lab-signal-breathe 8.5s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  body.motion-lab.motion-lab--hover .tile,
+  body.motion-lab.motion-lab--hover .career-row > summary,
+  body.motion-lab.motion-lab--hover .contact-row,
+  body.motion-lab.motion-lab--hover .faq-q,
+  body.motion-lab.motion-lab--hover .otc-row {
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1), border-color 260ms ease-out, opacity 260ms ease-out;
+  }
+
+  body.motion-lab.motion-lab--hover .tile:hover,
+  body.motion-lab.motion-lab--hover .tile:focus-within,
+  body.motion-lab.motion-lab--hover .contact-row:hover,
+  body.motion-lab.motion-lab--hover .otc-row:hover {
+    transform: translateY(-2px);
+  }
+
+  body.motion-lab.motion-lab--hover .career-row > summary:hover,
+  body.motion-lab.motion-lab--hover .career-row > summary:focus-visible,
+  body.motion-lab.motion-lab--hover .faq-q:hover {
+    transform: translateX(2px);
+  }
+
+  body.motion-lab.motion-lab--hover .tile:hover,
+  body.motion-lab.motion-lab--hover .tile:focus-within,
+  body.motion-lab.motion-lab--hover .career-row:hover,
+  body.motion-lab.motion-lab--hover .contact-row:hover {
+    border-color: color-mix(in srgb, var(--accent) 24%, var(--hairline));
+  }
+
+  body.motion-lab.motion-lab--type .hero-name {
+    animation: motion-lab-type-breathe 18s ease-in-out infinite;
+  }
+
+  body.motion-lab.motion-lab--type main > section.motion-lab-visible h2.display-roman {
+    font-variation-settings: 'opsz' 64, 'SOFT' 8;
+    transition: font-variation-settings 800ms ease-out;
+  }
+
+  body.motion-lab.motion-lab--traces .hairline-rule,
+  body.motion-lab.motion-lab--traces .tile,
+  body.motion-lab.motion-lab--traces .career-row,
+  body.motion-lab.motion-lab--traces .contact-row {
+    position: relative;
+    overflow: hidden;
+  }
+
+  body.motion-lab.motion-lab--traces .hairline-rule::after,
+  body.motion-lab.motion-lab--traces .tile::before,
+  body.motion-lab.motion-lab--traces .career-row::before,
+  body.motion-lab.motion-lab--traces .contact-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: clamp(40px, 11vw, 136px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0;
+    transform: translateX(-120%);
+    animation: motion-lab-trace 13s linear infinite;
+  }
+
+  body.motion-lab.motion-lab--traces .tile:nth-child(3n + 2)::before,
+  body.motion-lab.motion-lab--traces .career-row:nth-child(3n + 2)::before,
+  body.motion-lab.motion-lab--traces .contact-row:nth-child(3n + 2)::before {
+    animation-delay: 2.8s;
+  }
+
+  body.motion-lab.motion-lab--traces .tile:nth-child(3n)::before,
+  body.motion-lab.motion-lab--traces .career-row:nth-child(3n)::before,
+  body.motion-lab.motion-lab--traces .contact-row:nth-child(3n)::before {
+    animation-delay: 5.6s;
+  }
+
+  body.motion-lab.motion-lab--traces .tile:hover .sparkline-path,
+  body.motion-lab.motion-lab--traces .tile:focus-within .sparkline-path {
+    filter: drop-shadow(0 0 4px var(--accent-dim));
+    stroke-width: 1.5;
+    transition: filter 260ms ease-out, stroke-width 260ms ease-out;
+  }
+
+  .animation-lab-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    z-index: 80;
+    display: flex;
+    max-width: calc(100vw - 2rem);
+    transform: translateX(-50%);
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.375rem;
+    border: 1px solid var(--hairline);
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(12px);
+  }
+
+  .animation-lab-controls__label,
+  .animation-lab-controls__button {
+    font-family: 'Cascadia Code', monospace;
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .animation-lab-controls__label {
+    color: var(--ink-dim);
+    padding: 0 0.25rem 0 0.375rem;
+  }
+
+  .animation-lab-controls__options {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .animation-lab-controls__button {
+    min-height: 1.75rem;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--ink-dim);
+    cursor: pointer;
+    transition: color 180ms ease-out, border-color 180ms ease-out, background 180ms ease-out;
+  }
+
+  .animation-lab-controls__button[aria-pressed='true'] {
+    border-color: var(--accent-dim);
+    background: var(--bg-elevated);
+    color: var(--ink);
+  }
+
+  .animation-lab-controls__button:hover,
+  .animation-lab-controls__button:focus-visible {
+    color: var(--accent);
+  }
+
+  @keyframes motion-lab-ink-drift {
+    0%, 100% { opacity: 0.78; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes motion-lab-signal-breathe {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.82; transform: scale(1.28); }
+  }
+
+  @keyframes motion-lab-type-breathe {
+    0%, 100% { font-variation-settings: 'opsz' 144, 'SOFT' 0, 'wght' 900; }
+    50% { font-variation-settings: 'opsz' 132, 'SOFT' 4, 'wght' 900; }
+  }
+
+  @keyframes motion-lab-trace {
+    0%, 18% { opacity: 0; transform: translateX(-120%); }
+    25% { opacity: 0.42; }
+    42% { opacity: 0; transform: translateX(820%); }
+    100% { opacity: 0; transform: translateX(820%); }
+  }
+
+  @media (max-width: 760px) {
+    body.motion-lab main {
+      padding-bottom: 4.75rem;
+    }
+
+    .animation-lab-controls {
+      right: 0.75rem;
+      left: 0.75rem;
+      bottom: 0.75rem;
+      transform: none;
+      max-width: none;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .animation-lab-controls__label {
+      flex: 0 0 auto;
+      padding: 0 0.125rem 0 0.25rem;
+    }
+
+    .animation-lab-controls__options {
+      min-width: 0;
+      overflow-x: auto;
+      padding-bottom: 0.125rem;
+    }
+
+    .animation-lab-controls__button {
+      flex: 0 0 auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body.motion-lab main::before {
+      display: none;
+    }
+
+    body.motion-lab *,
+    body.motion-lab *::before,
+    body.motion-lab *::after {
+      animation: none !important;
+      transition-duration: 1ms !important;
+    }
+
+    body.motion-lab.motion-lab--scroll main > section,
+    body.motion-lab.motion-lab--scroll .hero-name {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+</style>
