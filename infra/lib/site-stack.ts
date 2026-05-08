@@ -36,6 +36,7 @@ export interface SiteStackProps extends StackProps {
  */
 export class SiteStack extends Stack {
   public readonly bucket: s3.Bucket;
+  public readonly logBucket: s3.Bucket;
   public readonly distribution: cloudfront.Distribution;
 
   constructor(scope: Construct, id: string, props: SiteStackProps) {
@@ -59,6 +60,31 @@ export class SiteStack extends Stack {
       enforceSSL: true,
       versioned: false,
       removalPolicy: RemovalPolicy.RETAIN,
+    });
+
+    // 2b. Access-log bucket - holds CloudFront standard logs.
+    //     30-day TTL on raw logs; the daily analytics workflow rolls
+    //     them up into per-day summaries before they expire so we keep
+    //     longitudinal data without keeping per-request data.
+    //
+    //     CloudFront standard logs use ACL-based delivery, so this
+    //     bucket must allow ACLs (BUCKET_OWNER_PREFERRED). The site
+    //     bucket stays on the default BUCKET_OWNER_ENFORCED.
+    this.logBucket = new s3.Bucket(this, 'LogBucket', {
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      enforceSSL: true,
+      versioned: false,
+      objectOwnership: s3.ObjectOwnership.BUCKET_OWNER_PREFERRED,
+      removalPolicy: RemovalPolicy.RETAIN,
+      lifecycleRules: [
+        {
+          id: 'expire-raw-logs',
+          enabled: true,
+          expiration: Duration.days(30),
+          abortIncompleteMultipartUploadAfter: Duration.days(7),
+        },
+      ],
     });
 
     // 3. ACM certificate (us-east-1, required by CloudFront).
@@ -134,6 +160,9 @@ export class SiteStack extends Stack {
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
       httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
       enableIpv6: true,
+      logBucket: this.logBucket,
+      logFilePrefix: 'cf-logs/',
+      logIncludesCookies: false,
       defaultBehavior,
       additionalBehaviors: {
         '/api/*': apiBehavior,
@@ -232,6 +261,10 @@ export class SiteStack extends Stack {
     new CfnOutput(this, 'DistributionDomainName', {
       value: this.distribution.distributionDomainName,
       description: 'CloudFront default domain (xxxx.cloudfront.net). For sanity-checking before DNS cuts over.',
+    });
+    new CfnOutput(this, 'LogBucketName', {
+      value: this.logBucket.bucketName,
+      description: 'S3 bucket receiving CloudFront access logs. Set as AWS_LOG_BUCKET in GitHub secrets for the analytics workflow.',
     });
   }
 }
