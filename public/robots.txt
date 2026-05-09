@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin/
+Disallow: /resume.pdf
 
 Sitemap: https://piercemoore.com/sitemap-index.xml

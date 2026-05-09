@@ -11,13 +11,15 @@
  *   2. www -> apex 301 redirect (canonical URL).
  *   3. POST /api/ask -> 501 JSON; other methods -> 405. The /api/ask path
  *      is reserved for v2 - this stub keeps the route claimed.
- *   4. /admin/* HTTP Basic Auth gate. The expected header value is
+ *   4. /resume.pdf bot gate. Returns 403 to non-browser User-Agents so
+ *      the analytics rollup counts only human downloads.
+ *   5. /admin/* HTTP Basic Auth gate. The expected header value is
  *      injected at synth time from the PIERCEMOORE_ADMIN_AUTH env var
  *      (or computed from PIERCEMOORE_ADMIN_USER + PIERCEMOORE_ADMIN_PASS).
  *      If the env var is unset, the placeholder remains and the gate
  *      returns 503 for every /admin/* request - admin is locked by
  *      default, you have to opt in by setting the env var at deploy.
- *   5. Clean-URL rewriting so /cv -> /cv/index.html for the S3 origin.
+ *   6. Clean-URL rewriting so /cv -> /cv/index.html for the S3 origin.
  */
 
 // __ADMIN_AUTH__ is replaced at CDK synth time. If left as the literal
@@ -88,7 +90,56 @@ function handler(event) {
     };
   }
 
-  // 4. /admin/* gate. Closed by default; opens only when ADMIN_AUTH was
+  // 4. /resume.pdf bot gate. Goal: count only human downloads in the
+  //    analytics rollup. Bots get 403; the 403 still lands in CloudFront
+  //    access logs (with status 403), so the analytics workflow can count
+  //    the blocks separately from the human-served 200/206s.
+  //
+  //    Heuristic: User-Agent string. Empty UA -> bot. Any string match
+  //    against the pattern list -> bot. Sophisticated UA-spoofers will
+  //    slip through; that's a known limitation of UA filtering. Adding
+  //    WAF / Bot Control later upgrades this.
+  //
+  //    The 403 carries Cache-Control: no-store so a bot's denial is
+  //    never served to a subsequent human request.
+  if (uri === '/resume.pdf') {
+    var ua = '';
+    if (request.headers['user-agent'] && request.headers['user-agent'].value) {
+      ua = request.headers['user-agent'].value.toLowerCase();
+    }
+    var botSignals = [
+      'bot', 'crawl', 'spider', 'scrape', 'fetch', 'slurp',
+      'archive.org', 'wayback', 'preview', 'whatsapp', 'telegram',
+      'discord', 'slack', 'embedly', 'link-checker', 'feedly',
+      'curl', 'wget', 'python-requests', 'python-urllib', 'urllib',
+      'go-http-client', 'java/', 'okhttp', 'libwww', 'lwp',
+      'requests/', 'axios', 'node-fetch', 'httpx', 'aiohttp',
+      'headless', 'phantom', 'puppeteer', 'playwright', 'selenium', 'scrapy'
+    ];
+    var isBot = !ua;
+    if (!isBot) {
+      for (var i = 0; i < botSignals.length; i++) {
+        if (ua.indexOf(botSignals[i]) !== -1) {
+          isBot = true;
+          break;
+        }
+      }
+    }
+    if (isBot) {
+      return {
+        statusCode: 403,
+        statusDescription: 'Forbidden',
+        headers: {
+          'content-type': { value: 'text/plain; charset=utf-8' },
+          'cache-control': { value: 'no-store' },
+          'x-blocked-reason': { value: 'bot-or-non-browser-user-agent' }
+        },
+        body: 'hello bot. this file is for human review only.\n'
+      };
+    }
+  }
+
+  // 5. /admin/* gate. Closed by default; opens only when ADMIN_AUTH was
   //    populated at deploy time and the request carries a matching header.
   if (uri === '/admin' || uri.indexOf('/admin/') === 0) {
     if (ADMIN_AUTH === '__ADMIN_AUTH__' || ADMIN_AUTH === '') {
@@ -118,7 +169,7 @@ function handler(event) {
     // /index.html.
   }
 
-  // 5. Clean-URL rewrite.
+  // 6. Clean-URL rewrite.
   //    Astro builds paths like /cv -> dist/cv/index.html. CloudFront/S3
   //    won't auto-resolve a directory listing, so we map:
   //       /            -> /index.html         (defaultRootObject handles this)
