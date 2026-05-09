@@ -157,5 +157,98 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toS
         );
       })();
     </script>
+
+    <script is:inline>
+      // First-party behavior beacon. Fires GET requests to a long-named
+      // endpoint that returns 204; CloudFront access logs capture the
+      // query string, which is the entire payload. No cookies, no
+      // fingerprinting, no third-party data egress, no CSRF surface.
+      // Path is deliberately self-documenting and ad-blocker-friendly
+      // (no "track", "analytics", "_p", etc.).
+      (function () {
+        try {
+          var EP = '/this-is-only-here-to-see-real-people-vs-robots-i-am-not-logging-all-your-shit-i-promise';
+          function send(params) {
+            try {
+              var qs = Object.keys(params)
+                .filter(function (k) { return params[k] !== undefined && params[k] !== null && params[k] !== ''; })
+                .map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); })
+                .join('&');
+              var url = qs ? EP + '?' + qs : EP;
+              if (typeof navigator.sendBeacon === 'function' && navigator.sendBeacon(url)) {
+                return;
+              }
+              fetch(url, { method: 'GET', cache: 'no-store', keepalive: true }).catch(function () {});
+            } catch (e) { /* silent */ }
+          }
+
+          // 1. Page view on load.
+          var refHost = '';
+          try { refHost = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) {}
+          send({ evt: 'view', p: location.pathname, ref: refHost });
+
+          // 2. Click + outbound + download tracking via one delegated listener.
+          document.addEventListener('click', function (e) {
+            var path = e.composedPath ? e.composedPath() : [];
+            var labelSent = false;
+            var anchor = null;
+            for (var i = 0; i < path.length; i++) {
+              var el = path[i];
+              if (!el || !el.getAttribute) continue;
+              if (!labelSent) {
+                var label = el.getAttribute('data-track');
+                if (label) {
+                  send({ evt: 'click', p: location.pathname, t: label });
+                  labelSent = true;
+                }
+              }
+              if (!anchor && el.tagName === 'A' && el.getAttribute('href')) {
+                anchor = el;
+              }
+            }
+            if (anchor) {
+              var href = anchor.getAttribute('href') || '';
+              if (anchor.host && anchor.host !== location.host) {
+                send({ evt: 'outbound', p: location.pathname, u: anchor.host + (anchor.pathname || '') });
+              }
+              if (href === '/resume.pdf') {
+                send({ evt: 'download', p: location.pathname, t: 'resume.pdf' });
+              }
+            }
+          }, true);
+
+          // 3. Section views via IntersectionObserver. Each <section id="..."> reports once.
+          if ('IntersectionObserver' in window) {
+            var seen = {};
+            var io = new IntersectionObserver(function (entries) {
+              for (var i = 0; i < entries.length; i++) {
+                var entry = entries[i];
+                if (entry.isIntersecting && entry.target.id && !seen[entry.target.id]) {
+                  seen[entry.target.id] = true;
+                  send({ evt: 'section', p: location.pathname, s: entry.target.id });
+                }
+              }
+            }, { threshold: 0.5 });
+            var sections = document.querySelectorAll('section[id]');
+            for (var i = 0; i < sections.length; i++) {
+              io.observe(sections[i]);
+            }
+          }
+
+          // 4. Theme toggle via MutationObserver on <html data-theme>.
+          if (typeof MutationObserver === 'function') {
+            var lastTheme = document.documentElement.getAttribute('data-theme') || '';
+            var mo = new MutationObserver(function () {
+              var t = document.documentElement.getAttribute('data-theme') || '';
+              if (t && t !== lastTheme) {
+                send({ evt: 'theme', v: t });
+                lastTheme = t;
+              }
+            });
+            mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+          }
+        } catch (e) { /* silent */ }
+      })();
+    </script>
   </body>
 </html>

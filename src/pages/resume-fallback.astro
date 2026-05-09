@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { loadContact } from '../lib/content';
+
+const contact = await loadContact();
+---
+<BaseLayout
+  title="Pierce Moore — get in touch"
+  description="Direct contact paths for Pierce Moore. Email, LinkedIn, GitHub, vCard QR code."
+>
+  <section class="page-gutter pt-32 pb-24 max-w-prose">
+    <div class="label-mono mb-3">/ get in touch</div>
+    <h1 class="display-italic text-3xl md:text-4xl text-ink leading-tight">
+      step away from the resume.
+    </h1>
+    <p class="mt-2 display-italic text-ink-muted text-base md:text-lg">
+      (just kidding. mostly.)
+    </p>
+
+    <p class="mt-10 display-italic text-base md:text-lg text-ink leading-relaxed numeric-oldstyle max-w-[60ch]">
+      Looks like your browser is sending an unusual user-agent — could be
+      a corporate proxy, could be an automated visitor. The PDF is gated
+      so the download counter on this site means real people, not crawlers.
+      Every other path in still works:
+    </p>
+
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-[260px_1fr] gap-10 md:gap-14 items-start">
+      <figure class="qr-figure" aria-label="vCard QR code for Pierce Moore">
+        <img
+          src="/contact-qr.png"
+          alt="QR code containing Pierce Moore's contact card"
+          width="260"
+          height="260"
+          class="qr-image"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim mt-3 text-center">
+          scan to add me to your contacts
+        </figcaption>
+      </figure>
+
+      <dl class="contact-fallback-list">
+        <div class="contact-fallback-row">
+          <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Email</dt>
+          <dd>
+            <a class="contact-fallback-link" href="mailto:pierce@piercemoore.com" data-track="fallback-email">
+              pierce@piercemoore.com
+            </a>
+          </dd>
+        </div>
+        <div class="contact-fallback-row">
+          <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">CV (HTML)</dt>
+          <dd>
+            <a class="contact-fallback-link" href="/cv" data-track="fallback-cv-html">
+              piercemoore.com/cv
+            </a>
+          </dd>
+        </div>
+        <div class="contact-fallback-row">
+          <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">LinkedIn</dt>
+          <dd>
+            <a class="contact-fallback-link" href="https://linkedin.com/in/piercemoore" rel="noopener noreferrer" target="_blank" data-track="fallback-linkedin">
+              /in/piercemoore
+            </a>
+          </dd>
+        </div>
+        <div class="contact-fallback-row">
+          <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">GitHub</dt>
+          <dd>
+            <a class="contact-fallback-link" href="https://github.com/rex" rel="noopener noreferrer" target="_blank" data-track="fallback-github">
+              /rex
+            </a>
+          </dd>
+        </div>
+        <div class="contact-fallback-row">
+          <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Phone</dt>
+          <dd>
+            <a class="contact-fallback-link" href="tel:+14695540035" data-track="fallback-phone">
+              469.554.0035
+            </a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <p class="mt-14 display-italic text-base md:text-lg text-ink-muted leading-relaxed max-w-[60ch]">
+      If you really wanted the PDF and you're on a real human keyboard,
+      email me directly. I'll send it. No vetting, no friction, no
+      tracking — just the file.
+    </p>
+
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a
+        href="/cv"
+        class="font-mono text-xs uppercase tracking-[0.16em] text-accent border border-[color:var(--accent-dim)] px-4 py-2 hover:border-[color:var(--accent)]"
+        data-track="fallback-read-cv"
+      >
+        read the html cv →
+      </a>
+      <a
+        href="/"
+        class="font-mono text-xs uppercase tracking-[0.16em] text-ink-muted border border-[color:var(--hairline)] px-4 py-2 hover:border-[color:var(--ink-muted)]"
+        data-track="fallback-home"
+      >
+        ← return home
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .qr-figure {
+    margin: 0;
+    padding: 18px;
+    background: #f4f1ea;
+    border-radius: 4px;
+    width: fit-content;
+  }
+  .qr-image {
+    display: block;
+    width: 224px;
+    height: 224px;
+    image-rendering: pixelated;
+  }
+  .contact-fallback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .contact-fallback-row {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .contact-fallback-row:last-child {
+    border-bottom: none;
+  }
+  .contact-fallback-link {
+    font-size: 1rem;
+    text-decoration: none;
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 220ms ease-out;
+    padding-bottom: 2px;
+  }
+  .contact-fallback-link:hover,
+  .contact-fallback-link:focus-visible {
+    background-size: 100% 1px;
+  }
+</style>

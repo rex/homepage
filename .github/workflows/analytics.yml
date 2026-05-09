@@ -116,15 +116,92 @@ jobs:
                out/today.json > out/today-merged.json
             mv out/today-merged.json out/today.json
 
-            echo "Resume rollup: total=$r_total ok=$r_ok blocked=$r_blocked unique_humans=$r_uniq"
+            # Resume fallback page hits (rewrite from /resume.pdf for bots).
+            # Counts as "blocked_bots" since the only path to that URL is
+            # the edge function rewrite. We add to the existing count.
+            r_fallback=$(zcat logs/*.gz | awk -F'\t' '!/^#/ && $8 == "/resume-fallback/index.html" && $9 == "200"' | wc -l | tr -d ' ')
+            jq --argjson f "$r_fallback" '.resume.fallback_views = $f' out/today.json > out/today-merged.json
+            mv out/today-merged.json out/today.json
+
+            echo "Resume rollup: total=$r_total ok=$r_ok blocked=$r_blocked unique_humans=$r_uniq fallback_views=$r_fallback"
           else
-            echo '{"generated_at":"'"$(date -u +%FT%TZ)"'","note":"no log data yet","resume":{"total_requests":0,"successful_downloads":0,"blocked_bots":0,"unique_human_ips":0}}' > out/today.json
+            echo '{"generated_at":"'"$(date -u +%FT%TZ)"'","note":"no log data yet","resume":{"total_requests":0,"successful_downloads":0,"blocked_bots":0,"unique_human_ips":0,"fallback_views":0}}' > out/today.json
           fi
 
           # Tag with today's date so historical rollups don't overwrite each other.
           DATESTAMP="$(date -u +%F)"
           cp out/today.json "out/${DATESTAMP}.json"
           ls -la out/
+
+      - name: Compute first-party beacon metrics
+        run: |
+          # Parses CloudFront logs for hits on the long-named beacon path.
+          # Each beacon GET carries the event type + page + target as a
+          # query string, captured in column 12 (cs-uri-query). Aggregate
+          # by event, by page, by click target, etc.
+          python3 - <<'PY' > /tmp/behavior.json
+          import gzip, glob, json, urllib.parse
+          from collections import Counter
+
+          EP = '/this-is-only-here-to-see-real-people-vs-robots-i-am-not-logging-all-your-shit-i-promise'
+
+          total = 0
+          by_event = Counter()
+          by_page = {}
+          by_click = Counter()
+          by_section = Counter()
+          by_outbound = Counter()
+          downloads = 0
+
+          for path in sorted(glob.glob('logs/*.gz')):
+              with gzip.open(path, 'rt', errors='replace') as f:
+                  for line in f:
+                      if not line or line.startswith('#') or '\t' not in line:
+                          continue
+                      parts = line.rstrip('\n').split('\t')
+                      if len(parts) < 12 or parts[7] != EP:
+                          continue
+                      query = parts[11] if parts[11] != '-' else ''
+                      params = dict(urllib.parse.parse_qsl(query))
+                      evt = params.get('evt', '')
+                      if not evt:
+                          continue
+                      total += 1
+                      by_event[evt] += 1
+                      page = params.get('p', '')
+                      if page:
+                          if page not in by_page:
+                              by_page[page] = Counter()
+                          by_page[page][evt] += 1
+                      if evt == 'click' and params.get('t'):
+                          by_click[params['t']] += 1
+                      elif evt == 'section' and params.get('s'):
+                          by_section[params['s']] += 1
+                      elif evt == 'outbound' and params.get('u'):
+                          by_outbound[params['u']] += 1
+                      elif evt == 'download':
+                          downloads += 1
+
+          out = {
+              'total_beacons': total,
+              'by_event': dict(by_event),
+              'by_page': {k: dict(v) for k, v in by_page.items()},
+              'by_click_target': dict(by_click.most_common(50)),
+              'by_section': dict(by_section.most_common(50)),
+              'by_outbound': dict(by_outbound.most_common(50)),
+              'downloads': downloads,
+          }
+          print(json.dumps(out))
+          PY
+
+          BEHAVIOR=$(cat /tmp/behavior.json)
+          jq --argjson b "$BEHAVIOR" '.behavior = $b' out/today.json > out/today-merged.json
+          mv out/today-merged.json out/today.json
+
+          DATESTAMP="$(date -u +%F)"
+          cp out/today.json "out/${DATESTAMP}.json"
+
+          echo "Behavior rollup: $(jq -r '.behavior.total_beacons' out/today.json) beacons, $(jq -r '.behavior.downloads' out/today.json) downloads"
 
       - name: Upload report + rollup to site bucket
         run: |
@@ -162,8 +239,15 @@ jobs:
 
           python3 - <<'PY' > out/trends.html
           import datetime, glob, html, json, os, sys
+          from collections import Counter
 
           rows = []
+          # Lifetime aggregates that span all history.
+          life_clicks = Counter()
+          life_sections = Counter()
+          life_outbound = Counter()
+          life_pages = Counter()
+
           for path in sorted(glob.glob('history/*.json')):
               date = os.path.splitext(os.path.basename(path))[0]
               try:
@@ -180,11 +264,30 @@ jobs:
               r_ok = int(resume.get('successful_downloads') or 0)
               r_blocked = int(resume.get('blocked_bots') or 0)
               r_uniq = int(resume.get('unique_human_ips') or 0)
+              behavior = data.get('behavior', {}) if isinstance(data, dict) else {}
+              by_event = behavior.get('by_event', {}) or {}
+              b_views = int(by_event.get('view') or 0)
+              b_clicks = int(by_event.get('click') or 0)
+              b_sections = int(by_event.get('section') or 0)
+              b_outbound = int(by_event.get('outbound') or 0)
+              b_downloads = int(behavior.get('downloads') or 0)
+              for label, n in (behavior.get('by_click_target') or {}).items():
+                  life_clicks[label] += int(n or 0)
+              for s, n in (behavior.get('by_section') or {}).items():
+                  life_sections[s] += int(n or 0)
+              for u, n in (behavior.get('by_outbound') or {}).items():
+                  life_outbound[u] += int(n or 0)
+              for p, evts in (behavior.get('by_page') or {}).items():
+                  if isinstance(evts, dict):
+                      life_pages[p] += int(evts.get('view') or 0)
               rows.append({
                   'date': date,
                   'total': total, 'uniq': uniq, 'failed': failed,
                   'r_total': r_total, 'r_ok': r_ok,
                   'r_blocked': r_blocked, 'r_uniq': r_uniq,
+                  'b_views': b_views, 'b_clicks': b_clicks,
+                  'b_sections': b_sections, 'b_outbound': b_outbound,
+                  'b_downloads': b_downloads,
               })
 
           if not rows:
@@ -211,6 +314,14 @@ jobs:
           dl_lifetime = sum(downloads)
           bots_lifetime = sum(r['r_blocked'] for r in rows)
 
+          views = [r['b_views'] for r in rows]
+          views_points, views_peak = sparkline_points(views)
+          views_lifetime = sum(views)
+          clicks_lifetime = sum(r['b_clicks'] for r in rows)
+          sections_lifetime = sum(r['b_sections'] for r in rows)
+          outbound_lifetime = sum(r['b_outbound'] for r in rows)
+          dl_intent_lifetime = sum(r['b_downloads'] for r in rows)
+
           last_date = rows[-1]['date']
           today_iso = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
@@ -230,6 +341,36 @@ jobs:
               for r in reversed(rows)
           )
 
+          engagement_rows = '\n'.join(
+              f'<tr><td>{html.escape(r["date"])}</td>'
+              f'<td class="num">{r["b_views"]:,}</td>'
+              f'<td class="num">{r["b_clicks"]:,}</td>'
+              f'<td class="num">{r["b_sections"]:,}</td>'
+              f'<td class="num">{r["b_downloads"]:,}</td>'
+              f'<td class="num dim">{r["b_outbound"]:,}</td></tr>'
+              for r in reversed(rows)
+          )
+
+          def small_table(items, cols, limit=10):
+              top = list(items.most_common(limit)) if hasattr(items, 'most_common') else list(items)[:limit]
+              if not top:
+                  return '<p class="dim small">no events recorded yet.</p>'
+              return (
+                  '<table class="mini"><thead><tr>'
+                  + ''.join(f'<th>{html.escape(c)}</th>' for c in cols)
+                  + '</tr></thead><tbody>'
+                  + ''.join(
+                      f'<tr><td>{html.escape(str(label))}</td><td class="num">{count:,}</td></tr>'
+                      for label, count in top
+                  )
+                  + '</tbody></table>'
+              )
+
+          top_clicks_html = small_table(life_clicks, ['click target', 'count'])
+          top_sections_html = small_table(life_sections, ['section', 'views'])
+          top_outbound_html = small_table(life_outbound, ['outbound host/path', 'count'])
+          top_pages_html = small_table(life_pages, ['page', 'views'])
+
           print(f'''<!doctype html>
           <html lang="en">
           <head>
@@ -242,6 +383,12 @@ jobs:
             body {{ font-family: 'Cascadia Code', ui-monospace, monospace; padding: 2.5rem 1.5rem; max-width: 760px; margin: 0 auto; }}
             h1 {{ font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 900; font-size: 2.5rem; margin: 0 0 0.5rem; letter-spacing: -0.02em; }}
             h2 {{ font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 3rem 0 1rem; letter-spacing: -0.01em; }}
+            h3 {{ font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 500; font-size: 1.0625rem; margin: 0 0 0.5rem; letter-spacing: -0.005em; }}
+            .grid-2 {{ display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }}
+            @media (min-width: 700px) {{ .grid-2 {{ grid-template-columns: 1fr 1fr; gap: 2.5rem; }} }}
+            table.mini {{ margin-top: 0; font-size: 0.75rem; }}
+            table.mini th {{ font-size: 0.625rem; }}
+            .small {{ font-size: 0.75rem; }}
             .subtitle {{ color: #8d877f; font-size: 0.875rem; }}
             .nav {{ margin: 1.5rem 0 2.5rem; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; }}
             .nav a {{ color: #ffb000; text-decoration: none; margin-right: 1.5rem; }}
@@ -307,7 +454,48 @@ jobs:
               </tbody>
             </table>
 
-            <div class="meta">generated {html.escape(today_iso)} - server-side rollup, no client-side js, ips anonymized at /24. /resume.pdf gated by user-agent filter at the cdn edge; "unique humans" counts distinct ips that received a 200/206 response.</div>
+            <h2>site engagement</h2>
+            <svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img" aria-label="js-confirmed page views per day, last {n} days">
+              <polyline class="sparkline" points="{views_points}" />
+            </svg>
+            <div class="subtitle">js-confirmed page views / day &middot; peak {views_peak:,} &middot; <span class="lifetime">lifetime: {views_lifetime:,} views, {clicks_lifetime:,} clicks, {sections_lifetime:,} section reads, {dl_intent_lifetime:,} download attempts, {outbound_lifetime:,} outbound clicks</span></div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>date</th>
+                  <th class="num">views</th>
+                  <th class="num">clicks</th>
+                  <th class="num">sections</th>
+                  <th class="num">downloads</th>
+                  <th class="num">outbound</th>
+                </tr>
+              </thead>
+              <tbody>
+              {engagement_rows}
+              </tbody>
+            </table>
+
+            <div class="grid-2">
+              <div>
+                <h3>top pages</h3>
+                {top_pages_html}
+              </div>
+              <div>
+                <h3>top click targets</h3>
+                {top_clicks_html}
+              </div>
+              <div>
+                <h3>top sections read</h3>
+                {top_sections_html}
+              </div>
+              <div>
+                <h3>top outbound</h3>
+                {top_outbound_html}
+              </div>
+            </div>
+
+            <div class="meta">generated {html.escape(today_iso)} - server-side rollup, no client-side js for tracking, ips anonymized at /24. /resume.pdf gated by user-agent filter at the cdn edge; "unique humans" counts distinct ips that received a 200/206 response. site engagement counts come from a first-party beacon at /this-is-only-here-to-see-real-people-vs-robots-i-am-not-logging-all-your-shit-i-promise — JS execution required, so bots that don't run JS never appear in these counts.</div>
           </body>
           </html>''')
           PY

@@ -11,15 +11,20 @@
  *   2. www -> apex 301 redirect (canonical URL).
  *   3. POST /api/ask -> 501 JSON; other methods -> 405. The /api/ask path
  *      is reserved for v2 - this stub keeps the route claimed.
- *   4. /resume.pdf bot gate. Returns 403 to non-browser User-Agents so
- *      the analytics rollup counts only human downloads.
- *   5. /admin/* HTTP Basic Auth gate. The expected header value is
+ *   4. First-party beacon endpoint
+ *      (/this-is-only-here-to-see-real-people-vs-robots-i-am-not-logging-all-your-shit-i-promise).
+ *      Returns 204; the CloudFront access log captures the query string,
+ *      which is the entire payload (event type, page, target, etc.).
+ *   5. /resume.pdf bot gate. Rewrites bot/non-browser requests to the
+ *      /resume-fallback/ page so false-positive humans see a useful
+ *      contact card instead of a hard 403.
+ *   6. /admin/* HTTP Basic Auth gate. The expected header value is
  *      injected at synth time from the PIERCEMOORE_ADMIN_AUTH env var
  *      (or computed from PIERCEMOORE_ADMIN_USER + PIERCEMOORE_ADMIN_PASS).
  *      If the env var is unset, the placeholder remains and the gate
  *      returns 503 for every /admin/* request - admin is locked by
  *      default, you have to opt in by setting the env var at deploy.
- *   6. Clean-URL rewriting so /cv -> /cv/index.html for the S3 origin.
+ *   7. Clean-URL rewriting so /cv -> /cv/index.html for the S3 origin.
  */
 
 // __ADMIN_AUTH__ is replaced at CDK synth time. If left as the literal
@@ -90,18 +95,34 @@ function handler(event) {
     };
   }
 
-  // 4. /resume.pdf bot gate. Goal: count only human downloads in the
-  //    analytics rollup. Bots get 403; the 403 still lands in CloudFront
-  //    access logs (with status 403), so the analytics workflow can count
-  //    the blocks separately from the human-served 200/206s.
+  // 4. First-party beacon endpoint. Pierce explicitly named the path
+  //    so it's both un-misleading-about-its-purpose AND unlikely to
+  //    trigger ad blockers (no "track", "analytics", "_p", etc.).
+  //    Returns 204 No Content. The CloudFront access log captures the
+  //    URI + query string, which is the entire payload.
+  //    See `analytics.yml` for how this is parsed.
+  if (uri === '/this-is-only-here-to-see-real-people-vs-robots-i-am-not-logging-all-your-shit-i-promise') {
+    return {
+      statusCode: 204,
+      statusDescription: 'No Content',
+      headers: {
+        'cache-control': { value: 'no-store' },
+        'x-real-people-only': { value: 'yes-i-promise' }
+      }
+    };
+  }
+
+  // 5. /resume.pdf bot gate. Rewrites the request URI to a friendly
+  //    fallback page (contact info + vCard QR) instead of returning
+  //    a hard 403. False-positive humans (corporate proxies stripping
+  //    UA, weird browsers, etc.) get a useful page with email + QR
+  //    code. Real bots get the same page - which is fine, the content
+  //    is public and points them at email anyway.
   //
-  //    Heuristic: User-Agent string. Empty UA -> bot. Any string match
-  //    against the pattern list -> bot. Sophisticated UA-spoofers will
-  //    slip through; that's a known limitation of UA filtering. Adding
-  //    WAF / Bot Control later upgrades this.
-  //
-  //    The 403 carries Cache-Control: no-store so a bot's denial is
-  //    never served to a subsequent human request.
+  //    Bots reach the fallback page (status 200, /resume-fallback/...)
+  //    instead of /resume.pdf. The analytics workflow counts hits to
+  //    the fallback path as "blocked_bots" and 200/206 to /resume.pdf
+  //    as real downloads.
   if (uri === '/resume.pdf') {
     var ua = '';
     if (request.headers['user-agent'] && request.headers['user-agent'].value) {
@@ -126,20 +147,12 @@ function handler(event) {
       }
     }
     if (isBot) {
-      return {
-        statusCode: 403,
-        statusDescription: 'Forbidden',
-        headers: {
-          'content-type': { value: 'text/plain; charset=utf-8' },
-          'cache-control': { value: 'no-store' },
-          'x-blocked-reason': { value: 'bot-or-non-browser-user-agent' }
-        },
-        body: 'hello bot. this file is for human review only.\n'
-      };
+      request.uri = '/resume-fallback/index.html';
+      return request;
     }
   }
 
-  // 5. /admin/* gate. Closed by default; opens only when ADMIN_AUTH was
+  // 6. /admin/* gate. Closed by default; opens only when ADMIN_AUTH was
   //    populated at deploy time and the request carries a matching header.
   if (uri === '/admin' || uri.indexOf('/admin/') === 0) {
     if (ADMIN_AUTH === '__ADMIN_AUTH__' || ADMIN_AUTH === '') {
@@ -169,7 +182,7 @@ function handler(event) {
     // /index.html.
   }
 
-  // 6. Clean-URL rewrite.
+  // 7. Clean-URL rewrite.
   //    Astro builds paths like /cv -> dist/cv/index.html. CloudFront/S3
   //    won't auto-resolve a directory listing, so we map:
   //       /            -> /index.html         (defaultRootObject handles this)

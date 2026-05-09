@@ -24,7 +24,11 @@ export default defineConfig({
     react(),
     tailwind({ applyBaseStyles: false }),
     mdx(),
-    sitemap(),
+    sitemap({
+      // Pages that exist in the build but should never be discovered
+      // by search engines or surfaced in the sitemap.
+      filter: (page) => !/(\/resume-fallback\/?$|\/animation-lab\/?$|\/admin\/)/.test(page),
+    }),
   ],
   vite: {
     define: {
