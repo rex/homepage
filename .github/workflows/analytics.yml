@@ -80,17 +80,45 @@ jobs:
           HTML
           fi
 
-      - name: Generate daily rollup JSON
+      - name: Generate daily rollup JSON (goaccess + resume metrics)
         run: |
           if ls logs/*.gz >/dev/null 2>&1; then
-            # goaccess --output with .json gives a structured summary.
+            # General goaccess summary covers everything across the bucket.
             zcat logs/*.gz | goaccess - \
               --log-format=CLOUDFRONT \
               --anonymize-ip \
               --no-progress \
               --output=out/today.json
+
+            # /resume.pdf-specific metrics. CloudFront log fields are
+            # tab-separated; column 5 = c-ip, 8 = cs-uri-stem, 9 = sc-status.
+            # 200 + 206 are real downloads (some PDF clients use Range
+            # requests). 403 is the bot-block result from our edge fn.
+            # The 30-pattern UA filter in edge.js means anything reaching
+            # 200/206 here was a browser, so unique-IP count is "unique
+            # humans" within UA-filter precision.
+            zcat logs/*.gz | awk -F'\t' '!/^#/ && $8 == "/resume.pdf"' > /tmp/resume.tsv
+            r_total=$(wc -l < /tmp/resume.tsv | tr -d ' ')
+            r_ok=$(awk -F'\t' '$9 == "200" || $9 == "206"' /tmp/resume.tsv | wc -l | tr -d ' ')
+            r_blocked=$(awk -F'\t' '$9 == "403"' /tmp/resume.tsv | wc -l | tr -d ' ')
+            r_uniq=$(awk -F'\t' '($9 == "200" || $9 == "206") {print $5}' /tmp/resume.tsv | sort -u | wc -l | tr -d ' ')
+
+            jq --argjson total "$r_total" \
+               --argjson ok "$r_ok" \
+               --argjson blocked "$r_blocked" \
+               --argjson uniq "$r_uniq" \
+               '.resume = {
+                  total_requests: $total,
+                  successful_downloads: $ok,
+                  blocked_bots: $blocked,
+                  unique_human_ips: $uniq
+                }' \
+               out/today.json > out/today-merged.json
+            mv out/today-merged.json out/today.json
+
+            echo "Resume rollup: total=$r_total ok=$r_ok blocked=$r_blocked unique_humans=$r_uniq"
           else
-            echo '{"generated_at":"'"$(date -u +%FT%TZ)"'","note":"no log data yet"}' > out/today.json
+            echo '{"generated_at":"'"$(date -u +%FT%TZ)"'","note":"no log data yet","resume":{"total_requests":0,"successful_downloads":0,"blocked_bots":0,"unique_human_ips":0}}' > out/today.json
           fi
 
           # Tag with today's date so historical rollups don't overwrite each other.
@@ -141,38 +169,65 @@ jobs:
               try:
                   with open(path) as f:
                       data = json.load(f)
-                  general = data.get('general', {}) if isinstance(data, dict) else {}
-                  total = int(general.get('total_requests') or 0)
-                  uniq = int(general.get('unique_visitors') or 0)
-                  failed = int(general.get('failed_requests') or 0)
               except Exception:
-                  total = uniq = failed = 0
-              rows.append((date, total, uniq, failed))
+                  data = {}
+              general = data.get('general', {}) if isinstance(data, dict) else {}
+              total = int(general.get('total_requests') or 0)
+              uniq = int(general.get('unique_visitors') or 0)
+              failed = int(general.get('failed_requests') or 0)
+              resume = data.get('resume', {}) if isinstance(data, dict) else {}
+              r_total = int(resume.get('total_requests') or 0)
+              r_ok = int(resume.get('successful_downloads') or 0)
+              r_blocked = int(resume.get('blocked_bots') or 0)
+              r_uniq = int(resume.get('unique_human_ips') or 0)
+              rows.append({
+                  'date': date,
+                  'total': total, 'uniq': uniq, 'failed': failed,
+                  'r_total': r_total, 'r_ok': r_ok,
+                  'r_blocked': r_blocked, 'r_uniq': r_uniq,
+              })
 
           if not rows:
               print('<!doctype html><title>no data</title><body>no rollups yet</body>')
               sys.exit(0)
 
-          totals = [r[1] for r in rows]
-          peak = max(totals) or 1
           n = len(rows)
           width = 600
           height = 80
           step = width / max(1, n - 1) if n > 1 else 0
-          points = ' '.join(
-              f'{i * step:.1f},{height - (totals[i] / peak) * (height - 6) - 3:.1f}'
-              for i in range(n)
-          )
 
-          last_date = rows[-1][0]
+          def sparkline_points(values):
+              peak = max(values) or 1
+              return ' '.join(
+                  f'{i * step:.1f},{height - (values[i] / peak) * (height - 6) - 3:.1f}'
+                  for i in range(n)
+              ), peak
+
+          totals = [r['total'] for r in rows]
+          traffic_points, traffic_peak = sparkline_points(totals)
+
+          downloads = [r['r_ok'] for r in rows]
+          dl_points, dl_peak = sparkline_points(downloads)
+          dl_lifetime = sum(downloads)
+          bots_lifetime = sum(r['r_blocked'] for r in rows)
+
+          last_date = rows[-1]['date']
           today_iso = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
-          row_html = '\n'.join(
-              f'<tr><td>{html.escape(d)}</td>'
-              f'<td class="num">{t:,}</td>'
-              f'<td class="num">{u:,}</td>'
-              f'<td class="num dim">{f:,}</td></tr>'
-              for d, t, u, f in reversed(rows)
+          traffic_rows = '\n'.join(
+              f'<tr><td>{html.escape(r["date"])}</td>'
+              f'<td class="num">{r["total"]:,}</td>'
+              f'<td class="num">{r["uniq"]:,}</td>'
+              f'<td class="num dim">{r["failed"]:,}</td></tr>'
+              for r in reversed(rows)
+          )
+          resume_rows = '\n'.join(
+              f'<tr><td>{html.escape(r["date"])}</td>'
+              f'<td class="num">{r["r_ok"]:,}</td>'
+              f'<td class="num">{r["r_uniq"]:,}</td>'
+              f'<td class="num dim">{r["r_blocked"]:,}</td>'
+              f'<td class="num dim">{r["r_total"]:,}</td></tr>'
+              for r in reversed(rows)
           )
 
           print(f'''<!doctype html>
@@ -186,6 +241,7 @@ jobs:
             html, body {{ margin: 0; background: #0d0d10; color: #f2ede4; }}
             body {{ font-family: 'Cascadia Code', ui-monospace, monospace; padding: 2.5rem 1.5rem; max-width: 760px; margin: 0 auto; }}
             h1 {{ font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 900; font-size: 2.5rem; margin: 0 0 0.5rem; letter-spacing: -0.02em; }}
+            h2 {{ font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 600; font-size: 1.5rem; margin: 3rem 0 1rem; letter-spacing: -0.01em; }}
             .subtitle {{ color: #8d877f; font-size: 0.875rem; }}
             .nav {{ margin: 1.5rem 0 2.5rem; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; }}
             .nav a {{ color: #ffb000; text-decoration: none; margin-right: 1.5rem; }}
@@ -198,6 +254,7 @@ jobs:
             .num {{ font-variant-numeric: tabular-nums; text-align: right; padding-right: 1.25rem; }}
             .dim {{ color: #8d877f; }}
             .meta {{ color: #5a5a5a; font-size: 0.75rem; margin-top: 3rem; }}
+            .lifetime {{ color: #ffb000; }}
           </style>
           </head>
           <body>
@@ -209,10 +266,11 @@ jobs:
               <a href="/">return home</a>
             </div>
 
+            <h2>site traffic</h2>
             <svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img" aria-label="total requests per day, last {n} days">
-              <polyline class="sparkline" points="{points}" />
+              <polyline class="sparkline" points="{traffic_points}" />
             </svg>
-            <div class="subtitle">total requests / day &middot; peak {peak:,}</div>
+            <div class="subtitle">total requests / day &middot; peak {traffic_peak:,}</div>
 
             <table>
               <thead>
@@ -224,11 +282,32 @@ jobs:
                 </tr>
               </thead>
               <tbody>
-              {row_html}
+              {traffic_rows}
               </tbody>
             </table>
 
-            <div class="meta">generated {html.escape(today_iso)} - server-side rollup, no client-side js, ips anonymized at /24</div>
+            <h2>résumé downloads</h2>
+            <svg viewBox="0 0 {width} {height}" width="{width}" height="{height}" role="img" aria-label="successful résumé downloads per day, last {n} days">
+              <polyline class="sparkline" points="{dl_points}" />
+            </svg>
+            <div class="subtitle">human downloads / day &middot; peak {dl_peak:,} &middot; <span class="lifetime">lifetime: {dl_lifetime:,} downloads, {bots_lifetime:,} bots blocked</span></div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>date</th>
+                  <th class="num">downloads</th>
+                  <th class="num">unique humans</th>
+                  <th class="num">bots blocked</th>
+                  <th class="num">total hits</th>
+                </tr>
+              </thead>
+              <tbody>
+              {resume_rows}
+              </tbody>
+            </table>
+
+            <div class="meta">generated {html.escape(today_iso)} - server-side rollup, no client-side js, ips anonymized at /24. /resume.pdf gated by user-agent filter at the cdn edge; "unique humans" counts distinct ips that received a 200/206 response.</div>
           </body>
           </html>''')
           PY
