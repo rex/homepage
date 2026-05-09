@@ -44,7 +44,7 @@ const contact = await loadContact();
         <div class="contact-fallback-row">
           <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Email</dt>
           <dd>
-            <a class="contact-fallback-link" href="mailto:pierce@piercemoore.com" data-track="fallback-email">
+            <a class="contact-fallback-link" href="mailto:pierce@piercemoore.com" data-event="fallback-email">
               pierce@piercemoore.com
             </a>
           </dd>
@@ -52,7 +52,7 @@ const contact = await loadContact();
         <div class="contact-fallback-row">
           <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">CV (HTML)</dt>
           <dd>
-            <a class="contact-fallback-link" href="/cv" data-track="fallback-cv-html">
+            <a class="contact-fallback-link" href="/cv" data-event="fallback-cv-html">
               piercemoore.com/cv
             </a>
           </dd>
@@ -60,7 +60,7 @@ const contact = await loadContact();
         <div class="contact-fallback-row">
           <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">LinkedIn</dt>
           <dd>
-            <a class="contact-fallback-link" href="https://linkedin.com/in/piercemoore" rel="noopener noreferrer" target="_blank" data-track="fallback-linkedin">
+            <a class="contact-fallback-link" href="https://linkedin.com/in/piercemoore" rel="noopener noreferrer" target="_blank" data-event="fallback-linkedin">
               /in/piercemoore
             </a>
           </dd>
@@ -68,7 +68,7 @@ const contact = await loadContact();
         <div class="contact-fallback-row">
           <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">GitHub</dt>
           <dd>
-            <a class="contact-fallback-link" href="https://github.com/rex" rel="noopener noreferrer" target="_blank" data-track="fallback-github">
+            <a class="contact-fallback-link" href="https://github.com/rex" rel="noopener noreferrer" target="_blank" data-event="fallback-github">
               /rex
             </a>
           </dd>
@@ -76,7 +76,7 @@ const contact = await loadContact();
         <div class="contact-fallback-row">
           <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Phone</dt>
           <dd>
-            <a class="contact-fallback-link" href="tel:+14695540035" data-track="fallback-phone">
+            <a class="contact-fallback-link" href="tel:+14695540035" data-event="fallback-phone">
               469.554.0035
             </a>
           </dd>
@@ -94,14 +94,14 @@ const contact = await loadContact();
       <a
         href="/cv"
         class="font-mono text-xs uppercase tracking-[0.16em] text-accent border border-[color:var(--accent-dim)] px-4 py-2 hover:border-[color:var(--accent)]"
-        data-track="fallback-read-cv"
+        data-event="fallback-read-cv"
       >
         read the html cv →
       </a>
       <a
         href="/"
         class="font-mono text-xs uppercase tracking-[0.16em] text-ink-muted border border-[color:var(--hairline)] px-4 py-2 hover:border-[color:var(--ink-muted)]"
-        data-track="fallback-home"
+        data-event="fallback-home"
       >
         ← return home
       </a>
