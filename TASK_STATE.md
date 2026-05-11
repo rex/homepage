@@ -11,11 +11,18 @@
 
 Adding site navigation to piercemoore.com. No nav exists today — the site is a single long-scroll page.
 Phase 1 (spec + design) is in progress. **Next action: begin Slice 1.1** — add a sticky top nav component.
-Do NOT touch `infra/` or `src/content/*.yaml` until Phase 1 contracts are frozen.
 
 ## Standing user directives
 
-- Use Serena tools for all operations; built-in Read/Edit forbidden on code files
+- Agent has broad authority over the homepage workspace (2026-05-11). Changes must be in version
+  control and revertible. Ask Pierce before: destructive operations he can't undo from Git,
+  spending money (new AWS resources beyond trivial, new SaaS subscriptions), DNS/cert changes,
+  removing user-facing features, breaking URL changes, security-sensitive code (auth, secrets,
+  edge-function changes that block traffic), or anything where "obviously should require approval"
+  is even a question — when in doubt, ask.
+- Prefer Serena's symbolic tools (find_symbol, replace_symbol_body, search_for_pattern,
+  replace_content) for code work — they're better than built-in Read/Edit for this codebase.
+  Built-ins are fine when they're the right tool (file deletion, simple markdown, shell ops).
 
 ## 1. Phases
 
@@ -66,17 +73,24 @@ Do NOT touch `infra/` or `src/content/*.yaml` until Phase 1 contracts are frozen
 
 ## 3. Blockers / open questions
 
-- 🔴 Planning not complete — Pierce has indicated more planning is needed before any implementation begins. Do not start Slice 1.1 without explicit direction.
+- ✅ Planning-required blocker lifted 2026-05-11 — Pierce granted broad workspace authority.
 
 ## 4. Recent decisions (append-only, newest first)
 
+- 2026-05-11 — Pierce lifted the workspace fences: agent can manage the homepage end-to-end
+  as long as changes are in version control and revertible; explicit approval still required
+  for destructive / DNS / money / security-sensitive operations.
+- 2026-05-11 — `/resume.pdf` retired (commit `ca70edd`); `/cv` is canonical résumé route,
+  `/resume` is a redirect alias.
+- 2026-05-11 — Email obfuscation landed (commit `9bd39cd`): MailLink component +
+  `hello@piercemoore.com` alias replaces primary email everywhere.
 - 2026-05-03 — Feature confirmed by Pierce: "Adding Navigation to homepage"
 
 ## 5. Next actions (ordered)
 
-1. Complete planning with Pierce before any implementation
-2. Resolve blockers in §3
-3. Only then: open `chore/add-navigation` branch and begin Slice 1.1
+1. Confirm nav scope/design with Pierce (sticky vs static? brand mark? "menu" wording?
+   accent colour? mobile breakpoint?) — quick pass before code.
+2. Open `chore/add-navigation` branch and begin Slice 1.1.
 
 ## 6. Handoff note (fill when ending a session)
 
