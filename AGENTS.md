@@ -4,7 +4,7 @@
 
 - **What**: Pierce Moore's personal homepage — portfolio site for a Senior DevOps Engineer
 - **Runtime**: Astro 5 (static output), TypeScript strict, Tailwind CSS 3, React (islands only)
-- **Owner**: Pierce Moore (solo project — pierce@piercemoore.com)
+- **Owner**: Pierce Moore (solo project — hello@piercemoore.com)
 - **Non-goals**: No CMS, no client-side analytics, no client-side router
 
 ## 2. Setup

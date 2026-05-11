@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import MailLink from '../components/MailLink.astro';
 import { loadContact } from '../lib/content';
 
 const contact = await loadContact();
+const [emailUser, emailDomain] = contact.primary_email.split('@');
 ---
 <BaseLayout
   title="Pierce Moore — get in touch"
@@ -44,9 +46,12 @@ const contact = await loadContact();
         <div class="contact-fallback-row">
           <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">Email</dt>
           <dd>
-            <a class="contact-fallback-link" href="mailto:pierce@piercemoore.com" data-event="fallback-email">
-              pierce@piercemoore.com
-            </a>
+            <MailLink
+              user={emailUser}
+              domain={emailDomain}
+              class="contact-fallback-link"
+              dataEvent="fallback-email"
+            />
           </dd>
         </div>
         <div class="contact-fallback-row">

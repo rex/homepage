@@ -1,11 +1,15 @@
 ---
 import type { ContactContent } from '../lib/content';
+import MailLink from './MailLink.astro';
 
 export interface Props {
   contact: ContactContent;
 }
 
 const { contact } = Astro.props;
+
+// Pre-parse primary_email so MailLink gets user/domain parts only.
+const [emailUser, emailDomain] = contact.primary_email.split('@');
 ---
 <section id="contact" class="page-gutter relative pt-24 pb-16" aria-labelledby="contact-heading">
   <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms;">
@@ -27,14 +31,22 @@ const { contact } = Astro.props;
       <div class="contact-row">
         <dt class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">{link.label}</dt>
         <dd>
-          <a
-            href={link.href}
-            class="contact-link text-ink"
-            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            target={link.href.startsWith('http') ? '_blank' : undefined}
-          >
-            {link.value}
-          </a>
+          {link.kind === 'email' ? (
+            <MailLink
+              user={emailUser}
+              domain={emailDomain}
+              class="contact-link text-ink"
+            />
+          ) : (
+            <a
+              href={link.href}
+              class="contact-link text-ink"
+              rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              target={link.href.startsWith('http') ? '_blank' : undefined}
+            >
+              {link.value}
+            </a>
+          )}
         </dd>
       </div>
     ))}

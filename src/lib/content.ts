@@ -62,7 +62,7 @@ export interface OffTheClockContent {
 
 export interface ContactContent {
   primary_email: string;
-  links: { label: string; href: string; value: string }[];
+  links: { label: string; href: string; value: string; kind?: 'email' }[];
   location: string;
   availability: string;
   humans_txt: string;

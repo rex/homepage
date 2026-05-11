@@ -376,7 +376,7 @@ Full summaries provided in `career-log.yaml`.
 **FAQ** — 12 Q&A pairs provided in `faq.yaml`. Intro: "Questions recruiters and hiring managers actually ask. This is the static version; a live query interface is planned for v2."
 
 **Contact**:
-- Email: `pierce@piercemoore.com`
+- Email: `hello@piercemoore.com`
 - GitHub: `github.com/rex`
 - LinkedIn: `linkedin.com/in/piercemoore`
 - Resume: `/resume.pdf`
@@ -538,7 +538,7 @@ Every page has a unique `<meta name="description">`.
     "addressRegion": "TX",
     "addressCountry": "US"
   },
-  "email": "pierce@piercemoore.com",
+  "email": "hello@piercemoore.com",
   "knowsAbout": [
     "Kubernetes", "Rancher", "Terraform", "Ansible",
     "AWS", "Prometheus", "Grafana", "DevOps",
@@ -601,7 +601,7 @@ thank you. That's on purpose.
 ### security.txt content
 
 ```
-Contact: mailto:pierce@piercemoore.com
+Contact: mailto:hello@piercemoore.com
 Preferred-Languages: en
 Canonical: https://piercemoore.com/.well-known/security.txt
 Expires: [BUILD-DATE + 1 YEAR in ISO 8601 format]

@@ -1,5 +1,6 @@
 ---
 import PrintLayout from '../layouts/PrintLayout.astro';
+import MailLink from '../components/MailLink.astro';
 import {
   loadHero,
   loadPracticeAreas,
@@ -16,6 +17,8 @@ const [hero, areas, career, contact] = await Promise.all([
 
 const operationalAreas = areas.filter((a) => a.status === 'operational');
 const archivedAreas = areas.filter((a) => a.status === 'archived');
+
+const [emailUser, emailDomain] = contact.primary_email.split('@');
 ---
 <PrintLayout
   title="Pierce Moore — Résumé"
@@ -30,7 +33,7 @@ const archivedAreas = areas.filter((a) => a.status === 'archived');
         <span class="display-italic text-ink-muted">{hero.tagline}</span>
       </div>
       <div class="mt-3 font-mono text-xs text-ink-dim">
-        {contact.location} · {contact.primary_email} · github /rex · /in/piercemoore
+        {contact.location} · <MailLink user={emailUser} domain={emailDomain} /> · github /rex · /in/piercemoore
       </div>
       <a href="/resume.pdf" class="cv-download no-print" download>
         download résumé as pdf →
@@ -92,7 +95,11 @@ const archivedAreas = areas.filter((a) => a.status === 'archived');
         {contact.links.map((l) => (
           <li>
             <span class="text-ink-dim">{l.label}: </span>
-            <a class="text-ink" href={l.href}>{l.value}</a>
+            {l.kind === 'email' ? (
+              <MailLink user={emailUser} domain={emailDomain} class="text-ink" />
+            ) : (
+              <a class="text-ink" href={l.href}>{l.value}</a>
+            )}
           </li>
         ))}
       </ul>

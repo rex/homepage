@@ -18,4 +18,4 @@
     - label: return home
       href: "/"
     - label: report this
-      href: "mailto:pierce@piercemoore.com?subject=site%20500"
+      href: "/#contact"

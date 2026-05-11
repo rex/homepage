@@ -1,0 +1,54 @@
+---
+/**
+ * MailLink — renders an obfuscated email link.
+ *
+ * The user + domain parts live in data-* attributes. A small inline
+ * script in BaseLayout assembles the mailto: anchor at runtime. The
+ * rendered HTML never contains an "@" between user and domain, so
+ * naive HTML-regex harvesters get nothing usable.
+ *
+ *   <MailLink user="hello" domain="piercemoore.com" />
+ *   <MailLink user="hello" domain="piercemoore.com" label="write to me" />
+ *   <MailLink user="hello" domain="piercemoore.com"
+ *             class="contact-link" subject="hello from the website"
+ *             dataEvent="contact-email" />
+ *
+ * `class` is applied to the final <a> after hydration. `dataEvent` is
+ * forwarded so the Presence beacon can pick up the click.
+ *
+ * Pre-JS fallback text is `fallback` || `label` || "email". The
+ * fallback is what scrapers and no-JS readers see; it must NOT be the
+ * address itself.
+ */
+
+export interface Props {
+  user: string;
+  domain: string;
+  label?: string;
+  fallback?: string;
+  class?: string;
+  subject?: string;
+  dataEvent?: string;
+}
+
+const {
+  user,
+  domain,
+  label,
+  fallback,
+  class: className,
+  subject,
+  dataEvent,
+} = Astro.props;
+
+const fallbackText = fallback ?? label ?? 'email';
+---
+<span
+  data-maillink
+  data-u={user}
+  data-d={domain}
+  data-label={label}
+  data-class={className}
+  data-subject={subject}
+  data-event={dataEvent}
+>{fallbackText}</span>

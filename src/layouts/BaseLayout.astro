@@ -130,6 +130,39 @@ const ogImageUrl = new URL(ogImage, Astro.site ?? 'https://piercemoore.com').toS
     <Footer />
 
     <script is:inline>
+      // MailLink hydration — assembles obfuscated email parts into a real
+      // mailto: anchor at runtime. The rendered HTML never has the address
+      // in plain form, so naive HTML scrapers get nothing usable.
+      (function () {
+        function rewrite(node) {
+          var u = node.getAttribute('data-u');
+          var d = node.getAttribute('data-d');
+          if (!u || !d) return;
+          var addr = u + '@' + d;
+          var subject = node.getAttribute('data-subject');
+          var label = node.getAttribute('data-label') || addr;
+          var cls = node.getAttribute('data-class');
+          var ev = node.getAttribute('data-event');
+          var a = document.createElement('a');
+          a.href = 'mailto:' + addr + (subject ? '?subject=' + encodeURIComponent(subject) : '');
+          if (cls) a.className = cls;
+          if (ev) a.setAttribute('data-event', ev);
+          a.textContent = label;
+          node.replaceWith(a);
+        }
+        function init() {
+          var nodes = document.querySelectorAll('[data-maillink]');
+          for (var i = 0; i < nodes.length; i++) rewrite(nodes[i]);
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+      })();
+    </script>
+
+    <script is:inline>
       // Console easter egg — fires once per session for the curious.
       (function () {
         try {

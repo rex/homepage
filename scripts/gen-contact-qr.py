@@ -35,7 +35,7 @@ VCARD = "\r\n".join([
     "FN:Pierce Moore",
     "TITLE:Senior DevOps Engineer",
     "ORG:piercemoore.com",
-    "EMAIL;TYPE=INTERNET,PREF:pierce@piercemoore.com",
+    "EMAIL;TYPE=INTERNET,PREF:hello@piercemoore.com",
     "TEL;TYPE=CELL:+1-469-554-0035",
     "URL:https://piercemoore.com",
     "URL;TYPE=linkedin:https://linkedin.com/in/piercemoore",
