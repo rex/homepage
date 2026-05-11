@@ -91,17 +91,32 @@ Basic Auth.
 
 ### Configuring the admin password
 
-Before `cdk deploy`, set one of the following env-var pairs in your
-shell:
+The recommended path is a local `.env` file that the Makefile sources
+automatically. One-time setup:
+
+```sh
+cp .env.example .env
+$EDITOR .env   # fill in PIERCEMOORE_ADMIN_USER + _PASS
+```
+
+Then any `make deploy` / `make deploy-site` picks up the values without
+you re-typing them. `.env` is gitignored at the repo root.
+
+Inside `.env`, choose one of the two patterns (no `export` keyword
+needed -- the Makefile uses `set -a` before sourcing):
 
 ```sh
 # Option A: full Authorization header value (you've pre-encoded it)
-export PIERCEMOORE_ADMIN_AUTH='Basic dXNlcjpzb21lcGFzc3dvcmQ='
+PIERCEMOORE_ADMIN_AUTH='Basic dXNlcjpzb21lcGFzc3dvcmQ='
 
 # Option B: plaintext user + pass (CDK will base64-encode)
-export PIERCEMOORE_ADMIN_USER='admin'
-export PIERCEMOORE_ADMIN_PASS='something-long-and-random'
+PIERCEMOORE_ADMIN_USER='admin'
+PIERCEMOORE_ADMIN_PASS='something-long-and-random'
 ```
+
+For one-off deploys without `.env`, exporting the same vars in your
+shell before `npx cdk deploy` still works -- the synth reads
+`process.env` either way.
 
 CDK substitutes the resolved value into the CloudFront Function source
 at synth time. The value ends up in the synthesized CloudFormation
@@ -129,7 +144,7 @@ In addition to the deploy secrets (`AWS_DEPLOY_ROLE_ARN`,
 ## Common tasks
 
 - **Day-to-day deploy**: push to `main` — GitHub Actions handles it (no CDK needed)
-- **Infra change**: `cd infra && npm install && npx cdk diff` → review → `npx cdk deploy` (admin creds)
+- **Infra change**: `cd infra && npm install && make diff` → review → `make deploy` (sources `.env` for admin creds)
 - **First bootstrap**: see root `README.md §Deploying to AWS`
 
 ## Gotchas
