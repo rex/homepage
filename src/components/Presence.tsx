@@ -85,9 +85,6 @@ export default function Presence(): null {
             u: anchor.host + (anchor.pathname || ''),
           });
         }
-        if (href === '/resume.pdf') {
-          note({ evt: 'download', p: location.pathname, t: 'resume.pdf' });
-        }
       }
     };
     document.addEventListener('click', onClick, true);

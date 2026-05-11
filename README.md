@@ -98,9 +98,7 @@ Full details: [`infra/README.md`](infra/README.md).
 
 Content lives entirely in `src/content/*.yaml`. Edit, commit, push — GitHub Actions deploys.
 
-The CV route is pure-derived from the same content; you don't maintain a separate résumé doc.
-
-A printable PDF version belongs at `public/resume.pdf` — referenced by `/cv` and the contact section. Drop the file in and re-deploy.
+The résumé is pure-derived from the same content and rendered as HTML at `/cv` (canonical) and `/resume` (alias redirect). No PDF is shipped — the print stylesheet on `/cv` produces a clean PDF via the browser's print dialog (Cmd+P → "Save as PDF").
 
 ## Accessibility
 

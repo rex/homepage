@@ -20,6 +20,12 @@ export default defineConfig({
   build: {
     inlineStylesheets: 'auto',
   },
+  // /resume is a memorable alias for the canonical HTML résumé at /cv.
+  // Astro emits a meta-refresh + canonical-link stub at /resume/ that
+  // forwards crawlers and humans to /cv.
+  redirects: {
+    '/resume': '/cv',
+  },
   integrations: [
     react(),
     tailwind({ applyBaseStyles: false }),
@@ -27,7 +33,7 @@ export default defineConfig({
     sitemap({
       // Pages that exist in the build but should never be discovered
       // by search engines or surfaced in the sitemap.
-      filter: (page) => !/(\/resume-fallback\/?$|\/animation-lab\/?$|\/admin\/)/.test(page),
+      filter: (page) => !/(\/animation-lab\/?$|\/admin\/|\/resume\/?$)/.test(page),
     }),
   ],
   vite: {

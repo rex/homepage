@@ -2,8 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
-Disallow: /resume.pdf
-Disallow: /resume-fallback/
 Disallow: /animation-lab/
 Disallow: /this-is-only-here-to-see-real-people-vs-robots-i-am-not-logging-all-your-shit-i-promise
 

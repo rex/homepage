@@ -35,9 +35,9 @@ const [emailUser, emailDomain] = contact.primary_email.split('@');
       <div class="mt-3 font-mono text-xs text-ink-dim">
         {contact.location} · <MailLink user={emailUser} domain={emailDomain} /> · github /rex · /in/piercemoore
       </div>
-      <a href="/resume.pdf" class="cv-download no-print" download>
-        download résumé as pdf →
-      </a>
+      <button type="button" class="cv-download no-print" data-event="cv-print" onclick="window.print()">
+        print or save as pdf →
+      </button>
     </header>
 
     <section class="cv-section">

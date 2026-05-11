@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """
-Regenerate public/contact-qr.png — a vCard QR code Pierce can offer
-on the /resume-fallback/ page. Recruiter scans → Pierce becomes a
-contact in their phone.
+Regenerate public/contact-qr.png — a vCard QR code Pierce can hand
+out in person or embed in a deck. Recruiter scans → Pierce becomes
+a contact in their phone. The PNG ships at public/contact-qr.png
+and is consumed wherever the design wants it (currently unlinked
+in the live site; reserved for physical-world / artifact use).
 
 Run from the repo root:
 
