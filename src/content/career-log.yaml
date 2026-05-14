@@ -2,130 +2,88 @@
 # Format: reverse chronological, versioned, changelog-style
 # Each entry has version, date range, role, employer, 1-3 line summary
 # Render as monospace block, tabular-figures for versions, italic serif for descriptions
-#
-# Dates verified against LinkedIn 2026-05-14. Pre-2012 entries (v0.x) are
-# Pierce-private (not on LinkedIn) and reflect his memory of those roles.
 
 entries:
   - version: v8.x
     period: 2020 — present
     role: Senior DevOps Engineer
-    title_arc: DevOps Engineer (Contract) → Senior DevOps Engineer
+    title_arc: Software Engineer → Senior DevOps Engineer
     employer: Drive Shack / Puttery
     location: Dallas, TX
     summary: >
-      Started as a contract DevOps Engineer in May 2020, converted to
-      Senior DevOps Engineer full-time in April 2021. Own DevOps,
-      automation, cloud, CI/CD, and venue platform reliability across
-      the org. Built and scaled a multi-venue Kubernetes/Rancher
-      platform, designed company-wide Ansible for Windows + Linux, and
-      led an AWS cleanup that cut spend by roughly 64% without
-      sacrificing reliability.
+      Own DevOps, automation, cloud, CI/CD, and venue platform reliability
+      across the org. Built and scaled a multi-venue Kubernetes/Rancher
+      platform, designed company-wide Ansible for Windows + Linux, and led
+      an AWS cleanup that cut spend by roughly 64% without sacrificing
+      reliability.
 
   - version: vol/22
     kind: volunteer
-    period: 2022 — 2023
+    period: 2022 — 2024
     role: Director of Communications
     employer: DFW Curling Club
-    location: Dallas, TX
+    location: Farmers Branch, TX
     summary: >
       Volunteer leadership of communications, member engagement, and
-      event coordination for the Dallas-Fort Worth area's curling
-      club. May 2022 — Nov 2023.
+      event coordination for the Dallas-Fort Worth area's
+      curling club. Significant work over two-plus years.
 
   - version: v7.x
     period: 2015 — 2020
-    role: Software Engineer II
+    role: Software Engineer
     employer: Topgolf
     location: Dallas, TX
     summary: >
       Full-stack engineer on real-time gameplay systems, developer tooling,
       and venue deployment workflows for 50+ locations. Shipped the Virtual
       Courses game UI, helped virtualize the venue software stack, and
-      internationalized gameplay across regions. Nov 2015 — May 2020.
+      internationalized gameplay across regions.
 
   - version: v6.x
-    period: 2015
+    period: 2014 — 2015
     role: Platform Engineer
     employer: Vinli
     location: Dallas, TX
     summary: >
-      Short stint (Aug — Nov 2015) on the Operations team for a
-      connected-vehicle platform: deploying and scaling a large
-      microservices infrastructure, helping build orchestration and
-      automation with Docker and Kubernetes, and standing up
-      monitoring/alerting.
+      Platform work on connected-vehicle infrastructure.
 
   - version: v5.x
-    period: 2015
-    role: Angular.js Developer
-    employer: Ristken Software Services
-    location: Dallas, TX
+    period: 2013 — 2014
+    role: Developer Operations
+    employer: YouToo
     summary: >
-      Two-month engagement (Jun — Jul 2015) on the Odyssey team,
-      expanding existing software via open-source tooling and building
-      hybrid mobile applications for iOS and Android with Cordova,
-      Ionic, and Angular.js.
+      DevOps-adjacent before "DevOps" was the word for it.
 
   - version: v4.x
-    period: 2014 — 2015
-    role: Interactive Developer → Freelance Web Developer
-    employer: Sq1
-    location: Dallas, TX
+    period: 2012 — 2013
+    role: Web Developer
+    employer: ZNGINE
     summary: >
-      Returned to Sq1 twice in late 2014: first as a freelance web
-      developer (Sep — Oct 2014), then as an Interactive Developer
-      (Oct 2014 — Apr 2015). Short-lifecycle client web work and
-      maintenance/feature additions across the agency.
+      Web dev work. Era of Rails, jQuery, and learning the web stack end-to-end.
 
   - version: v3.x
-    period: 2014
+    period: 2011 — 2012
     role: Web Developer
     employer: 70kft
-    location: Dallas, TX
     summary: >
-      One-month contract (Aug 2014) finishing the software marketplace
-      for Verizon's new consumer-targeted cloud services platform:
-      Node.js backend endpoints, Angular.js interface elements, and a
-      UX refactor of the existing interface.
+      Agency front-end and back-end work.
 
   - version: v2.x
-    period: 2014
-    role: Systems Administrator
-    employer: Youtoo Technologies
-    location: Irving, TX
+    period: 2010 — 2011
+    role: Interactive Developer → Web Developer → PHP Developer
+    employer: SQ1
     summary: >
-      Six months (Feb — Jul 2014) at a social-TV company integrating
-      social media and short-form video into live broadcasts. Built
-      Ruby/Rails deployment automation, ran a 50+ node worldwide AWS
-      footprint, and rolled custom monitoring/alerting in Ruby and Node.
+      Three titles, one agency. Moved up the stack from Flash/interactive
+      into full-stack PHP as the web itself changed underneath.
 
   - version: v1.x
-    period: 2013 — 2014
-    role: Web Developer
-    employer: Zngine
-    location: Irving, TX
+    period: 2008 — 2010
+    role: Angular.js Developer · Senior PHP Developer
+    employer: Ristken Software Services · Latimundo
     summary: >
-      Sep 2013 — Jan 2014. Brought on full-time after nearly a year of
-      building the same app as a contractor through Sq1. Split time
-      between new features and refactoring as business needs shifted;
-      implemented coding standards, usability guidelines, and unit
-      testing for the JavaScript surface (client + server).
+      Early professional dev work. Learning on the job.
 
   - version: v0.x
-    period: 2012 — 2013
-    role: PHP Developer
-    employer: Sq1
-    location: Dallas, TX
-    summary: >
-      First Sq1 stint (Oct 2012 — Sep 2013). Built a large-scale,
-      high-availability music-oriented social network with Node.js,
-      Express, Mongoose, MongoDB, and Backbone.js — including a
-      Backbone-powered web radio player and a RESTful API driving the
-      whole experience.
-
-  # Pre-LinkedIn — Pierce-private memory, not on the LinkedIn profile.
-  - version: v-1.x
     period: 2007 — 2008
     role: Sales Specialist
     employer: Limestone Networks
