@@ -2,94 +2,180 @@
 # Format: reverse chronological, versioned, changelog-style
 # Each entry has version, date range, role, employer, 1-3 line summary
 # Render as monospace block, tabular-figures for versions, italic serif for descriptions
+#
+# Versioning: v0.x = first paid job (Limestone, Aug 2008), increment forward.
+# Dates verified against linkedin.com/in/piercemoore experience section 2026-05-14.
 
 entries:
-  - version: v8.x
+  - version: v13.x
     period: 2020 — present
     role: Senior DevOps Engineer
-    title_arc: Software Engineer → Senior DevOps Engineer
+    title_arc: DevOps Engineer (Contract) → Senior DevOps Engineer
     employer: Drive Shack / Puttery
     location: Dallas, TX
     summary: >
-      Own DevOps, automation, cloud, CI/CD, and venue platform reliability
-      across the org. Built and scaled a multi-venue Kubernetes/Rancher
-      platform, designed company-wide Ansible for Windows + Linux, and led
-      an AWS cleanup that cut spend by roughly 64% without sacrificing
-      reliability.
+      Joined May 2020 on contract as DevOps Engineer, converted full-time
+      to Senior DevOps Engineer April 2021. Own DevOps, automation, cloud,
+      CI/CD, and venue platform reliability across the org. Built and
+      scaled a multi-venue Kubernetes/Rancher platform, designed
+      company-wide Ansible for Windows + Linux, and led an AWS cleanup
+      that cut spend by roughly 64% without sacrificing reliability.
 
   - version: vol/22
     kind: volunteer
-    period: 2022 — 2024
+    period: 2022 — 2023
     role: Director of Communications
     employer: DFW Curling Club
     location: Farmers Branch, TX
     summary: >
-      Volunteer leadership of communications, member engagement, and
-      event coordination for the Dallas-Fort Worth area's
-      curling club. Significant work over two-plus years.
+      May 2022 — Nov 2023. Volunteer leadership of communications, member
+      engagement, and event coordination for the Dallas-Fort Worth area's
+      curling club.
 
-  - version: v7.x
+  - version: v12.x
     period: 2015 — 2020
-    role: Software Engineer
+    role: Software Engineer II
     employer: Topgolf
     location: Dallas, TX
     summary: >
-      Full-stack engineer on real-time gameplay systems, developer tooling,
-      and venue deployment workflows for 50+ locations. Shipped the Virtual
-      Courses game UI, helped virtualize the venue software stack, and
-      internationalized gameplay across regions.
+      Nov 2015 — May 2020. Full-stack engineer on real-time gameplay
+      systems, developer tooling, and venue deployment workflows for 50+
+      locations. Shipped the Virtual Courses game UI, helped virtualize
+      the venue software stack, and internationalized gameplay across
+      regions.
 
-  - version: v6.x
-    period: 2014 — 2015
+  - version: v11.x
+    period: 2015
     role: Platform Engineer
     employer: Vinli
     location: Dallas, TX
     summary: >
-      Platform work on connected-vehicle infrastructure.
+      Aug — Nov 2015 (4 mos). Platform work on connected-vehicle
+      infrastructure: deploying and scaling a microservices platform,
+      Docker/Kubernetes orchestration, and infrastructure monitoring.
+
+  - version: v10.x
+    period: 2015
+    role: Angular.js Developer
+    employer: Ristken Software Services
+    location: Dallas, TX
+    summary: >
+      Jun — Jul 2015 (2 mos). Joined the Odyssey team to expand existing
+      software offerings via open-source tooling and build hybrid mobile
+      applications for iOS and Android with Cordova, Ionic, and Angular.js.
+
+  - version: v9.x
+    period: 2014 — 2015
+    role: Interactive Developer
+    employer: Sq1
+    location: Dallas, TX
+    summary: >
+      Oct 2014 — Apr 2015 (7 mos). Second Sq1 stint. Member of the team
+      on shorter-lifecycle projects and maintenance/feature additions for
+      existing client web applications; coordinated delivery across teams
+      to functional spec and timeline.
+
+  - version: v8.x
+    period: 2014
+    role: Freelance Web Developer
+    employer: Sq1
+    location: Dallas, TX
+    summary: >
+      Sep — Oct 2014 (2 mos). Bridge engagement at Sq1 between Youtoo and
+      the Interactive Developer role — same shorter-lifecycle client web
+      work and feature additions.
+
+  - version: v7.x
+    period: 2014
+    role: Web Developer
+    employer: 70kft
+    location: Dallas, TX
+    summary: >
+      Aug 2014 (1 mo contract). Finished the software marketplace for
+      Verizon's new consumer-targeted cloud services platform — Node.js
+      backend endpoints, Angular.js interface elements, and a UX
+      refactor of the existing interface.
+
+  - version: v6.x
+    period: 2014
+    role: Systems Administrator
+    employer: Youtoo Technologies
+    location: Irving, TX
+    summary: >
+      Feb — Jul 2014 (6 mos). Social-TV company integrating social media
+      and short-form video into live broadcasts. Built Ruby/Rails
+      deployment automation, ran a 50+ node worldwide AWS footprint,
+      and rolled custom monitoring/alerting in Ruby and Node.
 
   - version: v5.x
     period: 2013 — 2014
-    role: Developer Operations
-    employer: YouToo
+    role: Web Developer
+    employer: Zngine
+    location: Irving, TX
     summary: >
-      DevOps-adjacent before "DevOps" was the word for it.
+      Sep 2013 — Jan 2014 (5 mos). Brought on full-time after nearly a
+      year of building the same app as a contractor through Sq1. Split
+      time between new features and refactoring as business needs
+      shifted; implemented coding standards, usability guidelines, and
+      unit testing for the JavaScript surface (client + server).
 
   - version: v4.x
     period: 2012 — 2013
-    role: Web Developer
-    employer: ZNGINE
+    role: PHP Developer
+    employer: Sq1
+    location: Dallas, TX
     summary: >
-      Web dev work. Era of Rails, jQuery, and learning the web stack end-to-end.
+      Oct 2012 — Sep 2013 (1 yr). First Sq1 stint. Built a large-scale,
+      high-availability music-oriented social network with Node.js,
+      Express, Mongoose, MongoDB, and Backbone.js — including a
+      Backbone-powered web radio player and a RESTful API driving the
+      whole experience.
 
   - version: v3.x
-    period: 2011 — 2012
-    role: Web Developer
-    employer: 70kft
+    period: 2012
+    role: Senior PHP Developer
+    employer: Latimundo
+    location: Dallas, TX
     summary: >
-      Agency front-end and back-end work.
+      Feb — Oct 2012 (9 mos). Media production and digital effects shop
+      serving DFW clients. Designed and built PHP web applications
+      across multiple high-traffic properties; configured, secured, and
+      maintained high-availability Linux web servers in a
+      cinema/animation environment.
 
   - version: v2.x
-    period: 2010 — 2011
-    role: Interactive Developer → Web Developer → PHP Developer
-    employer: SQ1
+    period: 2010 — 2012
+    role: Director of Business Development
+    employer: Zee-Way
+    location: Dallas, TX
     summary: >
-      Three titles, one agency. Moved up the stack from Flash/interactive
-      into full-stack PHP as the web itself changed underneath.
+      2010 — 2012 (2 yrs). Semi-managed shared, virtual, and dedicated
+      server hosting for clients worldwide. Coordinated client
+      relationships, oversaw web development and new service features,
+      managed promotional offerings, and handled technical support.
 
   - version: v1.x
-    period: 2008 — 2010
-    role: Angular.js Developer · Senior PHP Developer
-    employer: Ristken Software Services · Latimundo
+    period: 2008 — 2011
+    role: Freelance Web Developer
+    employer: Refreshed Web Design
+    location: Dallas, TX
     summary: >
-      Early professional dev work. Learning on the job.
+      2008 — 2011 (3 yrs). Founded and ran a small freelance web
+      development firm focused on PHP web application development —
+      from concept and design through development, publishing, and
+      hosting.
 
   - version: v0.x
-    period: 2007 — 2008
+    period: 2008 — 2009
     role: Sales Specialist
-    employer: Limestone Networks
+    employer: Limestone Networks, Inc.
+    location: Dallas, TX
     summary: >
-      Pre-career: hosting/datacenter sales. Where the infrastructure
-      curiosity started.
+      Aug 2008 — Apr 2009 (9 mos). Inbound sales for unmanaged
+      dedicated hosting. Generated/analyzed/presented client and sales
+      metrics, handled client support across chat/email/phone, IP
+      assignment and control-panel licensing, and chargeback monitoring.
+      Where the infrastructure curiosity started.
 
 # Tagline to display under the career log, small, italic, mono:
-# `git log --all --oneline --since="2007-01-01"`
+# `git log --all --oneline --since="2008-01-01"`
