@@ -1,17 +1,18 @@
 name: pierce moore
 title: SENIOR DEVOPS ENGINEER
-tagline: human-centric infrastructure & automation
+tagline: human-centric infrastructure
 status: OPEN TO SENIOR PLATFORM / DEVOPS ROLES · REMOTE OR DALLAS
 
 bio: >
-  Nearly twenty years in and out of infrastructure. Currently running ten-plus
-  RKE2 clusters across physical venues for Drive Shack / Puttery, and
-  cleaning up etcd fires for fun. My mental model of "production"
-  includes the guests, not just the pods.
+  Nearly twenty years across software and infrastructure. Currently
+  running ten-plus RKE2 clusters across physical venues for Drive Shack /
+  Puttery, and cleaning up etcd fires when they happen. My mental model
+  of "production" includes the guests, not just the pods.
 
 short_tagline: >
-  Nearly twenty years across infrastructure, platforms, and the interfaces on top
-  of them. Currently: senior DevOps at Drive Shack / Puttery.
+  Nearly twenty years across infrastructure, platforms, and the
+  interfaces on top of them. Currently senior DevOps at Drive Shack /
+  Puttery.
 
 meta_description: >-
   Pierce Moore — Senior DevOps Engineer. Multi-venue Kubernetes,
@@ -19,6 +20,4 @@ meta_description: >-
   platform roles.
 
 signal_sentence: >
-  I came up through software engineering before moving deeper into
-  infrastructure, which means I care about developer experience as much
-  as uptime. Platforms are products. On-call humans are users too.
+  Platforms are products. On-call humans are users too.

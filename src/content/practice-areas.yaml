@@ -19,11 +19,11 @@ areas:
     recent: "2026-03 — nyc etcd self-removal recovery"
     recent_link: /postmortems/2026-03-nyc-etcd-self-removal
     expanded: >
-      Production Kubernetes across ten-plus physical venues, managed through
-      a central Rancher control plane in AWS. I handle the unglamorous day-2
-      work: RKE1 → RKE2 migration, cert rotation, workload cleanup, etcd
-      recovery, Longhorn rollout, and upgrades that need to happen without
-      turning venue operations into a sacrifice ritual.
+      Production Kubernetes across ten-plus physical venues, managed
+      through a central Rancher control plane in AWS. The unglamorous
+      day-2 work is the job: RKE1 to RKE2 migration, cert rotation,
+      workload cleanup, etcd recovery, Longhorn rollout, and upgrades
+      that have to happen without taking the venue down with them.
 
   - slug: iac-config
     name: infrastructure as code
@@ -37,11 +37,12 @@ areas:
       - vagrant
     recent: "2026-02 — venue provisioning pattern (infra → config → services)"
     expanded: >
-      Venue provisioning built as a repeatable pipeline: Terraform for
-      infrastructure, Ansible for configuration, Jenkins for orchestration,
-      and feature flags for controlled rollout. The goal is boring:
-      fewer snowflakes, fewer tribal incantations, and a path from blank
-      environment to running services that someone else can actually follow.
+      Venue provisioning built as a repeatable pipeline. Terraform for
+      infrastructure, Ansible for configuration, Jenkins for
+      orchestration, feature flags for controlled rollout. The goal is
+      boring: fewer snowflakes, fewer steps only one person remembers,
+      a path from blank environment to running services that someone
+      else can follow.
 
   - slug: observability
     name: observability
@@ -56,11 +57,11 @@ areas:
       - pushover
     recent: "2026-01 — full observability stack on helm's deep"
     expanded: >
-      Monitoring built for action, not dashboard cosplay. I use synthetic
-      checks, metrics, alerting, and runbooks to close blind spots across
-      venues and infrastructure. Prometheus, VictoriaMetrics, Grafana,
-      Icinga, and Pushover where they make sense — with the homelab as the
-      test range before production gets touched.
+      Monitoring built for action, not dashboard cosplay. Synthetic
+      checks, metrics, alerting, and runbooks that close blind spots
+      across venues and infrastructure. Prometheus, VictoriaMetrics,
+      Grafana, Icinga, and Pushover where they make sense. The homelab
+      is the test range before production gets touched.
 
   - slug: cloud-platforms
     name: cloud & platforms
@@ -74,11 +75,11 @@ areas:
       - vmware / proxmox
     recent: "2024 — ~64% aws cost reduction (rightsizing + infra cleanup)"
     expanded: >
-      AWS-primary platform work with enough multi-cloud literacy to avoid
-      treating one provider as a religion. Led a cloud cost reduction from
-      roughly $14k/month to $5k/month through rightsizing, consolidation,
-      and cleanup — without making reliability worse, which is the part
-      that actually matters. Certified Cloud Practitioner.
+      AWS-primary platform work with enough multi-cloud literacy to
+      know when not to commit. Led a cloud cost reduction from roughly
+      $14k/month to $5k/month through rightsizing, consolidation, and
+      cleanup, with reliability holding through the cut. Certified
+      Cloud Practitioner.
 
   - slug: cicd-platform
     name: ci/cd & delivery
@@ -92,11 +93,11 @@ areas:
       - helm repos
     recent: "2025-12 — internal helm repo + enforced release path"
     expanded: >
-      Release paths should make the safe thing easy and the dangerous thing
-      obvious. I build CI/CD systems, internal Helm repos, deployment
-      standards, and controlled rollout patterns that reduce heroics and
-      make production change less dependent on whoever remembers the magic
-      command.
+      Release paths should make the safe thing easy and the dangerous
+      thing obvious. I build CI/CD systems, internal Helm repos,
+      deployment standards, and controlled rollout patterns that reduce
+      heroics and make production change less dependent on whoever
+      remembers the magic command.
 
   - slug: devsecops
     name: devsecops & secrets
@@ -110,10 +111,10 @@ areas:
       - rbac
     recent: "2025 — least-privilege rbac rollout across venue estate"
     expanded: >
-      Secrets, access, and permissions handled as operational systems, not
-      vibes. Vault, KMS, Secrets Manager, Ansible Vault, Kubernetes RBAC,
-      AWS IAM, and least-privilege cleanup baked into delivery workflows
-      instead of bolted on after the audit panic starts.
+      Secrets and access run like the rest of production: managed,
+      audited, in code. Vault, KMS, Secrets Manager, Ansible Vault,
+      Kubernetes RBAC, AWS IAM. Least-privilege baked into delivery,
+      not bolted on after the audit.
 
   - slug: languages-backend
     name: backend & languages
@@ -128,11 +129,12 @@ areas:
       - go (learning)
     recent: "2026-03 — rancher mcp server (fastmcp, httpx, pydantic v2)"
     expanded: >
-      Long software background now aimed at platform tooling and automation.
-      Python, Node/Javascript/Typescript, PHP, Bash, and enough Ruby/Rails to be dangerous in the
-      useful way. I build the glue: CLIs, integrations, deployment tools,
-      reporting scripts, API wrappers, and internal systems that remove
-      repetitive human nonsense.
+      Long software background now aimed at platform tooling and
+      automation. Python, Node.js, TypeScript, Bash, and enough Ruby
+      and Rails to ship in it. Seven years of PHP underneath the rest.
+      I build the glue: CLIs, integrations, deployment tools, reporting
+      scripts, API wrappers, and internal systems that take repetitive
+      work off the team's plate.
 
   - slug: frontend-legacy
     name: frontend & interfaces
@@ -146,13 +148,11 @@ areas:
       - react
     recent: "2020 — topgolf gameplay ui (internationalized, multi-region)"
     expanded: >
-      Decade of frontend work before the DevOps pivot. Still active
-      when building internal tools and the occasional side project.
-      Shipped the Virtual Courses game UI at Topgolf and
-      internationalized the gameplay platform across regions.
-      internal tools deserve usable interfaces,
-      developer platforms have users, and operational dashboards should
-      answer questions instead of becoming decorative telemetry wallpaper.
+      Decade of frontend work before the DevOps pivot, still active for
+      internal tools and the occasional side project. Shipped the
+      Virtual Courses game UI at Topgolf and internationalized the
+      gameplay platform across regions. Internal tools deserve usable
+      interfaces, and developer platforms have users.
 
   - slug: maker-hardware
     name: maker & hardware
@@ -167,6 +167,8 @@ areas:
     recent: "2026 — nfc fossil dig station (jurassic park party build)"
     expanded: >
       Hardware and home automation as the physical counterpart to the
-      DevOps work. ESP32, Arduino, 3D printing, home automation. The
-      maker work informs how I think about "hidden infrastructure" —
+      platform work. ESP32, Arduino, 3D printing, home automation, and
+      the occasional wildly overengineered party prop (most recent:
+      NFC fossil dig station for a kid's Jurassic Park birthday). The
+      maker work informs how I think about hidden infrastructure:
       systems that work invisibly and well.

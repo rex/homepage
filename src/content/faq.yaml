@@ -8,45 +8,55 @@ intro: ""
 faqs:
   - q: What are you looking for?
     a: >
-      A senior DevOps or Platform Engineering role. Remote or Dallas-based.
-      I'm most interested in teams running production infrastructure at
-      real scale — multi-region, multi-tenant, or multi-venue — where
-      reliability and developer experience both matter. I'm less
-      interested in pure cloud-native greenfield work and more interested
-      in the messy reality of production systems that have to serve
-      humans in physical spaces.
+      A senior DevOps or Platform Engineering role. Remote or
+      Dallas-based. I'm most interested in teams running production
+      infrastructure at real scale, multi-region, multi-tenant, or
+      multi-venue, where reliability and developer experience both
+      matter. I'm less interested in pure cloud-native greenfield work
+      and more interested in the messy reality of production systems
+      that have to serve humans in physical spaces.
 
   - q: Why are you leaving your current role?
     a: >
-      I'm not in a rush. I've built something I'm proud of at Drive Shack /
-      Puttery — a multi-venue Kubernetes platform, company-wide Ansible,
-      major cost reductions, and a long list of incidents handled well.
-      I'm looking for the next tier of problem: more scale, more peers
-      who push me, and a team where platform engineering is funded as
-      a first-class function, not an afterthought.
+      I'm not in a rush. I've built something I'm proud of at Drive
+      Shack / Puttery: a multi-venue Kubernetes platform, company-wide
+      Ansible, major cost reductions, and a long list of incidents
+      handled well. I'm looking for the next tier of problem. More
+      scale, more peers who push me, and a team where platform
+      engineering is funded as a first-class function instead of an
+      afterthought.
 
   - q: What's your strongest skill?
     a: >
-      Diagnosing production problems under pressure and writing up what
-      happened afterwards. I'm good at the forensics — narrowing down
-      what actually went wrong vs. what looked wrong — and I'm a
-      stickler about postmortems that tell the truth, including the
+      Diagnosing production problems under pressure and writing up
+      what happened afterwards. I'm good at the forensics, narrowing
+      down what actually went wrong versus what looked wrong, and I'm
+      a stickler about postmortems that tell the truth, including the
       uncomfortable parts.
 
   - q: What about software development? You were a developer for a long time.
     a: >
       Twelve years before the DevOps pivot. Full-stack, with real UI
-      and UX experience. I don't bill myself as a developer anymore —
-      DevOps is the title and the work — but that background is why
-      I care obsessively about developer experience in the platforms
-      I build. I can also write production Python, Node, or Bash
-      without needing to look it up.
+      and UX experience. I don't bill myself as a developer anymore.
+      DevOps is the title and the work. But that background is why I
+      care obsessively about developer experience in the platforms I
+      build, and I can still write production Python, Node, or Bash
+      without needing to look it up (but I usually still do anyway).
+
+  - q: Why haven't you told me about your cat yet?
+    image: /lambda-linus.png
+    a: >
+      You didn't ask. This is Linus, orange American shorthair, b. 2014,
+      official CTO. He's been the constant through twelve years of
+      career changes, so he gets to be on every important thing I make.
+      Why the lambda? Because Half-Life 2 is one of the greatest games
+      of all time. And it looks kickass.
 
   - q: What's your stack, in one line?
     a: >
       Kubernetes (Rancher / RKE2) · Terraform · Ansible · AWS ·
       Prometheus / Grafana · Python · Jenkins / GitHub Actions ·
-      Helm · VMware / Proxmox. Linux primary, Windows where needed.
+      Helm · VMware / Proxmox. Macbook primary, Linux in production, Windows where needed.
 
   - q: Are you open to relocating?
     a: >
@@ -55,46 +65,33 @@ faqs:
 
   - q: Contract vs. full-time?
     a: >
-      Full-time primary. Open to senior contract work on the side where
-      it makes sense and doesn't conflict. Toptal-adjacent work
-      specifically is interesting.
+      Full-time primary. Open to senior contract work on the side
+      where it makes sense and doesn't conflict.
 
   - q: What does "human-centric infrastructure" mean?
     a: >
-      Infrastructure decisions show up in developer velocity, on-call
-      burnout, and customer experience. "Human-centric" means I design
-      for the people on both ends of the pipe — engineers shipping code,
-      operators running it, and the guests using the thing we built.
-      It's a deliberate rejection of infrastructure as an abstract
-      exercise in elegance. Elegance is a means; the end is people.
+      Engineers shipping code, operators running it, guests using what
+      we built. They're all users of the platform, and they all
+      deserve to be designed for. Elegance is a means; the end is
+      people.
 
   - q: Biggest mistake you made in the last year?
     a: >
       Trusting that a cloud provider's default pod storage would be
       fine for a low-traffic Postgres. It wasn't. We lost data on a
       controller-manager failure and spent a long night rebuilding.
-      The postmortem is honest about that — emptyDir for stateful
+      The postmortem is honest about that. emptyDir for stateful
       workloads is indefensible and I should have caught it before
       production.
 
   - q: What do you not want to work on?
     a: >
       Adtech, gambling, crypto-as-the-product, surveillance, weapons.
-      I'm not especially moralistic but those are not how I want to
-      spend the next decade.
-
-  - q: Why haven't you told me about your cat yet?
-    image: /lambda-linus.png
-    a: >
-      You didn't ask. This is Linus — orange American shorthair, b. 2014,
-      official CTO. He's been the constant through twelve years of career
-      changes, so he gets to be on every important thing I make. Why the
-      lambda? Because Half-Life 2 is one of the greatest games of all
-      time. And it looks kickass.
+      Not how I want to spend the next decade.
 
   - q: How should I reach out?
     a: >
-      Email is best — see the contact section at the bottom of the page.
-      GitHub is /rex. LinkedIn is /in/piercemoore. I respond to all of
-      them within a day or two. No phone number on the website for now;
-      happy to share it once we're in a conversation.
+      Email is best. See the contact section at the bottom of the
+      page. GitHub is /rex. LinkedIn is /in/piercemoore. I respond to
+      all of them within a day or two. No phone number on the website
+      for now; happy to share it once we're in a conversation.

@@ -1,9 +1,9 @@
 # Empty fields render nothing. Pierce will write intro + volunteer.body.
 # See docs/voice-todos.md.
 intro: >
-  Outside work, I tend to build things that still look suspiciously like
-  infrastructure: home automation, 3D printing, woodworking, electronics,
-  homelab systems, and the occasional wildly overengineered party prop.
+  Outside work I still build infrastructure, just smaller and weirder.
+  Home automation, 3D printing, woodworking, electronics, homelab
+  systems, and the occasional wildly overengineered party prop.
 
 certified:
   - certified curling instructor
@@ -13,15 +13,14 @@ certified:
 volunteer:
   org: DFW Curling Club
   role: Director of Communications
-  period: 2022 — 2024
+  period: 2022 — 2023
   body: >
-    Led communications, member engagement, event coordination, and public
-    messaging for a volunteer sports club. Less glamorous than production
-    infrastructure, but the same core skill shows up fast: make the system
-    understandable, keep people informed, and reduce chaos before it turns
-    into work for everyone else.
+    Led communications, member engagement, event coordination, and
+    public messaging for a volunteer sports club. Less glamorous than
+    production infrastructure, but the same core skill shows up fast:
+    make the system understandable, keep people informed, and reduce
+    chaos before it turns into work for everyone else.
 
 elsewhere: >
-  woodworking · 3d printing · esp32 / arduino · home automation · curling ·
-  scuba · homelab infrastructure · built environments · making physical
-  objects behave like reliable systems.
+  woodworking · 3d printing · esp32 / arduino · home automation ·
+  curling · scuba · homelab infrastructure · built environments.
