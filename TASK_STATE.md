@@ -5,12 +5,13 @@
 > and context compactions.
 >
 > Spec: `specs/001-add-navigation/spec.md` · Plan: `specs/001-add-navigation/plan.md`
-> Branch: `chore/add-navigation` · Owner (human): @pierce · Last update: 2026-05-03 by Claude
+> Branch: `chore/add-navigation` · Owner (human): @pierce · Last update: 2026-06-06 (archived)
 
 ## 0. TL;DR for a fresh agent session
 
 Adding site navigation to piercemoore.com. No nav exists today — the site is a single long-scroll page.
-Phase 1 (spec + design) is in progress. **Next action: begin Slice 1.1** — add a sticky top nav component.
+All phases still pending. **Next action: begin Slice 1.1** — add a sticky top nav component.
+Pierce has granted broad workspace authority (2026-05-11); no approval gate before starting.
 
 ## Standing user directives
 
@@ -73,7 +74,7 @@ Phase 1 (spec + design) is in progress. **Next action: begin Slice 1.1** — add
 
 ## 3. Blockers / open questions
 
-- ✅ Planning-required blocker lifted 2026-05-11 — Pierce granted broad workspace authority.
+_(none)_
 
 ## 4. Recent decisions (append-only, newest first)
 
@@ -84,19 +85,11 @@ Phase 1 (spec + design) is in progress. **Next action: begin Slice 1.1** — add
   `/resume` is a redirect alias.
 - 2026-05-11 — Email obfuscation landed (commit `9bd39cd`): MailLink component +
   `hello@piercemoore.com` alias replaces primary email everywhere.
-- 2026-05-03 — Feature confirmed by Pierce: "Adding Navigation to homepage"
 
 ## 5. Next actions (ordered)
 
-1. Confirm nav scope/design with Pierce (sticky vs static? brand mark? "menu" wording?
-   accent colour? mobile breakpoint?) — quick pass before code.
-2. Open `chore/add-navigation` branch and begin Slice 1.1.
+1. Open `chore/add-navigation` branch and begin Slice 1.1.
 
 ## 6. Handoff note (fill when ending a session)
 
-2026-05-03 (Claude): All 5 retrofit PRs merged. Navigation feature is specced but NOT ready
-to implement — Pierce wants more planning before Slice 1.1 starts. Do not begin implementation
-without explicit direction from Pierce.
-
-2026-05-03 (Codex): Added an independent `/animation-lab` experiment route for subtle homepage
-motion studies. This did not start or change the pending navigation work.
+_(no recent handoff — older notes archived to CHANGELOG.md 2026-06-06)_
