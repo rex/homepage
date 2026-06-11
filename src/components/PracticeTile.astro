@@ -13,79 +13,100 @@ const { area, index } = Astro.props;
 const dotDelay = 900 + index * 90 + 120;
 const sparkDelay = 900 + index * 90 + 280;
 const tileDelay = 900 + index * 90;
-
-const isLink = !!area.recent_link;
 ---
-{isLink ? (
-  <a href={area.recent_link} class="tile" data-boot style={`--boot-delay: ${tileDelay}ms;`}>
-    <article class="tile-inner">
-      <div class="flex items-baseline justify-between mb-6">
-        <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
-          <StatusDot status={area.status} bootDelay={dotDelay} />
-          <span>{area.status}</span>
-        </div>
-        <div class="font-mono text-xs text-ink-dim numeric-tabular">{area.years}</div>
+<div class="tile" data-boot style={`--boot-delay: ${tileDelay}ms;`}>
+  <article class="tile-inner">
+    <div class="flex items-baseline justify-between mb-6">
+      <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
+        <StatusDot status={area.status} bootDelay={dotDelay} />
+        <span>{area.status}</span>
       </div>
-      <h3 class="display-italic text-2xl text-ink leading-tight opsz-tile">{area.name}</h3>
-      <div class="mt-5">
-        <Sparkline values={area.sparkline} bootDelay={sparkDelay} />
-      </div>
-      <ul class="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.12em] text-ink-dim">
-        {area.tools.map((tool) => <li>{tool}</li>)}
-      </ul>
-      <p class="mt-6 font-mono text-xs text-ink-dim leading-relaxed">
-        <span class="text-accent" aria-hidden="true">↳ </span>{area.recent}
-      </p>
-    </article>
-  </a>
-) : (
-  <div class="tile" data-boot style={`--boot-delay: ${tileDelay}ms;`}>
-    <article class="tile-inner">
-      <div class="flex items-baseline justify-between mb-6">
-        <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">
-          <StatusDot status={area.status} bootDelay={dotDelay} />
-          <span>{area.status}</span>
-        </div>
-        <div class="font-mono text-xs text-ink-dim numeric-tabular">{area.years}</div>
-      </div>
-      <h3 class="display-italic text-2xl text-ink leading-tight opsz-tile">{area.name}</h3>
-      <div class="mt-5">
-        <Sparkline values={area.sparkline} bootDelay={sparkDelay} />
-      </div>
-      <ul class="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.12em] text-ink-dim">
-        {area.tools.map((tool) => <li>{tool}</li>)}
-      </ul>
-      <p class="mt-6 font-mono text-xs text-ink-dim leading-relaxed">
-        <span class="text-accent" aria-hidden="true">↳ </span>{area.recent}
-      </p>
-    </article>
-  </div>
-)}
+      <div class="font-mono text-xs text-ink-dim numeric-tabular">{area.years}</div>
+    </div>
+    <h3 class="display-italic text-2xl text-ink leading-tight opsz-tile">{area.name}</h3>
+    <div class="mt-5">
+      <Sparkline values={area.sparkline} bootDelay={sparkDelay} />
+    </div>
+    <ul class="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.12em] text-ink-dim">
+      {area.tools.map((tool) => <li>{tool}</li>)}
+    </ul>
+
+    <p class="mt-6 text-sm leading-relaxed text-ink-muted">{area.lead}</p>
+
+    {area.expanded && (
+      <details class="tile-expand mt-2">
+        <summary class="tile-summary font-mono text-xs uppercase tracking-[0.14em] text-ink-faint">
+          <span class="tile-toggle" aria-hidden="true">+</span>
+          <span>more</span>
+        </summary>
+        <p class="mt-3 text-sm leading-relaxed text-ink-muted">{area.expanded}</p>
+      </details>
+    )}
+
+    <p class="mt-6 font-mono text-xs leading-relaxed text-ink-dim">
+      <span class="text-accent" aria-hidden="true">↳ </span>{area.recent_link ? (
+        <a href={area.recent_link} class="tile-recent-link">{area.recent}</a>
+      ) : (
+        area.recent
+      )}
+    </p>
+  </article>
+</div>
 
 <style>
   .tile {
     display: block;
     padding: 24px 0 32px 0;
     border-top: 1px solid var(--hairline);
-    transition: opacity 200ms ease-out;
-    text-decoration: none;
     color: inherit;
-    height: 100%;
-  }
-  a.tile:hover {
-    opacity: 1;
-  }
-  a.tile:hover h3 {
-    color: var(--accent);
-    transition: color 200ms ease-out;
-  }
-  a.tile:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 6px;
   }
   .tile-inner {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    display: block;
+  }
+
+  /* Expand affordance — native <details>, matches the career-log toggle */
+  .tile-summary {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    cursor: pointer;
+    list-style: none;
+    transition: color 200ms ease-out;
+  }
+  .tile-summary::-webkit-details-marker { display: none; }
+  .tile-summary::marker { display: none; }
+  .tile-summary:hover { color: var(--accent); }
+  .tile-summary:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .tile-toggle {
+    display: inline-block;
+    transition: transform 200ms ease-out;
+  }
+  .tile-expand[open] .tile-toggle { transform: rotate(45deg); }
+  .tile-expand[open] > p {
+    animation: tile-fade 200ms ease-out;
+  }
+  @keyframes tile-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* Recent / last-activity line — only this links out when recent_link is set */
+  .tile-recent-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 200ms ease-out;
+  }
+  .tile-recent-link:hover { color: var(--accent); }
+  .tile-recent-link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile-expand[open] > p { animation: none; }
+    .tile-toggle { transition: none; }
   }
 </style>

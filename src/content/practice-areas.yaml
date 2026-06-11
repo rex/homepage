@@ -4,6 +4,9 @@
 # Sparkline: 10 values between 0.0 and 1.0, representing activity over ~24 months
 # Last incident/artifact: most recent meaningful work in this domain
 # Placeholder postmortem links stub to /postmortems/[slug] — routes will 404 until v2
+#
+# lead:     always-visible thesis sentence on the tile
+# expanded: the rest, revealed by the tile's "+ more" toggle
 
 areas:
   - slug: kubernetes-orchestration
@@ -18,12 +21,14 @@ areas:
       - argocd
     recent: "2026-03 — nyc etcd self-removal recovery"
     recent_link: /postmortems/2026-03-nyc-etcd-self-removal
-    expanded: >
+    lead: >
       Production Kubernetes across ten-plus physical venues, managed
-      through a central Rancher control plane in AWS. The unglamorous
-      day-2 work is the job: RKE1 to RKE2 migration, cert rotation,
-      workload cleanup, etcd recovery, Longhorn rollout, and upgrades
-      that have to happen without taking the venue down with them.
+      through a central Rancher control plane in AWS.
+    expanded: >
+      The unglamorous day-2 work is the job: RKE1 to RKE2 migration,
+      cert rotation, workload cleanup, etcd recovery, Longhorn rollout,
+      and upgrades that have to happen without taking the venue down
+      with them.
 
   - slug: iac-config
     name: infrastructure as code
@@ -36,13 +41,14 @@ areas:
       - packer
       - vagrant
     recent: "2026-02 — venue provisioning pattern (infra → config → services)"
+    lead: >
+      Venue provisioning built as a repeatable pipeline.
     expanded: >
-      Venue provisioning built as a repeatable pipeline. Terraform for
-      infrastructure, Ansible for configuration, Jenkins for
-      orchestration, feature flags for controlled rollout. The goal is
-      boring: fewer snowflakes, fewer steps only one person remembers,
-      a path from blank environment to running services that someone
-      else can follow.
+      Terraform for infrastructure, Ansible for configuration, Jenkins
+      for orchestration, feature flags for controlled rollout. The goal
+      is boring: fewer snowflakes, fewer steps only one person
+      remembers, a path from blank environment to running services
+      that someone else can follow.
 
   - slug: observability
     name: observability
@@ -56,12 +62,14 @@ areas:
       - icinga
       - pushover
     recent: "2026-01 — full observability stack on helm's deep"
+    lead: >
+      Monitoring built for action, not dashboard cosplay.
     expanded: >
-      Monitoring built for action, not dashboard cosplay. Synthetic
-      checks, metrics, alerting, and runbooks that close blind spots
-      across venues and infrastructure. Prometheus, VictoriaMetrics,
-      Grafana, Icinga, and Pushover where they make sense. The homelab
-      is the test range before production gets touched.
+      Synthetic checks, metrics, alerting, and runbooks that close
+      blind spots across venues and infrastructure. Prometheus,
+      VictoriaMetrics, Grafana, Icinga, and Pushover where they make
+      sense. The homelab is the test range before production gets
+      touched.
 
   - slug: cloud-platforms
     name: cloud & platforms
@@ -74,12 +82,13 @@ areas:
       - cloudflare
       - vmware / proxmox
     recent: "2024 — ~64% aws cost reduction (rightsizing + infra cleanup)"
-    expanded: >
+    lead: >
       AWS-primary platform work with enough multi-cloud literacy to
-      know when not to commit. Led a cloud cost reduction from roughly
-      $14k/month to $5k/month through rightsizing, consolidation, and
-      cleanup, with reliability holding through the cut. Certified
-      Cloud Practitioner.
+      know when not to commit.
+    expanded: >
+      Led a cloud cost reduction from roughly $14k/month to $5k/month
+      through rightsizing, consolidation, and cleanup, with reliability
+      holding through the cut. Certified Cloud Practitioner.
 
   - slug: cicd-platform
     name: ci/cd & delivery
@@ -92,12 +101,14 @@ areas:
       - gitea actions
       - helm repos
     recent: "2025-12 — internal helm repo + enforced release path"
-    expanded: >
+    lead: >
       Release paths should make the safe thing easy and the dangerous
-      thing obvious. I build CI/CD systems, internal Helm repos,
-      deployment standards, and controlled rollout patterns that reduce
-      heroics and make production change less dependent on whoever
-      remembers the magic command.
+      thing obvious.
+    expanded: >
+      I build CI/CD systems, internal Helm repos, deployment
+      standards, and controlled rollout patterns that reduce heroics
+      and make production change less dependent on whoever remembers
+      the magic command.
 
   - slug: devsecops
     name: devsecops & secrets
@@ -110,11 +121,13 @@ areas:
       - aws kms / secrets manager
       - rbac
     recent: "2025 — least-privilege rbac rollout across venue estate"
-    expanded: >
+    lead: >
       Secrets and access run like the rest of production: managed,
-      audited, in code. Vault, KMS, Secrets Manager, Ansible Vault,
-      Kubernetes RBAC, AWS IAM. Least-privilege baked into delivery,
-      not bolted on after the audit.
+      audited, in code.
+    expanded: >
+      Vault, KMS, Secrets Manager, Ansible Vault, Kubernetes RBAC,
+      AWS IAM. Least-privilege baked into delivery, not bolted on
+      after the audit.
 
   - slug: languages-backend
     name: backend & languages
@@ -128,13 +141,15 @@ areas:
       - ruby / rails
       - go (learning)
     recent: "2026-03 — rancher mcp server (fastmcp, httpx, pydantic v2)"
-    expanded: >
+    lead: >
       Long software background now aimed at platform tooling and
-      automation. Python, Node.js, TypeScript, Bash, and enough Ruby
-      and Rails to ship in it. Seven years of PHP underneath the rest.
-      I build the glue: CLIs, integrations, deployment tools, reporting
-      scripts, API wrappers, and internal systems that take repetitive
-      work off the team's plate.
+      automation.
+    expanded: >
+      Python, Node.js, TypeScript, Bash, and enough Ruby and Rails to
+      ship in it. Seven years of PHP underneath the rest. I build the
+      glue: CLIs, integrations, deployment tools, reporting scripts,
+      API wrappers, and internal systems that take repetitive work off
+      the team's plate.
 
   - slug: frontend-legacy
     name: frontend & interfaces
@@ -147,12 +162,14 @@ areas:
       - next.js
       - react
     recent: "2020 — topgolf gameplay ui (internationalized, multi-region)"
+    lead: >
+      Decade of frontend work before the DevOps pivot, still active
+      for internal tools and the occasional side project.
     expanded: >
-      Decade of frontend work before the DevOps pivot, still active for
-      internal tools and the occasional side project. Shipped the
-      Virtual Courses game UI at Topgolf and internationalized the
-      gameplay platform across regions. Internal tools deserve usable
-      interfaces, and developer platforms have users.
+      Shipped the Virtual Courses game UI at Topgolf and
+      internationalized the gameplay platform across regions. Internal
+      tools deserve usable interfaces, and developer platforms have
+      users.
 
   - slug: maker-hardware
     name: maker & hardware
@@ -165,10 +182,12 @@ areas:
       - home automation
       - "pi cluster"
     recent: "2026 — nfc fossil dig station (jurassic park party build)"
-    expanded: >
+    lead: >
       Hardware and home automation as the physical counterpart to the
-      platform work. ESP32, Arduino, 3D printing, home automation, and
-      the occasional wildly overengineered party prop (most recent:
-      NFC fossil dig station for a kid's Jurassic Park birthday). The
-      maker work informs how I think about hidden infrastructure:
-      systems that work invisibly and well.
+      platform work.
+    expanded: >
+      ESP32, Arduino, 3D printing, home automation, and the occasional
+      wildly overengineered party prop (most recent: NFC fossil dig
+      station for a kid's Jurassic Park birthday). The maker work
+      informs how I think about hidden infrastructure: systems that
+      work invisibly and well.

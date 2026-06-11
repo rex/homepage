@@ -29,6 +29,7 @@ export interface PracticeArea {
   tools: string[];
   recent: string;
   recent_link?: string;
+  lead: string;
   expanded: string;
 }
 
