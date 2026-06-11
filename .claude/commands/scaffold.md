@@ -153,11 +153,15 @@ The script handles steps 2–13 + 21 of the 22-step bootstrap sequence
 (see `~/.claude/skills/agentic-skeleton/references/bootstrap-sequence.md`):
 directory structure, root AGENTS.md + VIBE.yaml + CLAUDE.md/GEMINI.md
 symlinks, TASK_STATE.md, README.md, CHANGELOG.md, VERSION, Makefile,
-.gitignore, .claude/ config (hooks chmod +x, settings.json, .mcp.json,
+.gitignore (universal tooling stub — see `.gitignore` handling in
+Step 5), .claude/ config (hooks chmod +x, settings.json, .mcp.json,
 agents, commands, rules).
 
 If the target dir already has files, the script merges rather than
-overwriting; review the diff before committing.
+overwriting; review the diff before committing. `maybe_seed_gitignore`
+is idempotent — running it against a target that already has a
+`.gitignore` (e.g. one a lang-* skill wrote first) appends only the
+missing universal tooling lines, never duplicates.
 
 ## Step 4 — Hand-edits (the things scripts can't do)
 
@@ -198,6 +202,17 @@ Stack-specific skills load via description-match on the conversation
 content (e.g. mentioning `pyproject.toml` triggers `lang-python`).
 If a stack skill doesn't load, suggest the slash invocation
 (`/lang-python`) explicitly.
+
+**`.gitignore` discipline.** Step 3 lays down the universal tooling
+stub (`.serena/`, `.task_state_history/`, `.claude/serena-initialized`)
+from `templates/greenfield/.gitignore`. When a lang-* skill contributes
+stack-specific entries (Python `__pycache__/`, Node `node_modules/`,
+etc.), **append to the existing `.gitignore` — never overwrite it**.
+The universal stanza must remain or the `serena-required.sh`
+UserPromptSubmit hook's flag file shows up as untracked and trips
+`stop-gate.sh`. If you accidentally clobber the file, re-run
+`bootstrap_greenfield.py` against the target — its `maybe_seed_gitignore`
+step is idempotent and will re-append any missing universal lines.
 
 ## Step 6 — First commit + push
 

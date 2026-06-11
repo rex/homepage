@@ -20,7 +20,7 @@ if [ -z "$DESC" ]; then
   exit 1
 fi
 
-cd "${CLAUDE_PROJECT_DIR:-.}"
+cd "${CLAUDE_PROJECT_DIR:-.}" || exit 1
 
 if [ ! -f CHANGELOG.md ]; then
   # Bootstrap CHANGELOG if missing

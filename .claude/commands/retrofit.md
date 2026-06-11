@@ -195,7 +195,7 @@ is one commit; each commit pushes immediately.
 
 | PR | What it adds | CHECKLIST |
 |---|---|---|
-| **PR1: seed memory** | `AGENTS.md` (≤100 lines), `VIBE.yaml` with brownfield defaults, `CLAUDE.md` + `GEMINI.md` symlinks, `.gitignore` additions | `~/.claude/skills/agentic-skeleton/templates/brownfield/PR1-seed-memory/CHECKLIST.md` |
+| **PR1: seed memory** | `AGENTS.md` (≤100 lines), `VIBE.yaml` with brownfield defaults, `CLAUDE.md` + `GEMINI.md` symlinks, `.gitignore` additions, the standard `Makefile` (existing one backed up to `Makefile.pre-retrofit`) + `scripts/{bump_version,check_version_bumped,check_architecture}.py`. **stop-gate.sh hard-requires `check_architecture.py` — never skip the script seed.** | `~/.claude/skills/agentic-skeleton/templates/brownfield/PR1-seed-memory/CHECKLIST.md` |
 | **PR2: map + annotate** | `MAP.md` with module table, gotchas, hot/cold paths, extension points; per-module READMEs | `~/.claude/skills/agentic-skeleton/templates/brownfield/PR2-map-annotate/CHECKLIST.md` |
 | **PR3: MCP install** | `.mcp.json` (Serena, Context7, sequential-thinking, github), `.env.example` MCP entries | `~/.claude/skills/agentic-skeleton/templates/brownfield/PR3-mcp-install/CHECKLIST.md` |
 | **PR4: state tracking** | `PROGRESS.md`, `TASK_STATE.md`, `specs/_template/` | `~/.claude/skills/agentic-skeleton/templates/brownfield/PR4-state-tracking/CHECKLIST.md` |

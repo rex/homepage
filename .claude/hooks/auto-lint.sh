@@ -17,6 +17,12 @@ if [ -z "$FILE" ] || [ ! -f "$FILE" ]; then
   exit 0
 fi
 
+# Generated lockfiles are tool-owned — never reformat or lint them.
+case "$(basename "$FILE")" in
+  uv.lock|package-lock.json|pnpm-lock.yaml|yarn.lock|bun.lock|bun.lockb|Cargo.lock|poetry.lock|Gemfile.lock|composer.lock|Package.resolved|Podfile.lock|flake.lock|go.sum|gradle.lockfile)
+    exit 0 ;;
+esac
+
 case "$FILE" in
   *.py)
     command -v ruff >/dev/null 2>&1 && {

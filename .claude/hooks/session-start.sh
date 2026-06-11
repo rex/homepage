@@ -1,13 +1,21 @@
 #!/usr/bin/env bash
-# SessionStart hook — establishes context on a fresh session.
+# SessionStart hook — establishes context on a fresh session AND
+# re-establishes context after compaction.
 #
 # What this hook does:
 # Injects the five standing rules + repo state (branch, recent commits,
-# TASK_STATE.md, PROGRESS.md, SESSION_NOTES) so the agent has its
+# FULL TASK_STATE.md, PROGRESS.md, SESSION_NOTES) so the agent has its
 # bearings BEFORE the first user prompt. The model treats
 # additionalContext as ambient orientation (same priority as
 # system-reminders and config boilerplate), so this is context
 # establishment — NOT enforcement.
+#
+# Compaction defense:
+# SessionStart fires on `resume` after Claude Code compacts the
+# conversation. The full TASK_STATE.md dump here is what survives
+# compaction — there's no separate PreCompact hook (Claude Code's
+# PreCompact event does not accept hookSpecificOutput.additionalContext,
+# so any output we emitted there was rejected with a schema error).
 #
 # What this hook does NOT do:
 # - Run discovery. The /scaffold and /retrofit slash commands own
@@ -67,12 +75,29 @@ ctx+="### Repo state\n"
 ctx+="Branch: $(git branch --show-current 2>/dev/null || echo 'detached')\n"
 ctx+="Uncommitted: $(git status --porcelain 2>/dev/null | wc -l | tr -d ' ') files\n\n"
 
+# ─── Skeleton currency (informational) ────────────────────────────────
+# Surfaces drift between this repo's skeleton-owned files (gate scripts,
+# hooks) and the installed agentic-skeleton. Informational only; never
+# aborts session start. The fix is `make sync-skeleton`.
+
+if [ -f scripts/sync_skeleton.py ]; then
+  if command -v uv >/dev/null 2>&1; then
+    SYNC_RUN=(uv run scripts/sync_skeleton.py)
+  else
+    SYNC_RUN=(python3 scripts/sync_skeleton.py)
+  fi
+  if ! "${SYNC_RUN[@]}" --check >/dev/null 2>&1; then
+    ctx+="### Skeleton drift detected\n"
+    ctx+="This repo's skeleton-owned files are behind the installed agentic-skeleton. Run \`make sync-skeleton\` to pull the gate scripts + hooks current; \`make check-skeleton\` shows detail. A flagged Makefile / pre-commit config needs hand reconciliation.\n\n"
+  fi
+fi
+
 if command -v git >/dev/null 2>&1; then
   ctx+="### Recent commits\n$(git log --oneline -10 2>/dev/null || echo 'no history')\n\n"
 fi
 
 if [ -f TASK_STATE.md ]; then
-  ctx+="### Current task\n$(head -80 TASK_STATE.md)\n\n"
+  ctx+="### TASK_STATE.md (full)\n$(cat TASK_STATE.md)\n\n"
 fi
 
 if [ -f PROGRESS.md ]; then
