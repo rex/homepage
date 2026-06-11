@@ -1,0 +1,72 @@
+# Pre-commit hooks — the independent enforcement backstop.
+#
+# Runs on `git commit`. The architecture gates here mirror `make
+# validate`, so a commit cannot bypass them even if `make validate` was
+# skipped. This is the third enforcement layer, alongside the Makefile
+# gates and the Stop hook.
+#
+#   One-time setup per clone:   pre-commit install
+#   Refresh pinned versions:    pre-commit autoupdate
+#
+# The `rev:` pins below are real releases; run `pre-commit autoupdate`
+# to move them forward. The repo-native gates under `local` have no
+# pins that can go stale.
+#
+# REPO-SPECIFIC OMISSION (advisory reconciliation): the skeleton-standard
+# template also wires a `check-version-bumped` local hook. This repo does
+# NOT use the skeleton's VERSION-file + per-commit-bump model — its
+# version is pinned in package.json as a product-display constant
+# (VIBE.yaml versioning, bump_required_per_commit: false; AGENTS.md §5).
+# There is no VERSION file, so that hook would fail closed on every
+# commit for a gate the repo intentionally does not run. It is therefore
+# omitted here to match the repo's declared versioning policy. All other
+# standard hooks are retained verbatim.
+
+# Generated lockfiles are tool-owned: exempt from secret-scanning, size
+# caps, and whitespace rewriting (their hashes false-positive
+# detect-secrets, and rewriting them corrupts tool state).
+exclude: '(^|/)(uv\.lock|package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb?|Cargo\.lock|poetry\.lock|Gemfile\.lock|composer\.lock|Package\.resolved|Podfile\.lock|flake\.lock|go\.sum|gradle\.lockfile)$'
+
+repos:
+  # ── Hygiene + private-key detection (pure Python, no toolchain) ──────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=1024']
+      - id: check-yaml
+      - id: check-json
+      - id: detect-private-key
+
+  # ── Secret scanning — detect-secrets is pure Python, so pre-commit
+  # installs it with no Go/Docker toolchain (unlike gitleaks).
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+
+  # ── Shell-script linting — pip-packaged shellcheck, no system dep ───
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.11.0.1
+    hooks:
+      - id: shellcheck
+
+  # ── Repo-native gates — mirror `make validate`; no remote pins ──────
+  - repo: local
+    hooks:
+      - id: check-architecture
+        name: architecture line limits (VIBE.yaml)
+        entry: scripts/check_architecture.py
+        language: script
+        pass_filenames: false
+        always_run: true
+      - id: check-module-rules
+        name: module shape — max public functions (VIBE.yaml)
+        entry: scripts/check_module_rules.py
+        language: script
+        pass_filenames: false
+        always_run: true

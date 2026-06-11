@@ -300,8 +300,8 @@ Four links, laid out as a definition list. Each link:
 
 Single row on desktop, stacked on mobile.
 
-Left: `piercemoore.com @ v2.0.0 · build [SHORT-COMMIT-HASH] · [BUILD-DATE]`  
-Right: `start where you are.` (italic serif)  
+Left: `piercemoore.com @ v2.0.0 · build [SHORT-COMMIT-HASH] · [BUILD-DATE]`
+Right: `start where you are.` (italic serif)
 Far right: theme toggle (see below)
 
 The build commit hash and date must be **real**, injected at build time via Astro's build config. Use `import.meta.env` or Vite's `define` to inject `VITE_BUILD_COMMIT` (short hash, from `git rev-parse --short HEAD`) and `VITE_BUILD_DATE` (ISO 8601). These values are baked into the bundle. The commit hash is also visible in the HTML source as a `<meta name="build-commit" content="...">` tag.

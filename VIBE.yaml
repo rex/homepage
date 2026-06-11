@@ -9,17 +9,28 @@ project:
 
 workflow:
   default_autonomy_mode: interactive
-  validation_command: npm run build
-  final_verification_command: npm run build
+  changelog_required: true
+  commit_per_logical_step: true
+  signed_commits_required: true
+  push_after_each_commit_if_remote_exists: true
+  validation_command: make validate
+  final_verification_command: make check-if-the-agent-can-consider-this-task-completed
   ask_before_dockerizing: true
 
 quality_gates:
   lint:
-    required: true
-    command: npm run build
+    # No linter is wired for this repo (no eslint/prettier/biome config,
+    # no lint script in package.json). Astro's correctness checking is
+    # `astro check` — surfaced via the typecheck gate below. Required is
+    # false because a `make lint` that fails closed would block every
+    # commit for a gate the repo intentionally does not run.
+    required: false
+    command: make lint
   typecheck:
+    # Real: `make typecheck` runs `astro check` (the repo's correctness
+    # gate per AGENTS.md §3), which type-checks .astro/.ts across the tree.
     required: true
-    command: npm run build
+    command: make typecheck
   tests:
     mode: deferred
     command: null
@@ -30,7 +41,7 @@ quality_gates:
   clean_worktree_required_on_completion: true
 
 architecture:
-  check_command: npm run build
+  check_command: make check-architecture
   scope_globs:
     - "src/**/*"
   exclude_globs:
@@ -40,6 +51,7 @@ architecture:
   max_lines_per_file:
     soft: 250
     hard: 400
+  max_public_functions_per_module: 8
 
 docs:
   agents_md_required: true
@@ -54,9 +66,15 @@ reporting:
     detail_level: compact
 
 security:
-  secrets_in_files: forbidden
+  secrets_in_files: forbidden  # pragma: allowlist secret
 
 versioning:
+  # Repo-specific override of the skeleton default (which is a VERSION
+  # file + per-commit bump). This site pins its version in package.json
+  # as a PRODUCT-DISPLAY constant — the footer renders it dynamically via
+  # PACKAGE_VERSION (AGENTS.md §5). It is not a per-commit-bumped semver,
+  # so there is no VERSION file and bump_required_per_commit is false. The
+  # pre-commit version-bump hook is intentionally omitted to match this.
   enabled: true
   style: semver
   file: package.json
