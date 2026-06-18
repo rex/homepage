@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solarpunk Workshop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fern: #C8E6C9;
+      --sand: #EFE5D5;
+      --amber: #FFC107;
+      --coral: #FF7043;
+      --forest: #2E7D32;
+      --deep-forest: #1b4d1f;
+      --text-dark: #253525;
+      --text-light: #fdf9f4;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Nunito Sans', 'Söhne', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text-dark);
+      background: linear-gradient(180deg, rgba(232, 246, 233, 0.9), #fff);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Playfair Display', 'Canela', 'Times New Roman', serif;
+      color: var(--forest);
+      letter-spacing: 0.5px;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    a:focus, button:focus, .cta:focus {
+      outline: 3px solid var(--amber);
+      outline-offset: 4px;
+    }
+
+    header {
+      position: relative;
+      background: linear-gradient(135deg, rgba(255, 193, 7, 0.85), rgba(255, 112, 67, 0.65), rgba(46, 125, 50, 0.55));
+      color: var(--text-light);
+      padding: 6rem 5vw 8rem;
+      overflow: hidden;
+    }
+
+    header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 15% 20%, rgba(255, 255, 255, 0.55), transparent 60%),
+        radial-gradient(circle at 85% 25%, rgba(255, 255, 255, 0.3), transparent 55%),
+        linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 65%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    header .content {
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 1.5rem;
+      color: var(--text-light);
+    }
+
+    .hero-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 4vw + 1rem, 4.5rem);
+      margin: 0;
+      line-height: 1.1;
+    }
+
+    header p {
+      max-width: 650px;
+      font-size: clamp(1.05rem, 1vw + 1rem, 1.3rem);
+      color: rgba(255, 249, 244, 0.92);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .cta {
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 999px;
+      padding: 0.85rem 1.8rem;
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: transform 300ms ease, background 300ms ease, box-shadow 300ms ease;
+      box-shadow: 0 12px 25px rgba(43, 71, 41, 0.25);
+    }
+
+    .cta.secondary {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .cta:hover, .cta:focus-visible {
+      transform: translateY(-4px) scale(1.02);
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .hero-wave {
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: auto;
+    }
+
+    main {
+      padding: 4rem 5vw 6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-title {
+      font-size: clamp(1.9rem, 2vw + 1rem, 2.6rem);
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      color: rgba(37, 53, 37, 0.8);
+      max-width: 620px;
+      margin-bottom: 2.5rem;
+    }
+
+    .projects {
+      column-count: 1;
+      column-gap: 2rem;
+    }
+
+    @media (min-width: 768px) {
+      .projects {
+        column-count: 2;
+      }
+    }
+
+    @media (min-width: 1100px) {
+      .projects {
+        column-count: 3;
+      }
+    }
+
+    .project-card {
+      break-inside: avoid;
+      background: rgba(239, 229, 213, 0.85);
+      border-radius: 26px;
+      margin-bottom: 2rem;
+      padding: 1.75rem;
+      box-shadow: 0 18px 36px rgba(46, 125, 50, 0.16);
+      border: 1px solid rgba(200, 230, 201, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 193, 7, 0.45), transparent 55%);
+      opacity: 0;
+      transition: opacity 350ms ease;
+      pointer-events: none;
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .project-card h3 {
+      margin-top: 0;
+      font-size: 1.5rem;
+    }
+
+    .project-card p {
+      margin-bottom: 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(46, 125, 50, 0.08);
+      color: var(--forest);
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .badge svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .about {
+      display: grid;
+      gap: 2.5rem;
+      margin-top: 6rem;
+      align-items: center;
+    }
+
+    @media (min-width: 900px) {
+      .about {
+        grid-template-columns: 1fr 1.2fr;
+      }
+    }
+
+    .portrait {
+      background: linear-gradient(160deg, rgba(255, 193, 7, 0.45), rgba(200, 230, 201, 0.85));
+      border-radius: 40% 60% 55% 45% / 55% 45% 55% 45%;
+      width: min(340px, 80vw);
+      aspect-ratio: 4 / 5;
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 0 25px 40px rgba(33, 94, 37, 0.28);
+      overflow: hidden;
+    }
+
+    .portrait::after {
+      content: "";
+      position: absolute;
+      inset: 18%;
+      border-radius: 40% 60% 60% 40%;
+      border: 3px dashed rgba(37, 53, 37, 0.25);
+      mix-blend-mode: multiply;
+    }
+
+    .portrait svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.7;
+      fill: none;
+      stroke: rgba(37, 53, 37, 0.35);
+      stroke-width: 2;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-text strong {
+      color: var(--forest);
+    }
+
+    .motif {
+      margin-top: 4rem;
+      text-align: center;
+    }
+
+    .motif svg {
+      width: 120px;
+      height: auto;
+      fill: var(--forest);
+      opacity: 0.25;
+    }
+
+    footer {
+      background: linear-gradient(180deg, rgba(255, 193, 7, 0.92), rgba(46, 125, 50, 0.9));
+      color: var(--text-light);
+      text-align: center;
+      padding: 3.5rem 5vw 3rem;
+      position: relative;
+    }
+
+    footer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.25), transparent 60%),
+        radial-gradient(circle at 80% 30%, rgba(255, 255, 255, 0.2), transparent 55%);
+      pointer-events: none;
+    }
+
+    footer p {
+      margin: 0.4rem 0;
+      font-size: 0.95rem;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1rem;
+      z-index: 1;
+      position: relative;
+    }
+
+    .contact-links a {
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      padding: 0.6rem 1.2rem;
+      text-decoration: none;
+      color: var(--text-light);
+      transition: transform 250ms ease, background 250ms ease;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .contact-links a:hover, .contact-links a:focus-visible {
+      transform: translateY(-2px) scale(1.03);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .floating-leaf {
+      position: absolute;
+      width: 240px;
+      height: auto;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    .floating-leaf.leaf-left {
+      top: 12%;
+      left: -80px;
+    }
+
+    .floating-leaf.leaf-right {
+      bottom: 15%;
+      right: -90px;
+      transform: scaleX(-1);
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 5rem 7vw 6rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .about {
+        margin-top: 4rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 600ms ease, transform 600ms ease;
+    }
+
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img class="floating-leaf leaf-left" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 200'%3E%3Cpath fill='%23EFE5D5' d='M110.6 16.7C88 7.2 58.3 20 38.4 38.4 18.5 56.8 8.4 80.8 4.1 102.4c-4.3 21.6-3.7 40.8 4.3 58.2 8 17.4 22.6 33 39.6 37.4 17 4.4 36.5-3 51.3-17.5 14.9-14.5 25.1-35.1 23.2-58.1-1.9-23-16-48.6-20.4-72.7-4.3-24 0.4-47 8.5-58.3z'/%3E%3C/svg%3E" alt="" aria-hidden="true" />
+    <img class="floating-leaf leaf-right" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 200'%3E%3Cpath fill='%23C8E6C9' d='M9.4 16.7C32 7.2 61.7 20 81.6 38.4s30 42.4 34.3 64c4.3 21.6 3.7 40.8-4.3 58.2-8 17.4-22.6 33-39.6 37.4-17 4.4-36.5-3-51.3-17.5-14.9-14.5-25.1-35.1-23.2-58.1C-1 99.4 13 73.8 17.4 49.7 21.7 25.7 17 2.7 8.9-8.6z'/%3E%3C/svg%3E" alt="" aria-hidden="true" />
+    <div class="content">
+      <span class="hero-eyebrow">Solarpunk Workshop</span>
+      <h1>We craft regenerative futures with luminous design.</h1>
+      <p>Solarpunk Workshop is a collective of artists, makers, and technologists building tools for thriving communities. We fuse biomimicry, open-source tech, and lush imagination into experiences that nurture planet and people.</p>
+      <div class="hero-actions">
+        <a class="cta" href="#projects">Explore Projects</a>
+        <a class="cta secondary" href="#about">Meet the Collective</a>
+      </div>
+    </div>
+    <svg class="hero-wave" viewBox="0 0 1440 180" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="#ffffff" d="M0,64L80,80C160,96,320,128,480,144C640,160,800,160,960,133.3C1120,107,1280,53,1360,26.7L1440,0L1440,180L1360,180C1280,180,1120,180,960,180C800,180,640,180,480,180C320,180,160,180,80,180L0,180Z"></path>
+    </svg>
+  </header>
+
+  <main>
+    <section id="projects">
+      <h2 class="section-title fade-up">Regenerative Projects</h2>
+      <p class="section-subtitle fade-up">Each initiative is a seed of a brighter tomorrow — designed with communities, powered by renewables, and shaped to restore ecological balance.</p>
+      <div class="projects">
+        <article class="project-card fade-up">
+          <span class="badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2l2.09 6.26L20 9.27l-5 3.64L16.18 20 12 16.9 7.82 20 9 12.91 4 9.27l5.91-.99L12 2z" fill="currentColor" />
+            </svg>
+            Community Microgrid
+          </span>
+          <h3>Sunweave Cooperative</h3>
+          <p>A modular solar canopy system that shades public plazas while storing energy for neighborhood use. Built with biocomposite struts and citizen-maintained battery gardens.</p>
+        </article>
+
+        <article class="project-card fade-up">
+          <span class="badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2a7 7 0 017 7c0 5.25-7 13-7 13s-7-7.75-7-13a7 7 0 017-7zm0 9.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" fill="currentColor" />
+            </svg>
+            Bio-Urbanism
+          </span>
+          <h3>Verdant Highline</h3>
+          <p>An elevated mycelium walkway linking rooftops with edible gardens, misting stations, and pollinator wayfinding lights that respond to lunar cycles.</p>
+        </article>
+
+        <article class="project-card fade-up">
+          <span class="badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 4a8 8 0 018 8v6h-2v-6a6 6 0 10-12 0v6H4v-6a8 8 0 018-8zm-1 15h2v3h-2z" fill="currentColor" />
+            </svg>
+            Sonic Ecology
+          </span>
+          <h3>Forest Resonance Pods</h3>
+          <p>Immersive listening chambers tuned to the symphonies of nearby forests. Visitors experience live bioacoustics and contribute to open data for conservationists.</p>
+        </article>
+
+        <article class="project-card fade-up">
+          <span class="badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 4h16v2H4zm1 4h14l-1 12H6z" fill="currentColor" />
+            </svg>
+            Circular Craft
+          </span>
+          <h3>Amberleaf Atelier</h3>
+          <p>A repair-and-remix studio where neighbors learn biomaterial weaving, dyeing with algae pigments, and building zero-waste wearables.</p>
+        </article>
+
+        <article class="project-card fade-up">
+          <span class="badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M19 3H5a2 2 0 00-2 2v14l4-4h12a2 2 0 002-2V5a2 2 0 00-2-2z" fill="currentColor" />
+            </svg>
+            Storytelling
+          </span>
+          <h3>Solar Scribe Network</h3>
+          <p>An open storytelling platform archiving resilient practices through illustrated zines, localized broadcasts, and augmented reality park markers.</p>
+        </article>
+
+        <article class="project-card fade-up">
+          <span class="badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 22c4.97 0 9-4.03 9-9S16.97 4 12 4 3 8.03 3 13s4.03 9 9 9zm0-16a7 7 0 100 14 7 7 0 000-14z" fill="currentColor" />
+            </svg>
+            Climate Play
+          </span>
+          <h3>Bloom City Simulator</h3>
+          <p>A cooperative tabletop and AR experience where players co-design regenerative districts, experiment with policy levers, and visualize carbon-positive futures.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="about" id="about">
+      <div class="portrait fade-up" aria-hidden="true">
+        <svg viewBox="0 0 200 250">
+          <path d="M100 30c28 0 50 24 50 54s-22 54-50 54-50-24-50-54 22-54 50-54zm0 126c44 0 80 30 80 66H20c0-36 36-66 80-66z" />
+        </svg>
+      </div>
+      <div class="about-text fade-up">
+        <h2 class="section-title">About the Collective</h2>
+        <p>We are a constellation of designers, energy stewards, farmers, storytellers, and dreamers. Each project is a collaborative tapestry woven from <strong>community wisdom</strong>, open-source tools, and respectful technology.</p>
+        <p>From solar-powered fabrication labs to community seed libraries, our practice centers on mutual aid and ecological restoration. We host workshops, artist residencies, and research sprints that help cities bloom into resilient bioregions.</p>
+        <p>Our studio is powered by 100% renewables, and we redistribute a portion of every commission to local climate justice funds. Join us in cultivating luminous futures.</p>
+        <div class="hero-actions">
+          <a class="cta" href="mailto:hello@solarpunk.workshop">Collaborate with us</a>
+          <a class="cta secondary" href="#projects">View current initiatives</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="motif fade-up" aria-hidden="true">
+      <svg viewBox="0 0 200 80">
+        <path d="M10 60c20-30 40-30 60 0s40 30 60 0 40-30 60 0" stroke="currentColor" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+  </main>
+
+  <footer>
+    <p>Solarpunk Workshop • Regenerative Design Studio</p>
+    <p>Based between floating gardens and urban greenways.</p>
+    <div class="contact-links">
+      <a href="mailto:hello@solarpunk.workshop">hello@solarpunk.workshop</a>
+      <a href="https://www.instagram.com" target="_blank" rel="noreferrer noopener">@solarpunk.workshop</a>
+      <a href="https://www.are.na" target="_blank" rel="noreferrer noopener">Are.na Garden</a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1
+    });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
