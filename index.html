@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Brutalist Beat — Pierce Moore</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #0B0B0B;
+      --paper: #F5F3EF;
+      --vermilion: #FF3B30;
+      --cobalt: #2459FF;
+      --graphite: #1A1A1A;
+      --sans: "Space Grotesk", sans-serif;
+      --display: "Anton", sans-serif;
+      --max-width: min(1200px, 92vw);
+      --grid-gap: clamp(1rem, 3vw, 2.5rem);
+      --step: cubic-bezier(0, 0.9, 0.1, 1);
+      --transition: 120ms var(--step);
+      --shadow: 0 0 0 1px var(--graphite);
+      --noise: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.4;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: var(--noise);
+      opacity: 1;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:focus-visible, button:focus-visible {
+      outline: 3px solid var(--cobalt);
+      outline-offset: 3px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(245, 243, 239, 0.96);
+      backdrop-filter: blur(6px);
+      border-bottom: 2px solid var(--graphite);
+    }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 auto;
+      max-width: var(--max-width);
+      padding: clamp(1rem, 3vw, 1.8rem) 0;
+    }
+
+    .wordmark {
+      font-family: var(--display);
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      letter-spacing: 0.08em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: clamp(0.8rem, 2.5vw, 1.6rem);
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.1rem;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+      transition: border-width var(--transition), transform var(--transition), background var(--transition);
+    }
+
+    nav a:hover,
+    nav a:focus {
+      border-width: 3px;
+      transform: translate(2px, 2px);
+      background: var(--vermilion);
+      color: var(--paper);
+    }
+
+    main {
+      margin: 0 auto;
+      max-width: var(--max-width);
+      padding: clamp(2rem, 5vw, 4rem) 0 clamp(6rem, 8vw, 7rem);
+      display: grid;
+      gap: clamp(4rem, 6vw, 6rem);
+    }
+
+    .hero {
+      position: relative;
+      border: 3px solid var(--graphite);
+      padding: clamp(2.5rem, 6vw, 4.5rem);
+      background:
+        repeating-linear-gradient(90deg, transparent 0 70px, rgba(11,11,11,0.08) 70px 72px),
+        repeating-linear-gradient(0deg, transparent 0 70px, rgba(11,11,11,0.08) 70px 72px),
+        var(--paper);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background: linear-gradient(120deg, transparent 30%, rgba(36,89,255,0.25) 50%, transparent 70%);
+      animation: sweep 12s linear infinite;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .hero-title {
+      font-family: var(--display);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      line-height: 0.9;
+      display: grid;
+      gap: 0.3em;
+    }
+
+    .hero-sub {
+      margin-top: 1.5rem;
+      max-width: 32ch;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--graphite);
+    }
+
+    .hero-ctas {
+      margin-top: clamp(2rem, 3vw, 2.5rem);
+      display: flex;
+      gap: clamp(1rem, 3vw, 1.5rem);
+      flex-wrap: wrap;
+    }
+
+    .hero-ctas a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.9rem 1.8rem;
+      border: 3px solid var(--ink);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: border-width var(--transition), transform var(--transition), background var(--transition), color var(--transition);
+    }
+
+    .hero-ctas a.primary {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .hero-ctas a.secondary {
+      background: transparent;
+    }
+
+    .hero-ctas a:hover,
+    .hero-ctas a:focus {
+      border-width: 4px;
+      transform: translate(3px, 3px);
+    }
+
+    .hero-ctas a.primary:hover,
+    .hero-ctas a.primary:focus {
+      background: var(--vermilion);
+    }
+
+    .hero-ctas a.secondary:hover,
+    .hero-ctas a.secondary:focus {
+      background: var(--cobalt);
+      color: var(--paper);
+    }
+
+    .section-title {
+      font-family: var(--display);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      margin: 0 0 1.5rem;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--grid-gap);
+    }
+
+    .project-card {
+      border: 3px solid var(--graphite);
+      padding: clamp(1.8rem, 3vw, 2.4rem);
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--paper);
+      transition: border-color var(--transition), border-width var(--transition), transform var(--transition), background var(--transition), color var(--transition);
+    }
+
+    .project-card:nth-child(1) {
+      grid-column: span 2;
+    }
+    .project-card:nth-child(2) {
+      background: var(--vermilion);
+      color: var(--paper);
+    }
+    .project-card:nth-child(3) {
+      grid-row: span 2;
+    }
+    .project-card:nth-child(4) {
+      background: var(--cobalt);
+      color: var(--paper);
+    }
+
+    .project-card h3 {
+      font-family: var(--display);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: clamp(1.8rem, 4vw, 3.1rem);
+      margin: 0;
+    }
+
+    .project-card p {
+      margin: 0;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: currentColor;
+    }
+
+    .project-card:hover,
+    .project-card:focus-within {
+      border-width: 5px;
+      transform: translate(4px, 3px) scale(1.02);
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .project-card:nth-child(2):hover,
+    .project-card:nth-child(2):focus-within {
+      background: var(--vermilion);
+      color: var(--paper);
+    }
+
+    .project-card:nth-child(4):hover,
+    .project-card:nth-child(4):focus-within {
+      background: var(--cobalt);
+      color: var(--paper);
+    }
+
+    .project-meta {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .about {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--grid-gap);
+      border-left: 6px solid var(--graphite);
+      padding-left: clamp(1.5rem, 3vw, 2rem);
+    }
+
+    .about h2 {
+      font-family: var(--display);
+      font-size: clamp(2.5rem, 6vw, 3.8rem);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0;
+    }
+
+    .manifesto {
+      font-size: clamp(1rem, 2.6vw, 1.35rem);
+      max-width: 60ch;
+      color: var(--graphite);
+    }
+
+    .quick-facts {
+      display: grid;
+      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .fact {
+      border: 2px solid var(--graphite);
+      padding: 1rem 1.2rem;
+      background: rgba(11, 11, 11, 0.05);
+    }
+
+    .fact dt {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .fact dd {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--graphite);
+    }
+
+    .contact {
+      border: 3px solid var(--graphite);
+      padding: clamp(2rem, 4vw, 3rem);
+      display: grid;
+      gap: 1.5rem;
+      background: linear-gradient(135deg, rgba(36, 89, 255, 0.08), transparent 45%), var(--paper);
+    }
+
+    .contact h2 {
+      font-family: var(--display);
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0;
+    }
+
+    .email-callout {
+      font-size: clamp(1.4rem, 4vw, 2.4rem);
+      font-weight: 600;
+      text-transform: uppercase;
+      border: 3px solid var(--ink);
+      padding: 1rem 1.4rem;
+      display: inline-block;
+      transition: border-width var(--transition), transform var(--transition), background var(--transition), color var(--transition);
+    }
+
+    .email-callout:hover,
+    .email-callout:focus {
+      border-width: 4px;
+      transform: translate(3px, 3px);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .socials a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.1rem;
+      border: 2px solid var(--graphite);
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: rgba(11, 11, 11, 0.05);
+      transition: border-width var(--transition), transform var(--transition), background var(--transition), color var(--transition);
+    }
+
+    .socials a:hover,
+    .socials a:focus {
+      border-width: 3px;
+      background: var(--cobalt);
+      color: var(--paper);
+      transform: translate(2px, 2px);
+    }
+
+    footer {
+      margin-top: clamp(2rem, 3vw, 3rem);
+      border-top: 1px solid rgba(11, 11, 11, 0.4);
+      padding: 1rem 0 3rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(11, 11, 11, 0.8);
+    }
+
+    footer .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .sticky {
+      border-bottom-width: 4px;
+    }
+
+    @keyframes sweep {
+      from { transform: translateX(-40%); }
+      to { transform: translateX(40%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      nav a:hover,
+      nav a:focus,
+      .hero-ctas a:hover,
+      .hero-ctas a:focus,
+      .project-card:hover,
+      .project-card:focus-within,
+      .email-callout:hover,
+      .email-callout:focus,
+      .socials a:hover,
+      .socials a:focus {
+        transform: none !important;
+      }
+      .hero::after { display: none; }
+    }
+
+    @media (max-width: 720px) {
+      .project-card:nth-child(1),
+      .project-card:nth-child(3) {
+        grid-column: auto;
+        grid-row: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header role="banner">
+    <div class="nav-bar">
+      <div class="wordmark">Pierce Moore</div>
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title" class="hero-title">
+        <span>The Brutalist</span>
+        <span>Beat Manifest</span>
+      </h1>
+      <p class="hero-sub">Pierce Moore — DevOps Engineer &amp; Creative Technologist. Building ruthless automation with artful intent.</p>
+      <div class="hero-ctas">
+        <a class="primary" href="#projects">See Projects</a>
+        <a class="secondary" href="#contact">Get In Touch</a>
+      </div>
+    </section>
+
+    <section id="projects" class="projects" aria-labelledby="projects-title">
+      <h2 id="projects-title" class="section-title">Projects in Motion</h2>
+      <div class="projects-grid">
+        <article class="project-card" tabindex="0">
+          <header>
+            <div class="project-meta">Realtime Ops</div>
+            <h3>Bump-Tracker</h3>
+          </header>
+          <p>Sensor fusion pipeline mapping transit turbulence for live ops dashboards.</p>
+        </article>
+        <article class="project-card" tabindex="0">
+          <header>
+            <div class="project-meta">Growth Systems</div>
+            <h3>Infra Orchard</h3>
+          </header>
+          <p>Composable IaC orchard that spawns ephemeral environments at will.</p>
+        </article>
+        <article class="project-card" tabindex="0">
+          <header>
+            <div class="project-meta">Edge Mesh</div>
+            <h3>MQTT Roll-ups</h3>
+          </header>
+          <p>High-frequency broker mesh crunching telemetry into digestible roll-ups.</p>
+        </article>
+        <article class="project-card" tabindex="0">
+          <header>
+            <div class="project-meta">Experiment Ops</div>
+            <h3>Lootbox</h3>
+          </header>
+          <p>Playable feature flags for product squads shipping experiments daily.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="about" aria-labelledby="about-title">
+      <h2 id="about-title">About</h2>
+      <p class="manifesto">I build resilient systems with the blunt force of automation and the precision of a live set. My stack stitches CI/CD, observability, and creative coding into loud, reliable experiences.</p>
+      <div class="quick-facts" aria-label="Quick facts">
+        <dl class="fact">
+          <dt>Current Focus</dt>
+          <dd>Pipeline hardening &amp; platform DX</dd>
+        </dl>
+        <dl class="fact">
+          <dt>Based In</dt>
+          <dd>Chicago, IL</dd>
+        </dl>
+        <dl class="fact">
+          <dt>Allies</dt>
+          <dd>Rust · Terraform · SRE guilds</dd>
+        </dl>
+        <dl class="fact">
+          <dt>Late Night Fuel</dt>
+          <dd>Broken beats &amp; terminal glow</dd>
+        </dl>
+      </div>
+    </section>
+
+    <section id="contact" class="contact" aria-labelledby="contact-title">
+      <h2 id="contact-title">Contact</h2>
+      <a class="email-callout" href="mailto:hello@piercemoore.dev">hello@piercemoore.dev</a>
+      <div class="socials" aria-label="Social links">
+        <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub">GitHub</a>
+        <a href="https://www.linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">LinkedIn</a>
+        <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">X / Twitter</a>
+        <a href="#projects" aria-label="Back to projects">Projects</a>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <span>© <span id="year">2024</span> Pierce Moore</span>
+      <span>Built for The Brutalist Beat</span>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.querySelector('header');
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) {
+        header.classList.add('sticky');
+      } else {
+        header.classList.remove('sticky');
+      }
+    }, { threshold: 0.9 });
+
+    observer.observe(document.querySelector('.hero'));
+  </script>
+</body>
+</html>
