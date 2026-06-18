@@ -9,8 +9,17 @@
 
 ## 0. TL;DR for a fresh agent session
 
-Adding site navigation to piercemoore.com. No nav exists today — the site is a single long-scroll page.
-All phases still pending. **Next action: begin Slice 1.1** — add a sticky top nav component.
+> ⭐ **TOP PRIORITY — Portfolio page** (captured 2026-06-11). Pierce is actively
+> designing it now and will hand over design direction. This is the most important
+> piece of in-flight work and outranks the add-navigation feature below. A full spec
+> + slice breakdown lands once the design arrives. Until then: do not start building —
+> wait for Pierce's design. Likely route: `/portfolio` or `/work`. Strongest pending
+> artifact for the job hunt (showcases the rancher mcp server, homelab observability
+> stack, nfc fossil dig station, etc.). Note: navigation matters more once this exists
+> (multi-page site), so portfolio likely sequences before nav.
+
+This file currently still tracks **add-navigation** (parked, not abandoned). No nav
+exists today — the site is a single long-scroll page. All nav phases pending.
 Pierce has granted broad workspace authority (2026-05-11); no approval gate before starting.
 
 ## Standing user directives
