@@ -22,6 +22,7 @@ infra/.cdk.staging/
 # Useful artifacts get copied into public/ explicitly.
 stuff-for-claude/
 # Agent caches and logs (agentic-skeleton PR1)
+.Codex/
 .claude/logs/
 .claude/settings.local.json
 .claude/serena-initialized

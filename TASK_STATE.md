@@ -9,14 +9,11 @@
 
 ## 0. TL;DR for a fresh agent session
 
-> ⭐ **TOP PRIORITY — Portfolio page** (captured 2026-06-11). Pierce is actively
-> designing it now and will hand over design direction. This is the most important
-> piece of in-flight work and outranks the add-navigation feature below. A full spec
-> + slice breakdown lands once the design arrives. Until then: do not start building —
-> wait for Pierce's design. Likely route: `/portfolio` or `/work`. Strongest pending
-> artifact for the job hunt (showcases the rancher mcp server, homelab observability
-> stack, nfc fossil dig station, etc.). Note: navigation matters more once this exists
-> (multi-page site), so portfolio likely sequences before nav.
+> ⭐ **TOP PRIORITY — Portfolio page** (completed 2026-07-11). The supplied
+> reference is implemented at `/portfolio` as a dark, responsive, data-driven
+> project index. Placeholder catalogue content lives in
+> `src/content/portfolio.yaml`; replace it with real cases as they are prepared.
+> Navigation remains the next parked feature below.
 
 This file currently still tracks **add-navigation** (parked, not abandoned). No nav
 exists today — the site is a single long-scroll page. All nav phases pending.
@@ -101,4 +98,4 @@ _(none)_
 
 ## 6. Handoff note (fill when ending a session)
 
-_(no recent handoff — older notes archived to CHANGELOG.md 2026-06-06)_
+2026-07-11 — Implemented `/portfolio` as a dark, data-driven project index from the supplied reference. Placeholder catalogue content is in `src/content/portfolio.yaml`; `npm run build` passes.

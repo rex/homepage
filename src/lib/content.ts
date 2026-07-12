@@ -89,6 +89,7 @@ export interface AnimationLabContent {
   }[];
 }
 
+
 const heroData = yaml.parse(heroYaml) as HeroContent;
 const practiceData = yaml.parse(practiceYaml) as { areas: PracticeArea[] };
 const careerData = yaml.parse(careerYaml) as { entries: CareerEntry[] };
