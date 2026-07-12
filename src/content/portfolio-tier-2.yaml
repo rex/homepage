@@ -1,0 +1,176 @@
+projects:
+  - rank: 9
+    id: mcp-apple-reminders
+    tier: 2
+    name: mcp-apple-reminders
+    tag: AI tooling
+    group: AI / agentic
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Python
+      - Swift EventKit
+      - Obj-C ReminderKit
+      - MCP (advanced)
+    pitch: A macOS MCP server giving an AI agent full control of Apple Reminders via a three-tier native stack — including Apple's private ReminderKit framework.
+    blurb: "A macOS MCP server giving an AI agent full control of Apple Reminders via a three-tier native stack: direct CoreData SQLite reads, a Swift EventKit helper for public writes, and an Objective-C helper linking Apple's private ReminderKit framework for features the public API hides — plus the full advanced MCP surface (Sampling, Elicitation, Resources, Prompts), an OWASP MCP Top-10 review, and 37 test files. The public, linkable companion to the mcp-rancher hero."
+    metrics:
+      - v: "65"
+        k: tools
+      - v: "37"
+        k: test files
+    art: termtools
+    visual: Three-tier native-stack diagram
+    links:
+      repo: https://github.com/piercemoore/mcp-apple-reminders
+  - rank: 10
+    id: agent-skills
+    tier: 2
+    name: Agent Skills library
+    tag: Meta-tooling
+    group: AI / agentic
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Markdown
+      - Python (governance)
+      - CI gate
+    pitch: The meta “how he builds everything” story — a self-governing monorepo of 23 independently-versioned Claude Code / Codex skills.
+    blurb: A self-governing monorepo of 23 independently-versioned Claude Code / Codex skills (language/tool idioms, homelab/K8s context, the flagship agentic-skeleton repo scaffold) with a CI-aware Python gate that blocks any commit touching a skill's content without bumping its version + changelog — the scaffolding governs the repos it scaffolds, including itself.
+    metrics:
+      - v: "23"
+        k: skills
+      - v: "234"
+        k: commits
+      - v: 57K
+        k: lines md
+    art: workshop
+    visual: Skill / scaffold / gate diagram
+  - rank: 11
+    id: palantir
+    tier: 2
+    name: Palantir
+    tag: Observability
+    group: Infrastructure
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Python (zero-dep pollers)
+      - Prometheus
+      - SNMP
+      - Grafana
+      - Uptime Kuma
+      - Ansible
+    pitch: The distinct “observability” pillar alongside the Homelab Platform — one canonical inventory.yaml generates targets, config, coverage, and 78 alert rules.
+    blurb: A single canonical inventory.yaml (2,600+ lines, stdlib-parseable) generates the Prometheus targets, SNMP config, coverage matrix, and Uptime Kuma state, feeding 78 alert rules down to ZFS scrub-staleness, Patroni timeline splits, etcd leader churn, and Cisco SNMP egress-drop gating. 9 zero-dep pollers · ~24 Grafana dashboards · 17 runbooks.
+    metrics:
+      - v: 2,600+
+        k: line inventory
+      - v: "78"
+        k: alert rules
+      - v: "24"
+        k: dashboards
+    art: board
+    visual: inventory → renderers → Prometheus diagram
+  - rank: 12
+    id: homelab-autodeploy
+    tier: 2
+    name: Homelab Autodeploy
+    tag: Infra (archived)
+    group: Infrastructure
+    year: "2025"
+    status: archived
+    status_kind: archived
+    stack:
+      - Fastify / TypeScript
+      - Bash
+      - Portainer
+      - Pi-hole
+      - Nginx
+    pitch: An archived prior chapter, folded into the Platform story — HMAC-verified webhook service that redeploys the right Portainer stack.
+    blurb: A Fastify/TypeScript webhook service that verifies HMAC signatures on GitHub + Gitea push events and redeploys the right Portainer stack, with a one-command bootstrap-app.sh that links the container package, cuts the Pi-hole DNS record, and provisions the Nginx reverse-proxy host. Reached v0.8.7 before archival (superseded by homelab-control).
+    metrics:
+      - v: "205"
+        k: commits
+      - v: v0.8.7
+        k: at archival
+    art: terminal
+    visual: Webhook → deploy flow
+  - rank: 13
+    id: anchor
+    tier: 2
+    name: Anchor
+    tag: Product
+    group: Product / apps
+    year: "2026"
+    status: in-progress
+    status_kind: maintenance
+    stack:
+      - SwiftUI + SwiftData
+      - iOS + macOS
+      - FastAPI
+      - PostgreSQL
+      - MinIO
+      - yt-dlp / gallery-dl / ffmpeg
+    pitch: The design-philosophy-as-engineering axis — a cognitive-offload system whose inviolable core law is compiled into a state machine.
+    blurb: A cognitive-offload system whose inviolable “an anchor may never be destroyed, only transferred, enriched, or retired with consent” law is compiled into a SwiftUI/SwiftData state machine (forbidden transitions throw), across native iOS + macOS + a FastAPI/Postgres/MinIO backend + an append-only yt-dlp/gallery-dl/ffmpeg enrichment pipeline, all derived from a 2,498-line living design doctrine. Frame as an ambitious in-progress system, not a shipped product.
+    metrics:
+      - v: 2,498
+        k: line doctrine
+      - v: "3"
+        k: surfaces + backend
+    art: phone
+    visual: Screenshots + design-doctrine excerpts
+  - rank: 14
+    id: bump-tracker
+    tier: 2
+    name: Bump-Tracker
+    tag: IoT (2nd)
+    group: Product / apps
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - ESP32 / C
+      - MQTT
+      - InfluxDB
+      - Python sidecar
+      - APNs
+      - SwiftUI (8 targets)
+    pitch: "A second IoT data point — a personal event-tracking device: ESP32 hardware → Python sidecar → a universal 8-target SwiftUI suite."
+    blurb: "One product across five repos: an ESP32 device (dual OLEDs, chord-playing buzzers, LED ring, LittleFS animations) → a Python sidecar bridging MQTT→InfluxDB→APNs with idempotent event-sourcing and remote Live-Activity drive → a universal 8-target SwiftUI suite. A shadow-mode production-safety test harness rounds it out. Presented as an anonymized “personal event-tracking IoT device.”"
+    metrics:
+      - v: "408"
+        k: commits
+      - v: 25.5K
+        k: Swift LOC
+    art: phone
+    visual: Anonymized case study
+  - rank: 15
+    id: doombox
+    tier: 2
+    name: DoomBox
+    tag: Voice-AI
+    group: Product / apps
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Next.js
+      - Prisma
+      - PostgreSQL
+      - Parakeet-MLX (on-device STT)
+      - Ollama / OpenAI
+      - SSE
+    pitch: The voice-AI axis — a clutter-inventory app extended with a from-scratch local voice-capture agent.
+    blurb: "A Next.js/Prisma/Postgres inventory app for household clutter, extended with a from-scratch local voice-capture pilot: on-device Parakeet-MLX speech-to-text → a local (Ollama) or cloud (OpenAI) LLM tool-calling agent that drives the app's REST API and speaks back via macOS say, with a live SSE dashboard and measured local-vs-cloud latency tradeoffs. Deployed and in daily use."
+    metrics:
+      - v: 9.2K
+        k: LOC
+      - v: local+cloud
+        k: STT / LLM
+    art: statustable
+    visual: Voice-pilot writeup + screenshots

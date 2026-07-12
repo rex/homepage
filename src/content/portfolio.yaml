@@ -1,90 +1,50 @@
 title: "Projects — Pierce Moore"
-description: "A dark-mode project index with placeholder work across systems, tools, and field hardware."
+description: "Selected systems, tools, products, and public work spanning two decades."
 nav:
   site: "piercemoore.com"
   route: "projects"
   availability: "open to senior platform roles"
 index:
-  issue: "index issue 03"
-  title: "project index"
-  summary: "a working archive of systems, tools, and field notes."
-  total_label: "entries"
+  issue: "range / index 01"
+  title: "selected work"
+  thesis: "range, made legible."
+  summary: "Infrastructure, native apps, product ecosystems, hardware, AI tooling, and the odd side quest."
+  total_label: "projects"
+  curated_label: "curated cases"
 labels:
-  flagship: "flagship cases"
-  all_flagship: "view all flagship"
-  jump: "jump to letter"
-  type: "type"
-  depth: "depth"
-  view: "view"
-  all: "all entries"
-  selected: "currently selected"
-  count_by_type: "count by type"
-  thesis: "thesis"
+  heroes: "tier 01 / flagship systems"
+  all_heroes: "browse the full index"
+  index: "project index"
+  filter: "filter"
+  search: "search projects"
+  search_placeholder: "name, stack, or discipline"
+  tier: "depth"
+  all: "all curated"
+  tier_one: "flagship"
+  tier_two: "selected"
+  tier_three: "archive"
+  status: "status"
+  currently_selected: "selected case"
+  pitch: "brief"
+  hook: "the engineering move"
   stack: "stack"
-  artifacts: "artifacts"
-  terminal: '$ search --scope projects --query ""'
-  source: "source"
-filters:
-  types: ["all", "macOS", "iOS", "web", "AI", "infra", "hardware"]
-  depths: ["all", "brief", "case", "walkthrough"]
-  views: ["all entries", "flagship", "archived / minor"]
-types:
-  - { id: "macos", label: "macOS" }
-  - { id: "ios", label: "iOS" }
-  - { id: "web", label: "web" }
-  - { id: "ai", label: "AI" }
-  - { id: "infra", label: "infra / platform" }
-  - { id: "hardware", label: "hardware / maker" }
+  metrics: "scale"
+  links: "links"
+  live_site: "live site"
+  source_repo: "source repository"
+  no_results: "no projects match this filter"
+  historical: "the long arc"
+  historical_summary: "Public projects from 2010–2021 — the experiments, utilities, and odd ideas that built the range."
+  historical_count: "public archive"
+  terminal: '$ find ./work --range "twenty years"'
+  open_case: "open case"
+tiers:
+  - { id: "all", label: "all curated" }
+  - { id: "1", label: "tier 01 / flagship" }
+  - { id: "2", label: "tier 02 / selected" }
+  - { id: "3", label: "tier 03 / archive" }
 states:
   - { id: "active", label: "active" }
   - { id: "in-progress", label: "in progress" }
-  - { id: "maintenance", label: "maintenance" }
+  - { id: "shipped", label: "shipped" }
   - { id: "archived", label: "archived" }
-  - { id: "concept", label: "concept" }
-groups:
-  - { label: "A — C", letters: "ABC" }
-  - { label: "D — L", letters: "DEFGHIJKL" }
-  - { label: "M — R", letters: "MNOPQR" }
-  - { label: "S — Z", letters: "STUVWXYZ" }
-projects:
-  - { id: "01", title: "Atlas Client", group: "A — C", type: "macos", depth: "case", state: "active", preview: "meter", subtitle: "desktop control room" }
-  - { id: "02", title: "Audit Console", group: "A — C", type: "web", depth: "brief", state: "active", preview: "policy", subtitle: "evidence review queue" }
-  - { id: "03", title: "Beacon Bus", group: "A — C", type: "infra", depth: "walkthrough", state: "maintenance", preview: "relay", subtitle: "event delivery spine" }
-  - { id: "04", title: "Briefcase", group: "A — C", type: "macos", depth: "brief", state: "concept", preview: "meter", subtitle: "portable runbook shelf" }
-  - { id: "05", title: "Circuit Notes", group: "A — C", type: "hardware", depth: "case", state: "active", preview: "circuit", subtitle: "bench-side logbook" }
-  - { id: "06", title: "Cluster Ledger", group: "A — C", type: "infra", depth: "case", state: "active", preview: "relay", subtitle: "capacity history" }
-  - { id: "07", title: "Container Note", group: "A — C", type: "macos", depth: "brief", state: "archived", preview: "meter", subtitle: "local image inspector" }
-  - { id: "08", title: "Deploy Diary", group: "D — L", type: "infra", depth: "walkthrough", state: "active", preview: "relay", subtitle: "change history" }
-  - { id: "09", title: "Drift Catcher", group: "D — L", type: "web", depth: "case", state: "active", preview: "policy", subtitle: "configuration review" }
-  - { id: "10", title: "Field Station", group: "D — L", type: "hardware", depth: "case", state: "in-progress", preview: "circuit", subtitle: "environmental logger", featured: true }
-  - { id: "11", title: "Incident Lens", group: "D — L", type: "ai", depth: "walkthrough", state: "active", preview: "nodes", subtitle: "incident synthesis" }
-  - { id: "12", title: "Kube Courier", group: "D — L", type: "infra", depth: "brief", state: "maintenance", preview: "relay", subtitle: "cluster handoff" }
-  - { id: "13", title: "Launch Table", group: "D — L", type: "macos", depth: "brief", state: "active", preview: "meter", subtitle: "release checklist" }
-  - id: "14"
-    title: "Menu Meter"
-    group: "M — R"
-    type: "macos"
-    depth: "case"
-    state: "active"
-    preview: "meter"
-    subtitle: "signal-aware menu bar"
-    featured: true
-    selected: true
-    thesis: "Design is signal discipline: make the state clear before making it beautiful."
-    stack: "SwiftUI · Swift Charts · MenuBarExtra · SQLite · XCTest"
-    artifacts:
-      - { index: "01", label: "case notes (markdown)" }
-      - { index: "02", label: "interaction study (video)" }
-      - { index: "03", label: "screen set (18 images)" }
-      - { index: "04", label: "source (repository)" }
-  - { id: "15", title: "Nodework AI", group: "M — R", type: "ai", depth: "case", state: "active", preview: "nodes", subtitle: "workflow workbench", featured: true }
-  - { id: "16", title: "On-call Atlas", group: "M — R", type: "web", depth: "brief", state: "active", preview: "policy", subtitle: "service geography" }
-  - { id: "17", title: "Packet Garden", group: "M — R", type: "infra", depth: "brief", state: "maintenance", preview: "relay", subtitle: "network gardening" }
-  - { id: "18", title: "Policy Foundry", group: "M — R", type: "web", depth: "case", state: "active", preview: "policy", subtitle: "guided postmortems", featured: true }
-  - { id: "19", title: "Rancher Relay", group: "M — R", type: "infra", depth: "walkthrough", state: "in-progress", preview: "relay", subtitle: "context protocol bridge", featured: true }
-  - { id: "20", title: "Service Thread", group: "S — Z", type: "ios", depth: "brief", state: "active", preview: "nodes", subtitle: "mobile handoff" }
-  - { id: "21", title: "Signal Cast", group: "S — Z", type: "ios", depth: "case", state: "active", preview: "meter", subtitle: "field alert companion" }
-  - { id: "22", title: "Stack Queue", group: "S — Z", type: "ai", depth: "walkthrough", state: "concept", preview: "nodes", subtitle: "triage assistant" }
-  - { id: "23", title: "Terraform Ledger", group: "S — Z", type: "infra", depth: "case", state: "active", preview: "relay", subtitle: "module inventory" }
-  - { id: "24", title: "Trail Companion", group: "S — Z", type: "ios", depth: "brief", state: "archived", preview: "circuit", subtitle: "offline field notes" }
-  - { id: "25", title: "Uptime Studio", group: "S — Z", type: "web", depth: "case", state: "active", preview: "policy", subtitle: "reliability briefings" }

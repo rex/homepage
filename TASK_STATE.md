@@ -5,19 +5,14 @@
 > and context compactions.
 >
 > Spec: `specs/001-add-navigation/spec.md` · Plan: `specs/001-add-navigation/plan.md`
-> Branch: `chore/add-navigation` · Owner (human): @pierce · Last update: 2026-06-06 (archived)
+> Branch: `codex/implement-projects-page` · Owner (human): @pierce · Last update: 2026-07-12
 
 ## 0. TL;DR for a fresh agent session
 
-> ⭐ **TOP PRIORITY — Portfolio page** (completed 2026-07-11). The supplied
-> reference is implemented at `/portfolio` as a dark, responsive, data-driven
-> project index. Placeholder catalogue content lives in
-> `src/content/portfolio.yaml`; replace it with real cases as they are prepared.
-> Navigation remains the next parked feature below.
-
-This file currently still tracks **add-navigation** (parked, not abandoned). No nav
-exists today — the site is a single long-scroll page. All nav phases pending.
-Pierce has granted broad workspace authority (2026-05-11); no approval gate before starting.
+Navigation and the production portfolio catalogue are complete. The fixed Corner Index
+links Home, Writing, Projects, and CV on every route, with a compact mobile disclosure
+and keyboard shortcuts. `/portfolio` now presents 34 curated case studies plus 65 public
+archive projects using the site's existing tokens, typography, and light/dark themes.
 
 ## Standing user directives
 
@@ -35,48 +30,42 @@ Pierce has granted broad workspace authority (2026-05-11); no approval gate befo
 
 | # | Phase | Status | Exit criteria |
 |---|---|---|---|
-| 1 | Nav component + anchor links | ⏸ pending | Nav renders on all routes; all section anchors work |
-| 2 | Mobile / responsive | ⏸ pending | Nav collapses to hamburger on small screens |
-| 3 | Active-section highlighting | ⏸ pending | Scroll spy highlights current section in nav |
+| 1 | Site-wide Corner Index navigation | ✅ done | Nav renders on all routes and links canonical destinations |
+| 2 | Mobile / responsive | ✅ done | Nav uses an accessible compact disclosure on small screens |
+| 3 | Active-route highlighting | ✅ done | Current route is identified visually and with `aria-current` |
+| 4 | Production portfolio catalogue | ✅ done | Real curated and archive projects replace all placeholders |
 
 ## 2. Slices
 
-### Slice 1.1 — Add Header nav component with anchor links  ← NEXT
+### Slice 1.1 — Site-wide Corner Index navigation
 
-- Status: ⏸ pending
-- Owner: agent
-- Files (planned edits): `src/components/Header.astro`, `src/layouts/BaseLayout.astro`
-- Files (do NOT edit): `src/content/*.yaml`, `infra/`
+- Status: ✅ done
+- Files: `src/components/Header.astro`, `src/layouts/BaseLayout.astro`,
+  `src/content/navigation.yaml`, `src/lib/navigation-content.ts`
 - Acceptance:
-  - [ ] When a user visits any page, the system shall display a sticky top nav bar
-  - [ ] The nav shall link to each major section (`#identity`, `#practice-areas`, `#career`, `#contact`)
-  - [ ] The nav shall not obscure content (appropriate top-padding on sections)
-  - [ ] `npm run build` passes with zero errors
+  - [x] Navigation renders on every route
+  - [x] All links resolve to canonical public pages
+  - [x] Current route is exposed with `aria-current`
+  - [x] `g` + destination-key shortcuts work outside editable controls
 
-### Slice 1.2 — Add section IDs to all anchor targets
+### Slice 2.1 — Responsive navigation
 
-- Status: ⏸ pending
-- Files (planned edits): `src/components/Hero.astro`, `src/components/PracticeAreas.astro`, `src/components/CareerLog.astro`, `src/components/Contact.astro`
+- Status: ✅ done
 - Acceptance:
-  - [ ] Each section has a stable `id` attribute matching the nav links
-  - [ ] Keyboard tab to nav link + Enter scrolls to correct section
+  - [x] Desktop navigation remains visible without interaction
+  - [x] Mobile navigation uses a keyboard-accessible native disclosure
+  - [x] Disclosure closes after route selection
 
-### Slice 2.1 — Mobile hamburger collapse
+### Slice 3.1 — Real portfolio catalogue
 
-- Status: ⏸ pending
-- Files (planned edits): `src/components/Header.astro` or new `src/components/MobileMenu.tsx`
+- Status: ✅ done
+- Files: `src/pages/portfolio.astro`, `src/content/portfolio*.yaml`,
+  `src/lib/portfolio-content.ts`, `src/styles/portfolio.css`
 - Acceptance:
-  - [ ] While viewport width < 768px, the system shall show a hamburger icon instead of nav links
-  - [ ] When hamburger is tapped, the system shall expand the nav menu
-  - [ ] When a nav link is tapped on mobile, the menu shall close
-
-### Slice 3.1 — Scroll-spy active section highlighting
-
-- Status: ⏸ pending
-- Files (planned edits): `src/components/Header.astro` or new React island
-- Acceptance:
-  - [ ] While the user scrolls, the system shall highlight the nav link for the section in view
-  - [ ] Where `prefers-reduced-motion` is set, the system shall skip scroll animations
+  - [x] 34 ranked projects use curated production copy and public links
+  - [x] 65 older public projects remain available in a collapsed archive
+  - [x] Search, type filters, project selection, and deep-link hashes work
+  - [x] Page follows the shared token system in light and dark modes
 
 ## 3. Blockers / open questions
 
@@ -84,6 +73,10 @@ _(none)_
 
 ## 4. Recent decisions (append-only, newest first)
 
+- 2026-07-12 — Adopted the handoff's Corner Index as a site-wide route navigator rather
+  than an in-page scroll spy; this fits the site's growing multi-page structure.
+- 2026-07-12 — Published the 34 curated projects and the 65-item public archive; excluded
+  uncurated and sensitivity-flagged long-tail inventory from the public site.
 - 2026-05-11 — Pierce lifted the workspace fences: agent can manage the homepage end-to-end
   as long as changes are in version control and revertible; explicit approval still required
   for destructive / DNS / money / security-sensitive operations.
@@ -94,8 +87,12 @@ _(none)_
 
 ## 5. Next actions (ordered)
 
-1. Open `chore/add-navigation` branch and begin Slice 1.1.
+1. Replace generated project artifact previews with project-specific media as assets become available.
+2. Add dedicated case-study routes for the highest-ranked projects when their narratives are ready.
 
 ## 6. Handoff note (fill when ending a session)
 
-2026-07-11 — Implemented `/portfolio` as a dark, data-driven project index from the supplied reference. Placeholder catalogue content is in `src/content/portfolio.yaml`; `npm run build` passes.
+2026-07-12 — Implemented the site-wide Corner Index navigation and rebuilt `/portfolio`
+around the production catalogue: 34 curated projects plus 65 public archive entries.
+Navigation, filtering, selection, deep links, responsive behavior, and both color themes
+were browser-checked. `/projects` redirects to the canonical `/portfolio` route.

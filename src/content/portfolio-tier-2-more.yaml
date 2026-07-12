@@ -1,0 +1,170 @@
+projects:
+  - rank: 16
+    id: lootbox
+    tier: 2
+    name: Lootbox
+    tag: Consumer PWA
+    group: Product / apps
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Vue 3 PWA
+      - Pinia
+      - FastAPI
+      - MQTT pub/sub
+      - IndexedDB
+      - service worker
+    pitch: The strongest consumer-app entry — a gamified daily-wins tracker wired over live MQTT pub/sub, not REST polling.
+    blurb: "A Vue 3 PWA + FastAPI gamified daily-wins tracker wired over live MQTT pub/sub (not REST polling): the client publishes a win, the server computes points/streak/level and fans out events, and the Pinia store reacts live — with IndexedDB + service worker for offline resync and hand-designed badge art. Deployed via Gitea CI → homelab."
+    metrics:
+      - v: 3.4K
+        k: LOC
+      - v: MQTT
+        k: live event bus
+    art: phone
+    visual: Screenshots + MQTT event-flow (C4)
+  - rank: 17
+    id: magpie
+    tier: 2
+    name: Magpie
+    tag: macOS app
+    group: Native desktop
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Swift
+      - PythonKit
+      - embedded Python 3.11
+      - yt-dlp / gallery-dl
+    pitch: A native macOS download manager that embeds a full Python runtime inside the .app and drives yt-dlp/gallery-dl as in-process Python objects.
+    blurb: A native macOS download manager that embeds a full Python 3.11 runtime inside the .app bundle (PythonKit + beeware's Python-Apple-support xcframework) and drives yt-dlp/gallery-dl as in-process Python objects rather than shelling out — solving PYTHONHOME/PYTHONPATH relocation in a sandbox, GIL-safe threading, and a CI step that rebuilds the 200 MB Python payload. Synthwave UI.
+    metrics:
+      - v: 9.6K
+        k: Swift LOC
+      - v: 200 MB
+        k: embedded Python
+    art: verdict
+    visual: Synthwave UI + embedded-Python diagram
+  - rank: 18
+    id: dungeon-master
+    tier: 2
+    name: Dungeon Master
+    tag: Ops GUI
+    group: Native desktop
+    year: "2026"
+    status: in-progress
+    status_kind: maintenance
+    stack:
+      - Tauri 2.0
+      - Rust
+      - React
+      - tokio
+    pitch: The only native ops-GUI for the homelab — a background worker polls all Pi-hole nodes, diffs DNS record sets, and reconciles drift.
+    blurb: "A native macOS ops GUI (Tauri 2.0 + Rust + React): a background tokio worker polls all 3 Pi-hole nodes concurrently, diffs DNS record sets pairwise, classifies drift, and emits reconciliation events over Tauri's event bus — a real distributed-consistency problem — plus Nginx Proxy Manager control."
+    metrics:
+      - v: 9.6K
+        k: Rust + TS LOC
+      - v: "3"
+        k: Pi-hole nodes
+    art: console
+    visual: UI (needs capture) + reconciliation worker
+  - rank: 19
+    id: reaper
+    tier: 2
+    name: Reaper
+    tag: Systems / web
+    group: Web apps
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Go (work-stealing crawler)
+      - FastAPI
+      - PostgreSQL
+      - React
+      - W3C DTCG tokens
+    pitch: A three-language full-stack disk-usage tool for TrueNAS with a Go crawler that dodges the classic bounded-queue deadlock.
+    blurb: "A three-language full-stack disk-usage tool for TrueNAS: a Go crawler using an unbounded work-stealing directory queue (mutex + sync.Cond) feeding a separately-batched Postgres upserter to avoid the classic bounded-queue deadlock, a FastAPI backend serving treemap/duplicate/stale views, and a brutalist React UI with an exported W3C DTCG design-token package. Deletion is a staged, event-sourced audited workflow."
+    metrics:
+      - v: 10.9K
+        k: LOC
+      - v: "3"
+        k: languages
+      - v: "66"
+        k: commits
+    art: statustable
+    visual: Treemap UI + walker.go concurrency
+  - rank: 20
+    id: piercemoore-com
+    tier: 2
+    name: piercemoore.com
+    tag: This site
+    group: Web apps
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Astro 5
+      - hand-built design tokens
+      - self-hosted fonts
+      - CDK
+      - CloudFront + S3
+      - raw ES5.1 edge fn
+    pitch: This site — a hand-built design-token system on a CDK-provisioned CloudFront stack with a raw-ES5.1 edge function doing redirects, canonicalization, analytics, and a fail-closed /admin gate.
+    blurb: Astro 5 static site with a hand-built design-token system and self-hosted fonts (~47KB gzipped JS total), on a CDK-provisioned CloudFront + S3 + Route 53 stack with a hand-written CloudFront viewer-request function in raw ES5.1 (10KB/1ms budget) doing vanity-domain redirects, canonicalization, a privacy-first analytics beacon, and a fail-closed /admin Basic-Auth gate.
+    metrics:
+      - v: 47 KB
+        k: gzip JS total
+      - v: 1 ms
+        k: edge budget
+    art: site
+    visual: Homepage screenshot
+    links:
+      live: https://piercemoore.com
+      repo: https://github.com/piercemoore/homepage
+  - rank: 21
+    id: jurassic-park
+    tier: 2
+    name: Jurassic Park Diorama Toolchain
+    tag: CAD / fabrication
+    group: Creative / fabrication
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - React / Tailwind planner
+      - OpenSCAD (BOSL2 / NopSCADlib)
+      - Makefile → STL
+    pitch: Hardware/CAD range nothing else touches — a layout planner with a filament calculator, paired with a parametric OpenSCAD → STL pipeline.
+    blurb: A React/Tailwind layout planner (70+ catalog elements, fence/floor tools, undo/redo) with a filament calculator that turns a 2D park layout into a per-color spool shopping list, paired with a parametric OpenSCAD workspace (BOSL2/NopSCADlib) and a Makefile-driven .scad→STL pipeline — including a procedurally-lofted T-Rex and snap-fit fence posts with ceramic insulators.
+    metrics:
+      - v: 70+
+        k: catalog parts
+      - v: SCAD
+        k: → STL pipeline
+    art: board
+    visual: Layout-planner UI + rendered STL
+  - rank: 22
+    id: autopilot
+    tier: 2
+    name: Autopilot
+    tag: Automation
+    group: Automation
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - vanilla JS (single-file)
+      - PouchDB / CouchDB
+      - Gitea Actions CI/CD
+    pitch: A cyberpunk “mission control” packing checklist with offline-first bidirectional sync and a per-item formula engine.
+    blurb: A cyberpunk “mission control” packing checklist (vanilla-JS single-file app) with offline-first bidirectional PouchDB/CouchDB sync and a per-item formula engine (quantities computed from live trip parameters), shipped through a surprisingly mature Gitea Actions CI/CD pipeline (semver build-metadata, Docker layer caching, SHA-tagged registry pushes, OCI labels, HEALTHCHECK).
+    metrics:
+      - v: 2,500
+        k: line app
+      - v: offline
+        k: first sync
+    art: checklist
+    visual: Mission-control UI screenshot

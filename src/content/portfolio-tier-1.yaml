@@ -1,0 +1,245 @@
+projects:
+  - rank: 1
+    id: outageforge
+    tier: 1
+    name: OutageForge
+    bucket: DevOps product
+    tag: DevOps / SRE
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - TypeScript
+      - React
+      - Vite
+      - Fastify
+      - xterm.js
+      - WASM/WASI
+      - Supabase
+      - Vitest + fast-check
+    pitch: A deterministic “flight simulator” for infrastructure — practice on-call incidents and replay them frame-for-frame.
+    hook: The whole simulation is a pure, seeded, event-sourced reducer that never touches Math.random() or the wall clock — so a run is fully described by seed + input log. That one property buys time-travel debugging, lockstep multiplayer, free replay-based anti-cheat, and total observability, proven by adversarial property-based determinism tests.
+    blurb: OutageForge is a deterministic DevOps/SRE incident simulator — a flight simulator for infrastructure. It models a Kubernetes/Linux/network topology as a pure, event-sourced, seeded simulation and emulates the real tools (a WASM shell, real kubectl) at the surface, so you practice on-call incidents against realistic outages and get a causal, gamified debrief that levels up an RPG skill tree. Because the engine never touches randomness or wall-clock time, every run is reproducible from seed + input log — giving time-travel debugging, lockstep multiplayer where the server only orders inputs, and free anti-cheat, all proven with property-based tests. ~68K lines of TypeScript, 23 ADRs of design rigor, shipped through a green-gated blue-green pipeline.
+    metrics:
+      - v: 68K
+        k: lines TS
+      - v: "23"
+        k: ADRs
+      - v: "187"
+        k: test files
+    art: terminal
+    visual: War Room + architecture diagram
+  - rank: 2
+    id: homelab-platform
+    tier: 1
+    name: Homelab Platform
+    bucket: Infrastructure
+    tag: Platform eng
+    year: 2019—26
+    status: active
+    status_kind: operational
+    stack:
+      - Ansible
+      - Python
+      - TypeScript
+      - Fastify
+      - PostgreSQL
+      - Patroni
+      - etcd
+      - Proxmox
+      - Gitea
+    pitch: A five-repo, GitOps homelab platform run like a real production environment — declarative inventory, 60+ Ansible roles, a full HA tier, and an event-sourced deploy pipeline.
+    hook: "The deploy pipeline is genuinely event-sourced: a raw Gitea event store (UNIQUE delivery_id → retries are idempotent no-ops), JSONB payloads, and read-side projections over both Postgres and SQLite. Not a “webhook fires a redeploy” script but a proper CQRS-style event log with a synthesized state view."
+    blurb: A self-hosted platform that runs my entire homelab like a real production environment. A declarative YAML inventory is the single source of truth; ~60 Ansible roles converge six hosts including a full HA data tier (Patroni Postgres + etcd + keepalived VIPs, clustered EMQX, HA MinIO/InfluxDB/Grafana/Prometheus). A TypeScript control plane consumes Gitea webhooks into an idempotent, event-sourced deploy log and drives Portainer, with a 28-component React operator console over deploys, drift, secrets, and hosts. Five coordinated repos, 1,000+ commits, ADRs, CI, and Molecule tests.
+    metrics:
+      - v: 1,066
+        k: commits
+      - v: 60+
+        k: Ansible roles
+      - v: "6"
+        k: hosts / 59 stacks
+    art: console
+    visual: Operator console + HA-tier diagram
+  - rank: 3
+    id: cheddar
+    tier: 1
+    name: Cheddar
+    bucket: Full-stack product ecosystem
+    tag: Product ecosystem
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Supabase
+      - PostgreSQL / PL-pgSQL
+      - Deno Edge
+      - React
+      - TypeScript
+      - Kotlin / Compose
+      - FastAPI
+      - Playwright
+      - Plaid
+    pitch: "A five-repo personal-finance ecosystem for a tip-income worker: SQL-as-API backend, React SPA, native Android, and a headless integration server."
+    hook: "The database IS the product and the API — ~8,400 lines of SQL implement a degrade-safe safe_to_spend engine behind an inviolable data-provenance mandate: every one of 335 columns across 30 tables carries a machine-read COMMENT documenting its origin and class, enforced by a fail-closed gate. Paired with a Playwright headless scraper that reverse-engineers a POS with no public API via fingerprint-aware sessions and email-code 2FA."
+    blurb: "Cheddar is a full personal-finance ecosystem built for someone whose tip-heavy, variable income makes “can I afford this?” genuinely hard to answer. It's five coordinated repos: a Supabase/Postgres backend where security-definer functions ARE the API (tables sealed, RLS on), a React SPA and a native Android app as the daily surfaces, and a FastAPI homelab server that scrapes a booking POS with a headless browser, syncs the bank via Plaid, and parses email. The headline “safe to spend” number is deliberately conservative and shows its receipts, and every column in the schema has enforced, documented provenance so no number is ever a black box."
+    metrics:
+      - v: "5"
+        k: repos
+      - v: "335"
+        k: documented columns
+      - v: 8.4K
+        k: lines SQL
+    art: statustable
+    visual: De-identified UI + schema diagram
+  - rank: 4
+    id: pennywise
+    tier: 1
+    name: Pennywise
+    bucket: Hardware / IoT ecosystem
+    tag: Hardware / IoT
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - ESP32 / C++ (PlatformIO)
+      - MQTT
+      - Python (paho, aioapns)
+      - APNs / Live Activities
+      - Next.js 16
+      - React 19
+      - Prisma
+      - Swift / SwiftUI
+      - watchOS
+    pitch: "A hardware-to-cloud time-tracking ecosystem: an ESP32 desk device, a Python MQTT bridge, a Next.js hub, and an 8-target Apple app — all speaking one frozen contract."
+    hook: One schema-versioned, ADR-frozen MQTT contract (v3 task_event / retained stats topics) is the single artifact all four heterogeneous codebases — C++ firmware, Python sidecar, TypeScript/Zod webapp, Swift app — independently derive their topic constants and payload shapes from, with coordinated field renames landing in lockstep across the sidecar publisher and the Apple Live Activity ContentState.
+    blurb: "Pennywise is a time-tracking system built end to end across four surfaces that all speak one contract: an ESP32 desk device with dual OLED displays taps start/stop/switch over MQTT, a Python sidecar bridges that stream into a Next.js + Postgres system-of-record over REST and pushes APNs Live Activities, and a universal Swift app (8 Xcode targets — iOS, macOS, watchOS, widgets, Live Activity, Notification Service Extension) is the live surface, with tracked time feeding an invoice-and-PDF payoff on the web. The whole thing hangs off a single schema-versioned MQTT contract, frozen behind an ADR, that C++, Python, TypeScript, and Swift each derive from independently."
+    metrics:
+      - v: "5"
+        k: repos
+      - v: "8"
+        k: Xcode targets
+      - v: 51K
+        k: hand-written LOC
+    art: phone
+    visual: Device + app shots · data-plane diagram
+  - rank: 5
+    id: wideframe
+    tier: 1
+    name: Wideframe
+    bucket: Native desktop app
+    tag: macOS app
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Swift
+      - SwiftUI (@Observable)
+      - Swift 6 concurrency
+      - CoreImage
+      - Vision
+      - StoreKit 2
+      - Swift Testing
+    pitch: A native macOS app that frames any image to your display's exact pixels — ultrawide, multi-monitor, 5K2K — and sets it as wallpaper in one click.
+    hook: The “Quality Verdict” engine measures real sharpness via variance-of-Laplacian on a grayscale downsample, computes exact resolution headroom against the display's native panel-pixel sum, and estimates compression as encoded bits-per-pixel — composited into one honest 0–100 score. Paired with on-device Vision attention-saliency auto-framing, all off-main-actor under Swift 6 strict concurrency.
+    blurb: "Wideframe is a native macOS app built to solve a real annoyance: no wallpaper ever fits an ultrawide or multi-monitor setup without stretching or letterboxing. It frames any image to your display's exact pixels, uses on-device Vision saliency to auto-find the subject, and gives you an honest “Quality Verdict” — a composite of resolution headroom, measured sharpness, and compression that tells you whether an image will actually look good before you commit. SwiftUI + Swift 6 strict concurrency, StoreKit 2 monetization, App-Sandboxed and Mac-App-Store-ready, with a full marketing site at wideframe.studio."
+    metrics:
+      - v: 11.3K
+        k: lines Swift
+      - v: "120"
+        k: commits
+      - v: v1.93
+        k: shipping
+    art: verdict
+    visual: App screenshot / Quality Verdict
+    links:
+      live: https://wideframe.studio
+  - rank: 6
+    id: mcp-rancher
+    tier: 1
+    name: mcp-rancher
+    bucket: AI × DevOps tooling
+    tag: AI × DevOps
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Python 3.12
+      - FastMCP / MCP SDK
+      - Pydantic v2
+      - httpx
+      - websockets
+      - Jinja2 (codegen)
+      - pytest + respx
+    pitch: A 318-tool MCP server that lets an AI operate Rancher-managed Kubernetes fleets — code-generated from declarative YAML descriptors.
+    hook: The 318-tool surface isn't hand-written — it's emitted by an in-repo codegen pipeline (descriptor → plan → Jinja emitter → formatter) that reads ~one YAML descriptor per resource and spans both of Rancher's API planes (Norman /v3 and the Steve /v1 Kubernetes proxy), with schema-aware writable-field filtering, capability-gated version compatibility, and WebSocket streaming for live watch events.
+    blurb: mcp-rancher hands an AI assistant the keys to a Rancher-managed Kubernetes fleet — 318 typed tools spanning schema discovery, curated reads, guarded writes, and one-call operational diagnostics (health rollups, crash-loop and stalled-rollout finders). The tool surface is code-generated from a catalog of YAML descriptors, so each new Rancher resource is a declarative spec rather than hand-written boilerplate, covering both API planes with schema-aware field filtering, version capability detection, and live WebSocket watch streaming. ~46K lines of strictly-typed Python backed by ~29K lines of tests against captured Rancher contract fixtures.
+    metrics:
+      - v: "318"
+        k: MCP tools
+      - v: 46K
+        k: lines Python
+      - v: 29K
+        k: lines tests
+    art: termtools
+    visual: Codegen-pipeline diagram (diagram-led)
+  - rank: 7
+    id: jackbirthday
+    tier: 1
+    name: JackBirthday
+    bucket: Creative / fabrication + AI-ops
+    tag: Creative + AI-ops
+    year: "2026"
+    status: shipped
+    status_kind: archived
+    stack:
+      - Next.js 16
+      - React 19
+      - Prisma 7 + PostgreSQL
+      - Better Auth
+      - Graphile Worker
+      - AWS / Terraform
+      - OpenAI · Anthropic · Gemini
+      - OpenSCAD
+    pitch: A private full-stack AI ops platform — with its own AWS infra, cost accounting, and 3D-printed hardware — built to run a kid's birthday party.
+    hook: "A from-scratch AI cost-accounting subsystem: every AI run persists full provider/model/token/latency lineage, and a versioned provider_pricing_catalog table computes per-run cost with explicit exact / formula-estimated / unknown confidence tiers — billing-integrity discipline you'd expect in a paid SaaS, built for a single-family party app."
+    blurb: A full-stack, multi-agent AI event-ops platform built to run a 6th birthday party — Next.js 16/React 19/Prisma/Postgres with Better Auth, a Graphile Worker background queue, and three wired AI providers (OpenAI, Anthropic, Gemini) for brainstorming and image generation. It has first-class audit logging on every mutation, a dedicated AI-usage-and-cost dashboard with a versioned pricing catalog, and its own Terraform-provisioned AWS Lightsail deployment behind Caddy with S3 storage and nightly Postgres backups — plus real fabrication output (OpenSCAD/STL files for a 3D-printed party arch sign, a Python SVG badge generator).
+    metrics:
+      - v: 12.9K
+        k: lines TS
+      - v: "22"
+        k: Prisma models
+      - v: "3"
+        k: AI providers
+    art: board
+    visual: 3D-printed arch sign + cost dashboard
+  - rank: 8
+    id: specimen
+    tier: 1
+    name: Specimen
+    bucket: ML / data engineering
+    tag: ML / data eng
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Python
+      - FastAPI
+      - SQLAlchemy 2.0 async
+      - PostgreSQL 16
+      - pgvector
+      - ONNX Runtime
+      - CLIP ViT-B/32
+      - Next.js 15
+      - Docker Compose
+    pitch: A homelab font-cataloging pipeline with CLIP visual embeddings, pgvector duplicate detection, and a Postgres-as-queue worker architecture — for a 20k-file font hoard.
+    hook: Hand-rolled a torch-free CLIP inference path — exported ViT-B/32 to ONNX and reimplemented open_clip's exact image preprocessing (bicubic resize, center-crop, channel normalization) in raw NumPy/PIL to escape a torch dependency conflict — then tuned the ONNX Runtime session (disabled memory arena/pattern growth, capped intra-op threads) to keep RSS bounded inside a hard container memory limit.
+    blurb: "Specimen is a self-hosted font cataloging system built to tame a 20,000+ file font hoard on a home NAS. A Postgres-backed pipeline (no Redis, no Celery — the database is the queue) discovers, dedupes, and deeply analyzes every font: OpenType table parsing, glyph outline extraction, and CLIP ViT-B/32 visual embeddings for similarity search and duplicate detection via pgvector cosine KNN. A Next.js frontend exposes a polished dark-themed catalog with tagging, family grouping, style-pairing suggestions, and an admin triage queue. Shipped in 4 weeks across 144 commits and 10 build phases, live on the homelab."
+    metrics:
+      - v: 20K+
+        k: font corpus
+      - v: "144"
+        k: commits
+      - v: ~4 wks
+        k: to ship
+    art: board
+    visual: Catalog screenshot (lead with it)

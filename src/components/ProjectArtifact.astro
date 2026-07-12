@@ -1,0 +1,28 @@
+---
+import type { PortfolioProject } from '../lib/portfolio-content';
+
+export interface Props {
+  project: PortfolioProject;
+  compact?: boolean;
+}
+
+const { project, compact = false } = Astro.props;
+const stack = project.stack?.slice(0, compact ? 2 : 4) ?? [];
+const metrics = project.metrics.slice(0, compact ? 1 : 3);
+---
+
+<div class:list={['project-artifact', { 'project-artifact--compact': compact }]} data-art={project.art ?? 'board'} aria-hidden="true">
+  <div class="project-artifact__chrome">
+    <span class="project-artifact__dots"><i></i><i></i><i></i></span>
+    <span>{project.id}.sys</span>
+  </div>
+  <div class="project-artifact__canvas">
+    <div class="project-artifact__signal"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="project-artifact__stack">
+      {stack.map((item) => <span>{item}</span>)}
+    </div>
+    <div class="project-artifact__metrics">
+      {metrics.map((metric) => <span><b>{metric.v}</b><small>{metric.k}</small></span>)}
+    </div>
+  </div>
+</div>

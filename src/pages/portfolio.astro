@@ -1,120 +1,219 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectArtifact from '../components/ProjectArtifact.astro';
 import { loadPortfolio } from '../lib/portfolio-content';
 import '../styles/portfolio.css';
 
 const portfolio = await loadPortfolio();
-const featured = portfolio.projects.filter((project) => project.featured);
-const selected = portfolio.projects.find((project) => project.selected) ?? portfolio.projects[0];
+const heroes = portfolio.projects.filter((project) => project.tier === 1);
+const selected = heroes[0];
 
 if (!selected) {
-  throw new Error('Portfolio content requires at least one project.');
+  throw new Error('Portfolio content requires at least one flagship project.');
 }
 
-const projectGroups = portfolio.groups.map((group) => ({
-  ...group,
-  projects: portfolio.projects.filter((project) => project.group === group.label),
-}));
-const typeLabels = new Map(portfolio.types.map((type) => [type.id, type.label]));
+const tierGroups = [
+  { id: '1', label: portfolio.labels.tier_one, projects: portfolio.projects.filter((project) => project.tier === 1) },
+  { id: '2', label: portfolio.labels.tier_two, projects: portfolio.projects.filter((project) => project.tier === 2) },
+  { id: '3', label: portfolio.labels.tier_three, projects: portfolio.projects.filter((project) => project.tier === 3) },
+];
 const stateLabels = new Map(portfolio.states.map((state) => [state.id, state.label]));
-const typeCount = (type: string) => portfolio.projects.filter((project) => project.type === type).length;
+const archiveYears = [...new Set(portfolio.archive.map((project) => project.year))]
+  .sort((left, right) => Number(left) - Number(right))
+  .map((year) => ({ year, projects: portfolio.archive.filter((project) => project.year === year) }));
+const totalProjects = portfolio.projects.length + portfolio.archive.length;
 ---
 
 <BaseLayout title={portfolio.title} description={portfolio.description} bodyClass="portfolio-page">
-  <div class="portfolio-shell">
+  <div class="portfolio-shell" data-portfolio-root>
     <header class="portfolio-masthead">
       <p class="portfolio-breadcrumb"><span>{portfolio.nav.site}</span><b>/</b><span>{portfolio.nav.route}</span></p>
-      <p class="portfolio-availability"><i></i>{portfolio.nav.availability}</p>
+      <p class="portfolio-availability"><i aria-hidden="true"></i>{portfolio.nav.availability}</p>
     </header>
 
     <section class="portfolio-hero" aria-labelledby="portfolio-title">
       <p class="portfolio-margin">{portfolio.index.issue}</p>
       <div class="portfolio-intro">
+        <p class="portfolio-kicker">{portfolio.index.thesis}</p>
         <h1 id="portfolio-title">{portfolio.index.title}</h1>
-        <div class="portfolio-count">
-          <strong>{portfolio.projects.length}</strong>
-          <span>{portfolio.index.total_label}</span>
-          <p>{portfolio.index.summary}</p>
-        </div>
+        <p class="portfolio-summary">{portfolio.index.summary}</p>
+        <dl class="portfolio-stats">
+          <div><dt>{portfolio.index.total_label}</dt><dd>{totalProjects}</dd></div>
+          <div><dt>{portfolio.index.curated_label}</dt><dd>{portfolio.projects.length}</dd></div>
+          <div><dt>{portfolio.labels.tier_one}</dt><dd>{heroes.length}</dd></div>
+        </dl>
       </div>
 
-      <div class="portfolio-featured">
-        <p class="portfolio-kicker">{portfolio.labels.flagship}</p>
-        <div class="portfolio-featured-grid">
-          {featured.map((project) => (
-            <article class="portfolio-feature">
-              <p><span>{project.id}</span><span>/ {typeLabels.get(project.type)}</span></p>
-              <div class="portfolio-preview" data-preview={project.preview} aria-hidden="true">
-                <div class="preview-top"><i></i><i></i><i></i></div>
-                <div class="preview-side"><i></i><i></i><i></i><i></i></div>
-                <div class="preview-body"><i></i><i></i><i></i><i></i><i></i></div>
-              </div>
-              <h2>{project.title}</h2>
-              <small>{project.subtitle}</small>
-            </article>
+      <div class="portfolio-heroes">
+        <p class="portfolio-kicker">{portfolio.labels.heroes}</p>
+        <div class="portfolio-hero-grid">
+          {heroes.map((project) => (
+            <a class="portfolio-hero-card" href={'#project-' + project.id} data-project-jump={project.id}>
+              <ProjectArtifact project={project} compact />
+              <span class="portfolio-hero-meta"><b>{String(project.rank).padStart(2, '0')}</b>{project.tag}</span>
+              <h2>{project.name}</h2>
+              <p>{project.pitch}</p>
+            </a>
           ))}
         </div>
-        <a class="portfolio-all-flagship" href="#inventory">{portfolio.labels.all_flagship}<span aria-hidden="true">→</span></a>
+        <a class="portfolio-all-heroes" href="#project-index">{portfolio.labels.all_heroes}<span aria-hidden="true">→</span></a>
       </div>
     </section>
 
-    <section class="portfolio-filters" aria-label={portfolio.labels.view}>
-      <div class="portfolio-filter portfolio-filter--jump">
-        <p>{portfolio.labels.jump}</p>
-        <nav aria-label={portfolio.labels.jump}>
-          {projectGroups.map((group) => <a href={`#group-${group.letters}`}>{group.label}</a>)}
-        </nav>
-      </div>
-      <div class="portfolio-filter"><p>{portfolio.labels.type}</p><span>{portfolio.filters.types.join(' · ')}</span></div>
-      <div class="portfolio-filter"><p>{portfolio.labels.depth}</p><span>{portfolio.filters.depths.join(' · ')}</span></div>
-      <div class="portfolio-filter"><p>{portfolio.labels.view}</p><span>{portfolio.filters.views.join(' · ')}</span></div>
-    </section>
+    <section class="portfolio-index" id="project-index" aria-labelledby="project-index-title">
+      <header class="portfolio-index-head">
+        <p class="portfolio-kicker">{portfolio.index.curated_label}</p>
+        <h2 id="project-index-title">{portfolio.labels.index}</h2>
+      </header>
 
-    <section class="portfolio-index" id="inventory" aria-label={portfolio.labels.all}>
-      <aside class="portfolio-aside">
-        <ul class="portfolio-legend" aria-label={portfolio.labels.view}>
-          {portfolio.states.map((state) => <li><i data-state={state.id}></i>{state.label}</li>)}
-        </ul>
-        <div class="portfolio-type-count">
-          <p>{portfolio.labels.count_by_type}</p>
-          <ul>{portfolio.types.map((type) => <li><span>{type.label}</span><b>{String(typeCount(type.id)).padStart(2, '0')}</b></li>)}</ul>
-        </div>
-      </aside>
+      <div class="portfolio-workbench">
+        <aside class="portfolio-filters" aria-label={portfolio.labels.filter}>
+          <label class="portfolio-search">
+            <span>{portfolio.labels.search}</span>
+            <input type="search" placeholder={portfolio.labels.search_placeholder} data-project-search />
+          </label>
 
-      <div class="portfolio-directory">
-        {projectGroups.map((group) => (
-          <section class="portfolio-letter-group" id={`group-${group.letters}`}>
-            <h2>{group.label}</h2>
+          <div class="portfolio-filter-group">
+            <p>{portfolio.labels.tier}</p>
+            {portfolio.tiers.map((tier) => (
+              <button type="button" data-tier-filter={tier.id} aria-pressed={tier.id === 'all' ? 'true' : 'false'}>
+                <i aria-hidden="true"></i>
+                <span>{tier.label}</span>
+                <b>{tier.id === 'all' ? portfolio.projects.length : portfolio.projects.filter((project) => String(project.tier) === tier.id).length}</b>
+              </button>
+            ))}
+          </div>
+
+          <div class="portfolio-status">
+            <p>{portfolio.labels.status}</p>
             <ul>
-              {group.projects.map((project) => (
-                <li class:list={['portfolio-project', { 'portfolio-project--selected': project.selected }]}>
-                  <span class="portfolio-project-name">{project.title}</span>
-                  <span class="portfolio-project-meta"><i data-preview={project.preview} aria-hidden="true"></i><b>{project.id}</b><em data-state={project.state} aria-hidden="true"></em><span class="sr-only">{stateLabels.get(project.state)}</span></span>
-                </li>
+              {portfolio.states.map((state) => (
+                <li><i data-state={state.id} aria-hidden="true"></i><span>{state.label}</span><b>{portfolio.projects.filter((project) => project.status === state.id).length}</b></li>
               ))}
             </ul>
-            <p>{group.projects.length} {portfolio.index.total_label}</p>
-          </section>
-        ))}
-      </div>
+          </div>
+        </aside>
 
-      <aside class="portfolio-selected" id="selected">
-        <p class="portfolio-kicker">{portfolio.labels.selected}</p>
-        <p class="portfolio-selected-id">{selected.id} / {typeLabels.get(selected.type)}</p>
-        <h2>{selected.title}</h2>
-        <p class="portfolio-selected-subtitle">{selected.subtitle}</p>
-        <div class="portfolio-selected-preview" data-preview={selected.preview} aria-hidden="true">
-          <div class="selected-panel"></div>
-          <svg viewBox="0 0 480 250" focusable="false"><path d="M35 38H130V95H220V145H330V210H444"/><path d="M62 208V134H170V64H265V110H410"/><circle cx="130" cy="38" r="4"/><circle cx="220" cy="95" r="4"/><circle cx="330" cy="145" r="4"/><circle cx="170" cy="134" r="4"/><circle cx="265" cy="64" r="4"/></svg>
+        <div class="portfolio-project-list" aria-live="polite">
+          {tierGroups.map((tier) => (
+            <section class="portfolio-tier" data-project-group={tier.id}>
+              <header><h3>{tier.label}</h3><span>{tier.projects.length}</span></header>
+              <div>
+                {tier.projects.map((project) => (
+                  <button
+                    type="button"
+                    class:list={['portfolio-project-row', { current: project.id === selected.id }]}
+                    id={'project-' + project.id}
+                    data-project-id={project.id}
+                    data-project-tier={project.tier}
+                    data-project-search={[project.name, project.bucket, project.tag, ...(project.stack ?? [])].join(' ').toLowerCase()}
+                    aria-pressed={project.id === selected.id ? 'true' : 'false'}
+                  >
+                    <span class="portfolio-project-rank">{String(project.rank).padStart(2, '0')}</span>
+                    <span class="portfolio-project-name">{project.name}</span>
+                    <span class="portfolio-project-tag">{project.tag}</span>
+                    <span class="portfolio-project-year">{project.year}</span>
+                    <i data-state={project.status} aria-hidden="true"></i>
+                    <span class="sr-only">{stateLabels.get(project.status)}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          ))}
+          <p class="portfolio-no-results" data-no-results hidden>{portfolio.labels.no_results}</p>
         </div>
-        <dl>
-          <div><dt>{portfolio.labels.thesis}</dt><dd>{selected.thesis}</dd></div>
-          <div><dt>{portfolio.labels.stack}</dt><dd>{selected.stack}</dd></div>
-          <div><dt>{portfolio.labels.artifacts}</dt><dd><ul>{selected.artifacts?.map((artifact) => <li><b>{artifact.index}</b>{artifact.label}<span aria-hidden="true">→</span></li>)}</ul></dd></div>
-        </dl>
-      </aside>
+
+        <aside class="portfolio-detail" aria-live="polite">
+          {portfolio.projects.map((project) => (
+            <article data-project-detail={project.id} hidden={project.id !== selected.id}>
+              <p class="portfolio-kicker">{portfolio.labels.currently_selected}</p>
+              <ProjectArtifact project={project} />
+              <div class="portfolio-detail-heading">
+                <span>{String(project.rank).padStart(2, '0')} / {project.tag}</span>
+                <h2>{project.name}</h2>
+                <p>{project.bucket} · {project.year} · {stateLabels.get(project.status)}</p>
+              </div>
+
+              <section>
+                <h3>{portfolio.labels.pitch}</h3>
+                <p>{project.pitch}</p>
+              </section>
+
+              {project.hook && (
+                <section>
+                  <h3>{portfolio.labels.hook}</h3>
+                  <p>{project.hook}</p>
+                </section>
+              )}
+
+              {project.metrics.length > 0 && (
+                <section>
+                  <h3>{portfolio.labels.metrics}</h3>
+                  <dl class="portfolio-detail-metrics">
+                    {project.metrics.map((metric) => <div><dt>{metric.k}</dt><dd>{metric.v}</dd></div>)}
+                  </dl>
+                </section>
+              )}
+
+              {project.stack && project.stack.length > 0 && (
+                <section>
+                  <h3>{portfolio.labels.stack}</h3>
+                  <ul class="portfolio-stack">{project.stack.map((item) => <li>{item}</li>)}</ul>
+                </section>
+              )}
+
+              {project.links && (
+                <section>
+                  <h3>{portfolio.labels.links}</h3>
+                  <div class="portfolio-links">
+                    {project.links.live && <a href={project.links.live} target="_blank" rel="noreferrer">{portfolio.labels.live_site}<span aria-hidden="true">↗</span></a>}
+                    {project.links.repo && <a href={project.links.repo} target="_blank" rel="noreferrer">{portfolio.labels.source_repo}<span aria-hidden="true">↗</span></a>}
+                  </div>
+                </section>
+              )}
+            </article>
+          ))}
+        </aside>
+      </div>
     </section>
 
-    <footer class="portfolio-terminal"><span aria-hidden="true">λ</span><p>{portfolio.labels.terminal}</p><small>{portfolio.labels.source} · {stateLabels.get(selected.state)}</small></footer>
+    <section class="portfolio-history" aria-labelledby="portfolio-history-title">
+      <details>
+        <summary>
+          <span>
+            <span class="portfolio-kicker">{portfolio.archive.length} {portfolio.labels.historical_count}</span>
+            <strong id="portfolio-history-title">{portfolio.labels.historical}</strong>
+            <small>{portfolio.labels.historical_summary}</small>
+          </span>
+          <i aria-hidden="true">+</i>
+        </summary>
+        <div class="portfolio-history-grid">
+          {archiveYears.map((group) => (
+            <section>
+              <h3>{group.year}</h3>
+              <ul>
+                {group.projects.map((project) => (
+                  <li>
+                    <a href={project.href} target="_blank" rel="noreferrer">
+                      <span><b>{project.name}</b><small>{project.language}</small></span>
+                      {project.description && <p>{project.description}</p>}
+                      <i aria-hidden="true">↗</i>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+      </details>
+    </section>
+
+    <footer class="portfolio-terminal"><span aria-hidden="true">λ</span><p>{portfolio.labels.terminal}</p></footer>
   </div>
 </BaseLayout>
+
+<script>
+  import { initPortfolio } from '../lib/portfolio-interactions';
+
+  initPortfolio();
+</script>

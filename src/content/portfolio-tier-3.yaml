@@ -1,0 +1,133 @@
+projects:
+  - rank: 23
+    id: lattice
+    tier: 3
+    name: Lattice
+    tag: web app
+    group: Web apps
+    year: "2025"
+    status: active
+    status_kind: operational
+    pitch: Self-hosted Gridfinity layout manager with a genuinely tricky auto-baseplate 2D bin-packing algorithm (unit-tested), full CI/CD to homelab.
+    metrics: []
+  - rank: 24
+    id: invoice-openapi
+    tier: 3
+    name: Invoice OpenAPI Aggregator
+    tag: tooling
+    group: Tooling
+    year: "2024"
+    status: shipped
+    status_kind: archived
+    pitch: A tiny (~150 LOC) Express service that merges three homelab OpenAPI specs into one namespaced Swagger UI. Nice DX glue.
+    metrics: []
+  - rank: 25
+    id: clipboard-tui
+    tier: 3
+    name: Clipboard-driven download TUI
+    tag: tool
+    group: Tooling
+    year: "2025"
+    status: active
+    status_kind: operational
+    pitch: An async clipboard-driven download-queue TUI with exponential backoff + a host-outage circuit breaker.
+    metrics: []
+  - rank: 26
+    id: firefox-archiver
+    tier: 3
+    name: Firefox Archiver
+    tag: tool
+    group: Tooling
+    year: "2026"
+    status: shipped
+    status_kind: archived
+    pitch: A clever mozLz4 binary-format parser + local-Ollama extraction with a hallucination validator. A 5-day spike.
+    metrics: []
+  - rank: 27
+    id: venomjaxx
+    tier: 3
+    name: venomjaxx (Roblox)
+    tag: games
+    group: Creative / games
+    year: "2025"
+    status: active
+    status_kind: operational
+    pitch: A procedurally-generated (Luau) park with a surprisingly disciplined DataStore layer (retry/backoff, session locks).
+    metrics: []
+  - rank: 28
+    id: esp32-clock
+    tier: 3
+    name: ESP32 6-Display Vertical Clock
+    tag: hardware
+    group: Hardware
+    year: "2024"
+    status: shipped
+    status_kind: archived
+    pitch: "The only bare-metal hardware entry: bit-banged I2C across 8 GPIO pairs with differential redraw. 169 LOC, no repo."
+    metrics: []
+  - rank: 29
+    id: bumper-stickers
+    tier: 3
+    name: Bumper Stickers (iOS)
+    tag: iOS
+    group: Product / apps
+    year: "2025"
+    status: archived
+    status_kind: archived
+    pitch: A native SwiftUI car-quotes app with live SFSpeechRecognizer dictation, MapKit, and Supabase sync. A 2-day prototype.
+    metrics: []
+  - rank: 30
+    id: case-workbench
+    tier: 3
+    name: AI case-prep workbench
+    tag: private
+    group: Private
+    year: "2025"
+    status: archived
+    status_kind: archived
+    pitch: A private AI-assisted case-prep tool — dual-provider AI with citation provenance and a baseline-vs-context comparison engine.
+    metrics: []
+  - rank: 31
+    id: driveshack-tracker
+    tier: 3
+    name: Project Tracker (client)
+    tag: work
+    group: Work
+    year: "2025"
+    status: active
+    status_kind: operational
+    pitch: A sharp internal tool that tracks billed-vs-actual hours so automation gains read as efficiency, not overbilling. Solid build (OpenAPI contract, hardened CI).
+    metrics: []
+  - rank: 32
+    id: chronicle
+    tier: 3
+    name: Chronicle
+    tag: work
+    group: Work
+    year: "2025"
+    status: active
+    status_kind: operational
+    pitch: An event-sourced multi-source timeline (chat / email / invoicing → one FTS Postgres schema, zero ORM).
+    metrics: []
+  - rank: 33
+    id: n8n-influx
+    tier: 3
+    name: n8n InfluxDB node
+    tag: tooling
+    group: Tooling
+    year: "2026"
+    status: archived
+    status_kind: archived
+    pitch: A clean, well-tested (75 tests) custom n8n node — but an inert single-day spike, never published.
+    metrics: []
+  - rank: 34
+    id: minio-console
+    tier: 3
+    name: MinIO Console build pipeline
+    tag: infra note
+    group: Infrastructure
+    year: "2024"
+    status: active
+    status_kind: operational
+    pitch: Self-hosts and maintains a custom build pipeline for MinIO's Console.
+    metrics: []

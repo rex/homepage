@@ -8,7 +8,7 @@
 | Components | Reusable UI sections | `src/components/` | Pierce |
 | Content | Typed YAML copy for all sections | `src/content/*.yaml` | Pierce |
 | Styles | Token system + Tailwind layer + boot animations | `src/styles/globals.css` | Pierce |
-| Lib | Build metadata, sparkline math, content loader | `src/lib/` | Pierce |
+| Lib | Build metadata, content loaders, and lightweight interactions | `src/lib/` | Pierce |
 | Infra | AWS CDK app — S3 + CloudFront + Route 53 | `infra/bin/homepage.ts` | Pierce |
 
 ## Extension points
@@ -17,6 +17,8 @@
 - **New content type**: add `src/content/<name>.yaml` + schema + loader in `src/lib/content.ts`
 - **New component**: add to `src/components/`; import where needed
 - **New design token**: add CSS custom property to `src/styles/globals.css`
+- **New navigation destination**: add it to `src/content/navigation.yaml`
+- **New portfolio project**: add it to the appropriate ranked `src/content/portfolio-*.yaml` file
 
 ## Where bodies are buried
 
@@ -24,6 +26,7 @@
 - Boot animation is CSS-only: `data-boot` attribute on an element + `--boot-delay` CSS var sets timing
 - `VITE_BUILD_COMMIT` and `VITE_BUILD_DATE` are injected at build time by `astro.config.mjs` via `git rev-parse`
 - `src/content/*.yaml` is loaded via raw Vite import (`?raw`) then parsed — not using Astro content collections
+- `src/components/Header.astro` is the fixed site-wide Corner Index; `/projects` aliases `/portfolio`
 
 ## Do not edit without an ADR
 
@@ -45,6 +48,8 @@
 
 - Build metadata: `src/lib/build-info.ts` (version, commit hash, build date)
 - Content loading: `src/lib/content.ts` (loads + validates all YAML content)
+- Navigation: `src/content/navigation.yaml` + `src/lib/navigation-content.ts`
+- Portfolio catalogue: `src/content/portfolio*.yaml` + `src/lib/portfolio-content.ts`
 - Theming: `data-theme` attr on `<html>` toggled by `ThemeToggle.tsx`
 - Accessibility: `SkipToContent.astro`, `aria-label` on wrapped-letter h1
 - Error pages: `src/content/error-pages.yaml` + CloudFront Function in `infra/functions/edge.js`
