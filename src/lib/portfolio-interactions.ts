@@ -6,7 +6,7 @@ export function initPortfolio(): void {
   const details = [...root.querySelectorAll<HTMLElement>('[data-project-detail]')];
   const groups = [...root.querySelectorAll<HTMLElement>('[data-project-group]')];
   const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-tier-filter]')];
-  const search = root.querySelector<HTMLInputElement>('[data-project-search]');
+  const search = root.querySelector<HTMLInputElement>('input[data-project-search]');
   const noResults = root.querySelector<HTMLElement>('[data-no-results]');
   let tier = 'all';
 
@@ -25,7 +25,7 @@ export function initPortfolio(): void {
     const query = search?.value.trim().toLowerCase() ?? '';
     const visible = rows.filter((row) => {
       const matchesTier = tier === 'all' || row.dataset.projectTier === tier;
-      const matchesSearch = !query || row.dataset.projectSearch?.includes(query);
+      const matchesSearch = !query || row.dataset.projectHaystack?.includes(query);
       row.hidden = !(matchesTier && matchesSearch);
       return !row.hidden;
     });

@@ -88,9 +88,25 @@ _(none)_
 ## 5. Next actions (ordered)
 
 1. Replace generated project artifact previews with project-specific media as assets become available.
-2. Add dedicated case-study routes for the highest-ranked projects when their narratives are ready.
+2. Write `detail:` blocks (longform/shortform) for more projects — exemplars exist on
+   `outageforge` (longform) and `firefox-archiver` (shortform).
+3. Pierce: recategorize/promote the 22 reconciled tier-3 additions; decide on the
+   commented-out repos at the bottom of `portfolio-tier-3.yaml` (openclaw-*, invoice-war,
+   elitebabes sibling, .zsh).
 
 ## 6. Handoff note (fill when ending a session)
+
+2026-07-13 (v1.1.0, branch `codex/implement-projects-page`) — Post-review revision pass:
+portfolio CSS fully tokenized (light mode fixed — artifacts were hardcoded dark), Fraunces
+variable axes + ss02 applied, `.page-gutter` adopted, `shipped` status color split from
+`archived`, archive sorted newest→oldest, search-attr collision fixed
+(`data-project-haystack`). All 14 tier-2 hooks + all tier-3 hooks/metrics/stacks
+backfilled from the deep-dive capsules; wrong-owner repo links fixed (piercemoore→rex).
+Full-inventory reconciliation added 22 new tier-3 entries (56 curated + 65 archive = 121
+accounted; exclusion ledger in tier-3 YAML comments). New: minimal-card artifact variant
+(all tier-3), `/portfolio/[slug]` case pages for every project (longform + shortform
+forms), open-case links from the index. Build green; dark/light/search/case pages
+browser-verified.
 
 2026-07-12 — Implemented the site-wide Corner Index navigation and rebuilt `/portfolio`
 around the production catalogue: 34 curated projects plus 65 public archive entries.

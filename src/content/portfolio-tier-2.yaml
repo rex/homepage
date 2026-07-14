@@ -14,6 +14,7 @@ projects:
       - Obj-C ReminderKit
       - MCP (advanced)
     pitch: A macOS MCP server giving an AI agent full control of Apple Reminders via a three-tier native stack — including Apple's private ReminderKit framework.
+    hook: "A three-tier native access stack: direct CoreData SQLite reads for fast queries, a Swift EventKit helper for public-API writes, and an Objective-C subprocess linking Apple's private ReminderKit framework for the features the public API hides."
     blurb: "A macOS MCP server giving an AI agent full control of Apple Reminders via a three-tier native stack: direct CoreData SQLite reads, a Swift EventKit helper for public writes, and an Objective-C helper linking Apple's private ReminderKit framework for features the public API hides — plus the full advanced MCP surface (Sampling, Elicitation, Resources, Prompts), an OWASP MCP Top-10 review, and 37 test files. The public, linkable companion to the mcp-rancher hero."
     metrics:
       - v: "65"
@@ -23,7 +24,7 @@ projects:
     art: termtools
     visual: Three-tier native-stack diagram
     links:
-      repo: https://github.com/piercemoore/mcp-apple-reminders
+      repo: https://github.com/rex/mcp-apple-reminders
   - rank: 10
     id: agent-skills
     tier: 2
@@ -38,6 +39,7 @@ projects:
       - Python (governance)
       - CI gate
     pitch: The meta “how he builds everything” story — a self-governing monorepo of 23 independently-versioned Claude Code / Codex skills.
+    hook: "Self-referential and self-enforcing — the governance hooks that police agents in every repo are themselves generated from templates that live inside the library. The gate was built by the thing it gates."
     blurb: A self-governing monorepo of 23 independently-versioned Claude Code / Codex skills (language/tool idioms, homelab/K8s context, the flagship agentic-skeleton repo scaffold) with a CI-aware Python gate that blocks any commit touching a skill's content without bumping its version + changelog — the scaffolding governs the repos it scaffolds, including itself.
     metrics:
       - v: "23"
@@ -65,6 +67,7 @@ projects:
       - Uptime Kuma
       - Ansible
     pitch: The distinct “observability” pillar alongside the Homelab Platform — one canonical inventory.yaml generates targets, config, coverage, and 78 alert rules.
+    hook: "One canonical 2,600-line inventory.yaml generates the entire monitoring plane — Prometheus targets, 78 alert rules, Grafana dashboards, nine zero-dependency Telegraf pollers — parsed with the Python stdlib and nothing else."
     blurb: A single canonical inventory.yaml (2,600+ lines, stdlib-parseable) generates the Prometheus targets, SNMP config, coverage matrix, and Uptime Kuma state, feeding 78 alert rules down to ZFS scrub-staleness, Patroni timeline splits, etcd leader churn, and Cisco SNMP egress-drop gating. 9 zero-dep pollers · ~24 Grafana dashboards · 17 runbooks.
     metrics:
       - v: 2,600+
@@ -91,6 +94,7 @@ projects:
       - Pi-hole
       - Nginx
     pitch: An archived prior chapter, folded into the Platform story — HMAC-verified webhook service that redeploys the right Portainer stack.
+    hook: "A home-grown GitOps control plane over Portainer: dual GitHub+Gitea signed webhooks with timing-safe HMAC comparison, per-app in-flight dedup locks, and an event-sourced deploy ledger."
     blurb: A Fastify/TypeScript webhook service that verifies HMAC signatures on GitHub + Gitea push events and redeploys the right Portainer stack, with a one-command bootstrap-app.sh that links the container package, cuts the Pi-hole DNS record, and provisions the Nginx reverse-proxy host. Reached v0.8.7 before archival (superseded by homelab-control).
     metrics:
       - v: "205"
@@ -116,6 +120,7 @@ projects:
       - MinIO
       - yt-dlp / gallery-dl / ffmpeg
     pitch: The design-philosophy-as-engineering axis — a cognitive-offload system whose inviolable core law is compiled into a state machine.
+    hook: "The philosophy is compiled, not documented: the capture lifecycle is a SwiftUI/SwiftData state machine where forbidden transitions (Floating → Resolved) literally do not compile."
     blurb: A cognitive-offload system whose inviolable “an anchor may never be destroyed, only transferred, enriched, or retired with consent” law is compiled into a SwiftUI/SwiftData state machine (forbidden transitions throw), across native iOS + macOS + a FastAPI/Postgres/MinIO backend + an append-only yt-dlp/gallery-dl/ffmpeg enrichment pipeline, all derived from a 2,498-line living design doctrine. Frame as an ambitious in-progress system, not a shipped product.
     metrics:
       - v: 2,498
@@ -141,6 +146,7 @@ projects:
       - APNs
       - SwiftUI (8 targets)
     pitch: "A second IoT data point — a personal event-tracking device: ESP32 hardware → Python sidecar → a universal 8-target SwiftUI suite."
+    hook: "The APNs bridge keeps a device-keyed token store for self-event suppression, drives iOS Live Activities remotely by mirroring the Swift ContentState over push, and handles Apple 410-Gone invalidation with atomic state rewrites."
     blurb: "One product across five repos: an ESP32 device (dual OLEDs, chord-playing buzzers, LED ring, LittleFS animations) → a Python sidecar bridging MQTT→InfluxDB→APNs with idempotent event-sourcing and remote Live-Activity drive → a universal 8-target SwiftUI suite. A shadow-mode production-safety test harness rounds it out. Presented as an anonymized “personal event-tracking IoT device.”"
     metrics:
       - v: "408"
@@ -166,6 +172,7 @@ projects:
       - Ollama / OpenAI
       - SSE
     pitch: The voice-AI axis — a clutter-inventory app extended with a from-scratch local voice-capture agent.
+    hook: "An 860-line voice pilot chains on-device Parakeet-MLX speech-to-text into an LLM tool-calling agent that drives the app's own REST API — and speaks the results back."
     blurb: "A Next.js/Prisma/Postgres inventory app for household clutter, extended with a from-scratch local voice-capture pilot: on-device Parakeet-MLX speech-to-text → a local (Ollama) or cloud (OpenAI) LLM tool-calling agent that drives the app's REST API and speaks back via macOS say, with a live SSE dashboard and measured local-vs-cloud latency tradeoffs. Deployed and in daily use."
     metrics:
       - v: 9.2K

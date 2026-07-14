@@ -5,12 +5,38 @@ import tierOneYaml from '../content/portfolio-tier-1.yaml?raw';
 import tierTwoYaml from '../content/portfolio-tier-2.yaml?raw';
 import tierTwoMoreYaml from '../content/portfolio-tier-2-more.yaml?raw';
 import tierThreeYaml from '../content/portfolio-tier-3.yaml?raw';
+import tierThreeMoreYaml from '../content/portfolio-tier-3-more.yaml?raw';
 import archiveYaml from '../content/portfolio-archive.yaml?raw';
 import archiveLateYaml from '../content/portfolio-archive-late.yaml?raw';
 
 export interface PortfolioMetric {
   v: string;
   k: string;
+}
+
+export interface ProjectDetailSection {
+  label?: string;
+  title?: string;
+  body: string;
+}
+
+export interface ProjectGalleryItem {
+  src: string;
+  caption?: string;
+}
+
+export interface ProjectEvolutionEntry {
+  year: string;
+  note: string;
+}
+
+export interface ProjectDetail {
+  form?: 'longform' | 'shortform';
+  intro?: string;
+  highlights?: string[];
+  sections?: ProjectDetailSection[];
+  gallery?: ProjectGalleryItem[];
+  evolution?: ProjectEvolutionEntry[];
 }
 
 export interface PortfolioProject {
@@ -32,6 +58,7 @@ export interface PortfolioProject {
   art?: string;
   visual?: string;
   links?: { live?: string; repo?: string };
+  detail?: ProjectDetail;
 }
 
 export interface PortfolioArchiveProject {
@@ -83,6 +110,7 @@ interface PortfolioCopy {
     open_case: string;
   };
   tiers: { id: string; label: string }[];
+  case: Record<string, string>;
   states: { id: string; label: string }[];
 }
 
@@ -96,6 +124,7 @@ const tierOne = yaml.parse(tierOneYaml) as { projects: PortfolioProject[] };
 const tierTwo = yaml.parse(tierTwoYaml) as { projects: PortfolioProject[] };
 const tierTwoMore = yaml.parse(tierTwoMoreYaml) as { projects: PortfolioProject[] };
 const tierThree = yaml.parse(tierThreeYaml) as { projects: PortfolioProject[] };
+const tierThreeMore = yaml.parse(tierThreeMoreYaml) as { projects: PortfolioProject[] };
 const archive = yaml.parse(archiveYaml) as { projects: PortfolioArchiveProject[] };
 const archiveLate = yaml.parse(archiveLateYaml) as { projects: PortfolioArchiveProject[] };
 
@@ -106,6 +135,7 @@ const portfolioData: PortfolioContent = {
     ...tierTwo.projects,
     ...tierTwoMore.projects,
     ...tierThree.projects,
+    ...tierThreeMore.projects,
   ].sort((left, right) => left.rank - right.rank),
   archive: [...archive.projects, ...archiveLate.projects],
 };

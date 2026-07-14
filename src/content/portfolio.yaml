@@ -48,3 +48,19 @@ states:
   - { id: "in-progress", label: "in progress" }
   - { id: "shipped", label: "shipped" }
   - { id: "archived", label: "archived" }
+case:
+  kicker: "case file"
+  back: "back to the index"
+  brief: "brief"
+  hook: "the engineering move"
+  highlights: "highlights"
+  gallery: "artifacts"
+  gallery_pending: "imagery pending — placeholder plate holds the slot"
+  evolution: "evolution"
+  metrics: "scale"
+  stack: "stack"
+  links: "links"
+  live_site: "live site"
+  source_repo: "source repository"
+  prev: "prev case"
+  next: "next case"

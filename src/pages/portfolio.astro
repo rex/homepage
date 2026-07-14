@@ -19,13 +19,13 @@ const tierGroups = [
 ];
 const stateLabels = new Map(portfolio.states.map((state) => [state.id, state.label]));
 const archiveYears = [...new Set(portfolio.archive.map((project) => project.year))]
-  .sort((left, right) => Number(left) - Number(right))
+  .sort((left, right) => Number(right) - Number(left))
   .map((year) => ({ year, projects: portfolio.archive.filter((project) => project.year === year) }));
 const totalProjects = portfolio.projects.length + portfolio.archive.length;
 ---
 
 <BaseLayout title={portfolio.title} description={portfolio.description} bodyClass="portfolio-page">
-  <div class="portfolio-shell" data-portfolio-root>
+  <div class="portfolio-shell page-gutter" data-portfolio-root>
     <header class="portfolio-masthead">
       <p class="portfolio-breadcrumb"><span>{portfolio.nav.site}</span><b>/</b><span>{portfolio.nav.route}</span></p>
       <p class="portfolio-availability"><i aria-hidden="true"></i>{portfolio.nav.availability}</p>
@@ -106,7 +106,7 @@ const totalProjects = portfolio.projects.length + portfolio.archive.length;
                     id={'project-' + project.id}
                     data-project-id={project.id}
                     data-project-tier={project.tier}
-                    data-project-search={[project.name, project.bucket, project.tag, ...(project.stack ?? [])].join(' ').toLowerCase()}
+                    data-project-haystack={[project.name, project.bucket, project.tag, ...(project.stack ?? [])].join(' ').toLowerCase()}
                     aria-pressed={project.id === selected.id ? 'true' : 'false'}
                   >
                     <span class="portfolio-project-rank">{String(project.rank).padStart(2, '0')}</span>
@@ -131,7 +131,8 @@ const totalProjects = portfolio.projects.length + portfolio.archive.length;
               <div class="portfolio-detail-heading">
                 <span>{String(project.rank).padStart(2, '0')} / {project.tag}</span>
                 <h2>{project.name}</h2>
-                <p>{project.bucket} · {project.year} · {stateLabels.get(project.status)}</p>
+                <p>{project.bucket ?? project.group ?? project.tag} · {project.year} · {stateLabels.get(project.status)}</p>
+                <a class="portfolio-open-case" href={'/portfolio/' + project.id}>{portfolio.labels.open_case}<span aria-hidden="true">→</span></a>
               </div>
 
               <section>

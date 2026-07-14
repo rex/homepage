@@ -1,0 +1,399 @@
+projects:
+  # ────────────────────────────────────────────────────────────────────
+  # Added 2026-07-13 — full-inventory reconciliation. Every rex-owned,
+  # non-fork, non-empty repo now has a row. Recategorize freely.
+  # ────────────────────────────────────────────────────────────────────
+  - rank: 35
+    id: lambda
+    tier: 3
+    name: Lambda
+    tag: browser platform
+    group: Tooling
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - TypeScript
+      - Vue
+      - WXT
+    pitch: The modern rebuild of a browser-extension lineage that goes back to 2013's lambda-chrome — 44K lines with tests, docs, and agent-collaboration scaffolding.
+    metrics:
+      - v: "44K"
+        k: LOC
+      - v: "138"
+        k: commits
+    art: minimal
+  - rank: 36
+    id: dasher-keyboard
+    tier: 3
+    name: Dasher Keyboard (Tapback)
+    tag: mobile
+    group: Product / apps
+    year: "2025"
+    status: shipped
+    status_kind: archived
+    stack:
+      - Kotlin (Android)
+      - Swift (iOS)
+    pitch: "Tapback: a custom mobile keyboard for GIFs, ASCII art, and snippets — one tap away. Native Kotlin and Swift implementations."
+    metrics:
+      - v: "38K"
+        k: LOC combined
+      - v: "2"
+        k: platforms
+    art: minimal
+  - rank: 37
+    id: teams-archive
+    tier: 3
+    name: Teams archive pilot (work)
+    tag: work
+    group: Work
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Python
+      - Docker
+    pitch: Work pilot for archiving Microsoft Teams history into a searchable local store.
+    metrics:
+      - v: "29K"
+        k: LOC
+    art: minimal
+  - rank: 38
+    id: artifact-viewer
+    tier: 3
+    name: Artifact Viewer
+    tag: AI tooling
+    group: AI / agentic
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - JavaScript
+      - Electron-style shell
+    pitch: An application shell to view and run AI-generated artifacts locally.
+    metrics:
+      - v: "20K"
+        k: LOC
+    art: minimal
+  - rank: 39
+    id: word-world
+    tier: 3
+    name: Word World
+    tag: web game
+    group: Creative / games
+    year: "2026"
+    status: shipped
+    status_kind: archived
+    stack:
+      - TypeScript
+      - Vite
+    pitch: A word-building web game — "the best app that ever existed," per its target audience.
+    metrics:
+      - v: "19K"
+        k: LOC
+    art: minimal
+  - rank: 40
+    id: email-archive-db
+    tier: 3
+    name: Email archive database (client)
+    tag: work
+    group: Work
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Python
+      - PostgreSQL
+      - Docker
+    pitch: Client email-archive ingestion and search pipeline — tested, containerized, CI-gated.
+    metrics:
+      - v: "18K"
+        k: LOC
+      - v: "45"
+        k: commits
+    art: minimal
+  - rank: 41
+    id: n8n-workflows
+    tier: 3
+    name: n8n workflow library
+    tag: automation
+    group: Infrastructure
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - n8n
+      - Python
+      - Docker
+    pitch: Homelab n8n instance-as-code — the workflow library and deployment config behind the lab's automations.
+    metrics:
+      - v: "49"
+        k: commits
+    art: minimal
+  - rank: 42
+    id: appocalypse
+    tier: 3
+    name: Appocalypse
+    tag: macOS
+    group: Product / apps
+    year: "2025"
+    status: shipped
+    status_kind: archived
+    stack:
+      - Electron
+      - TypeScript
+    pitch: A macOS app launcher built in Electron — indexes /Applications and gets out of the way.
+    metrics:
+      - v: "15K"
+        k: LOC
+    art: minimal
+  - rank: 43
+    id: vibe-dashboard
+    tier: 3
+    name: Vibe Dashboard
+    tag: macOS
+    group: AI / agentic
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Swift
+      - SwiftUI
+    pitch: A native macOS dashboard for at-a-glance agent-session and workspace state.
+    metrics:
+      - v: "13K"
+        k: LOC
+    art: minimal
+  - rank: 44
+    id: dev-dash
+    tier: 3
+    name: Dev Dash
+    tag: macOS
+    group: Product / apps
+    year: "2025"
+    status: shipped
+    status_kind: archived
+    stack:
+      - Shell
+      - Swift
+    pitch: "\"A neon control room for your Mac\" — a personal dev-environment dashboard."
+    metrics:
+      - v: "12K"
+        k: LOC
+    art: minimal
+  - rank: 45
+    id: mcp-apple-obsidian
+    tier: 3
+    name: mcp-apple-obsidian
+    tag: AI tooling
+    group: AI / agentic
+    year: "2026"
+    status: shipped
+    status_kind: archived
+    stack:
+      - Python
+      - MCP SDK
+    pitch: The third MCP server — gives Claude a native bridge into Obsidian on macOS. Public.
+    metrics:
+      - v: "9.4K"
+        k: LOC
+    art: minimal
+    links:
+      repo: https://github.com/rex/mcp-apple-obsidian
+  - rank: 46
+    id: music-world
+    tier: 3
+    name: Music World
+    tag: game
+    group: Creative / games
+    year: "2026"
+    status: shipped
+    status_kind: archived
+    stack:
+      - Godot
+      - GDScript
+    pitch: A 3D world where everything reacts to music — a Godot experiment.
+    metrics:
+      - v: "7.7K"
+        k: LOC
+    art: minimal
+  - rank: 47
+    id: arda
+    tier: 3
+    name: Arda
+    tag: infra
+    group: Infrastructure
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Shell
+      - Make
+    pitch: Homelab bootstrap and utility repo — named for the world that contains the lab's Tolkien hosts.
+    metrics:
+      - v: "20"
+        k: commits
+    art: minimal
+  - rank: 48
+    id: terminal-theme-studio
+    tier: 3
+    name: Terminal Theme Studio
+    tag: web tool
+    group: Tooling
+    year: "2025"
+    status: shipped
+    status_kind: archived
+    stack:
+      - JavaScript
+      - Docker
+    pitch: A web studio for designing and previewing terminal color themes.
+    metrics:
+      - v: "5.9K"
+        k: LOC
+    art: minimal
+  - rank: 49
+    id: invoice-generation
+    tier: 3
+    name: Invoice Manager (v1)
+    tag: tooling
+    group: Tooling
+    year: "2025"
+    status: archived
+    status_kind: archived
+    stack:
+      - TypeScript
+      - Docker
+    pitch: Invoicing v1 — the predecessor that grew up and became the Pennywise invoice pipeline.
+    metrics:
+      - v: "44"
+        k: commits
+    art: minimal
+  - rank: 50
+    id: keyboard-cheatsheet
+    tier: 3
+    name: Keyboard Cheatsheet
+    tag: web tool
+    group: Tooling
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - JavaScript
+      - Docker
+    pitch: A printable keyboard-shortcut cheatsheet generator, self-hosted on the lab.
+    metrics:
+      - v: "14"
+        k: commits
+    art: minimal
+  - rank: 51
+    id: problem-coach
+    tier: 3
+    name: Problem Coach
+    tag: web tool
+    group: AI / agentic
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - TypeScript
+      - Docker
+    pitch: A small AI-assisted problem-framing coach — ask better questions before writing code.
+    metrics:
+      - v: "7"
+        k: commits
+    art: minimal
+  - rank: 52
+    id: resume-pipeline
+    tier: 3
+    name: Resume pipeline
+    tag: meta
+    group: Meta
+    year: "2026"
+    status: active
+    status_kind: operational
+    stack:
+      - Python
+    pitch: Resume-as-code — the pipeline behind /cv on this site.
+    metrics:
+      - v: "5"
+        k: commits
+    art: minimal
+  - rank: 53
+    id: massage-brand
+    tier: 3
+    name: Massage-brand design system (client)
+    tag: work
+    group: Work
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - HTML/CSS
+      - Docker
+    pitch: Brand and design system for a massage-therapy business — tokens, type, components.
+    metrics:
+      - v: "23"
+        k: commits
+    art: minimal
+  - rank: 54
+    id: idea-elaborator
+    tier: 3
+    name: Idea Elaborator
+    tag: web tool
+    group: AI / agentic
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - HTML
+      - Docker
+    pitch: A tiny AI idea-elaboration tool — feed it a spark, get a fleshed-out concept.
+    metrics:
+      - v: "9"
+        k: commits
+    art: minimal
+  - rank: 55
+    id: dotfiles
+    tier: 3
+    name: Dotfiles
+    tag: meta
+    group: Meta
+    year: "2025"
+    status: active
+    status_kind: operational
+    stack:
+      - Shell
+      - zsh
+    pitch: The portable dev environment — shell, editor, and tool config as a repo.
+    art: minimal
+    metrics: []
+  - rank: 56
+    id: adhd-checklist
+    tier: 3
+    name: ADHD Checklist
+    tag: micro-app
+    group: Product / apps
+    year: "2025"
+    status: shipped
+    status_kind: archived
+    stack:
+      - HTML
+    pitch: A single-file daily-checklist micro-app, built for one user with ADHD in mind.
+    art: minimal
+    metrics: []
+
+# ── Accounted-for but NOT listed (2026-07-13 reconciliation) — promote by adding a row above.
+# COVERED BY A CURATED PRODUCT: outageforge(GH mirror)→OutageForge · homelab {ansible,control,
+#   inventory,farmhand,scientist,infrastructure-general}→Homelab Platform · cheddar-{android,
+#   server,supabase,web,skill}→Cheddar · pennywise-*→Pennywise · bump-tracker-{ios,sidecar,
+#   mqtt-ios-bridge,workspace,rewrite},BumpOrNahClean→Bump-Tracker · anchor-{api,ios,macos}→Anchor
+#   wideframe-site→Wideframe · magpie-macos→Magpie · jurassic-park-builder,world-builder*→Jurassic
+#   Park · bumper-stickers-{flutter,android}→Bumper Stickers · lambda-chrome-wxt→Lambda
+#   homepage-archive,PM_Site→piercemoore.com · tiff-court-case-3→AI case-prep workbench
+# DATA/AUTO-COMMIT: claude-transcripts, dash-cheatsheets, dash-docsets
+# STUBS (≤1 commit / ≤2 LOC): work-tracker{,-sidecar,-device}, easy-button-ios, autopilot-ios,
+#   imessage-archive, jukeboxd, TiffMom
+# EMPTY REMOTE: agentic-skeleton · CONFIG: .zsh (fold into Dotfiles?)
+# NEEDS PIERCE INPUT (contents unknown): openclaw-artifacts, openclaw-workspace, invoice-war
+# SENSITIVE (abstract or omit): elitebabes-downloader — sibling of the Clipboard TUI

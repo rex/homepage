@@ -8,8 +8,19 @@ projects:
     year: "2025"
     status: active
     status_kind: operational
+    stack:
+      - Next.js 15
+      - TypeScript strict
+      - Prisma + PostgreSQL
+      - "@dnd-kit"
     pitch: Self-hosted Gridfinity layout manager with a genuinely tricky auto-baseplate 2D bin-packing algorithm (unit-tested), full CI/CD to homelab.
-    metrics: []
+    hook: "computeBaseplateLayout solves a real 2D bin-packing subproblem: tile an arbitrary half-cell-precision surface with a minimal set of printable baseplates — covered by 25+ unit tests on the geometry module alone."
+    metrics:
+      - v: "19"
+        k: api routes
+      - v: "25+"
+        k: geometry tests
+    art: minimal
   - rank: 24
     id: invoice-openapi
     tier: 3
@@ -19,8 +30,19 @@ projects:
     year: "2024"
     status: shipped
     status_kind: archived
+    stack:
+      - Node.js 22
+      - Express
+      - swagger-ui-express
+      - Docker (Alpine)
     pitch: A tiny (~150 LOC) Express service that merges three homelab OpenAPI specs into one namespaced Swagger UI. Nice DX glue.
-    metrics: []
+    hook: "Collision-safe by construction: every upstream path is rewritten to /{app}{path}, every schema re-keyed as {app}__{Name}, every operation auto-tagged by source — 53 merged paths, zero conflicts."
+    metrics:
+      - v: "~150"
+        k: LOC
+      - v: "53"
+        k: merged paths
+    art: minimal
   - rank: 25
     id: clipboard-tui
     tier: 3
@@ -30,8 +52,19 @@ projects:
     year: "2025"
     status: active
     status_kind: operational
+    stack:
+      - Python 3.12
+      - asyncio
+      - Textual
+      - SQLite (WAL)
     pitch: An async clipboard-driven download-queue TUI with exponential backoff + a host-outage circuit breaker.
-    metrics: []
+    hook: "A tolerant async line reader patches around asyncio's 64KB StreamReader limit so one long subprocess stderr line can never crash the queue — plus a per-host circuit breaker that pauses the world when a host goes down."
+    metrics:
+      - v: "4.9K"
+        k: lines py
+      - v: "378+"
+        k: items tracked
+    art: minimal
   - rank: 26
     id: firefox-archiver
     tier: 3
@@ -41,8 +74,28 @@ projects:
     year: "2026"
     status: shipped
     status_kind: archived
+    stack:
+      - Python
+      - SQLite FTS5
+      - Playwright
+      - Ollama (local LLM)
     pitch: A clever mozLz4 binary-format parser + local-Ollama extraction with a hallucination validator. A 5-day spike.
-    metrics: []
+    hook: "Hand-rolled parser for Firefox's proprietary mozLz4 sessionstore format — 8-byte magic header plus raw LZ4 block decompression, no wrapper library — feeding 2,465 real tabs into a searchable FTS5 store."
+    metrics:
+      - v: "2,465"
+        k: tabs archived
+      - v: "5"
+        k: day build
+    art: minimal
+    detail:
+      form: shortform
+      intro: >
+        A five-day burst project: rescue every Firefox tab I'd ever left open —
+        2,465 tabs across 92 domains — into a searchable local knowledge base.
+      highlights:
+        - Hand-rolled mozLz4 sessionstore parser (magic header + raw LZ4 block decompression)
+        - Playwright re-scrape + local-LLM (Ollama) summarization with a hallucination validator
+        - SQLite FTS5 index + a single-file React viewer — no server needed to browse the archive
   - rank: 27
     id: venomjaxx
     tier: 3
@@ -52,8 +105,19 @@ projects:
     year: "2025"
     status: active
     status_kind: operational
+    stack:
+      - Luau
+      - Roblox Studio
+      - Rojo
+      - DataStoreService
     pitch: A procedurally-generated (Luau) park with a surprisingly disciplined DataStore layer (retry/backoff, session locks).
-    metrics: []
+    hook: "The entire game world — terrain, buildings, paddocks, landmarks across 4 maps — is generated procedurally from a chain of Luau builder modules; nothing is hand-placed."
+    metrics:
+      - v: "10.5K"
+        k: lines Luau
+      - v: "4"
+        k: maps
+    art: minimal
   - rank: 28
     id: esp32-clock
     tier: 3
@@ -63,19 +127,41 @@ projects:
     year: "2024"
     status: shipped
     status_kind: archived
+    stack:
+      - ESP32
+      - C++ / Arduino
+      - PlatformIO
+      - U8g2
     pitch: "The only bare-metal hardware entry: bit-banged I2C across 8 GPIO pairs with differential redraw. 169 LOC, no repo."
-    metrics: []
+    hook: "Six independently-addressed OLEDs on one ESP32 via per-display bit-banged software I2C across 8 GPIO pairs, with a differential-redraw loop that only repaints changed digits."
+    metrics:
+      - v: "6"
+        k: OLEDs
+      - v: "169"
+        k: lines C++
+    art: minimal
   - rank: 29
     id: bumper-stickers
     tier: 3
-    name: Bumper Stickers (iOS)
-    tag: iOS
+    name: Bumper Stickers
+    tag: mobile
     group: Product / apps
     year: "2025"
     status: archived
     status_kind: archived
-    pitch: A native SwiftUI car-quotes app with live SFSpeechRecognizer dictation, MapKit, and Supabase sync. A 2-day prototype.
-    metrics: []
+    stack:
+      - SwiftUI
+      - Supabase
+      - MapKit
+      - Speech framework
+    pitch: A native car-quotes app with live SFSpeechRecognizer dictation, MapKit, and Supabase sync — built three ways (SwiftUI, Flutter, and Kotlin siblings). A 2-day prototype.
+    hook: "Live on-device speech-to-text (SFSpeechRecognizer + AVAudioEngine) wired into two independent dictation fields, with async/await Supabase CRUD and MapKit sighting pins."
+    metrics:
+      - v: "3"
+        k: implementations
+      - v: "2"
+        k: day build
+    art: minimal
   - rank: 30
     id: case-workbench
     tier: 3
@@ -85,8 +171,19 @@ projects:
     year: "2025"
     status: archived
     status_kind: archived
+    stack:
+      - Next.js 16
+      - React 19
+      - Prisma + PostgreSQL
+      - MinIO
     pitch: A private AI-assisted case-prep tool — dual-provider AI with citation provenance and a baseline-vs-context comparison engine.
-    metrics: []
+    hook: "Every AI analysis can run twice — a baseline pass and a context-augmented pass — stored as a linked comparison, so the effect of added context is itself auditable."
+    metrics:
+      - v: "52"
+        k: prisma models
+      - v: "65"
+        k: test files
+    art: minimal
   - rank: 31
     id: driveshack-tracker
     tier: 3
@@ -96,8 +193,19 @@ projects:
     year: "2025"
     status: active
     status_kind: operational
+    stack:
+      - Next.js 16
+      - TypeScript strict
+      - Prisma 7
+      - PostgreSQL
     pitch: A sharp internal tool that tracks billed-vs-actual hours so automation gains read as efficiency, not overbilling. Solid build (OpenAPI contract, hardened CI).
-    metrics: []
+    hook: "Explicitly tracks estimated vs actual vs billed hours per task — plus an ai_assisted_hours field — so automation gains are visible and defensible to the client."
+    metrics:
+      - v: "16K"
+        k: lines TS
+      - v: "4"
+        k: months live
+    art: minimal
   - rank: 32
     id: chronicle
     tier: 3
@@ -107,8 +215,19 @@ projects:
     year: "2025"
     status: active
     status_kind: operational
+    stack:
+      - Python (stdlib http.server)
+      - PostgreSQL
+      - React 19
+      - Vite 7
     pitch: An event-sourced multi-source timeline (chat / email / invoicing → one FTS Postgres schema, zero ORM).
-    metrics: []
+    hook: "A single-table Postgres event-sourcing schema with a GIN full-text index, source+source_id dedup constraints, and resolve-by-any-identifier contact matching — no ORM anywhere."
+    metrics:
+      - v: "4"
+        k: sources merged
+      - v: "0"
+        k: ORMs
+    art: minimal
   - rank: 33
     id: n8n-influx
     tier: 3
@@ -118,8 +237,18 @@ projects:
     year: "2026"
     status: archived
     status_kind: archived
+    stack:
+      - TypeScript strict
+      - n8n-workflow SDK
+      - Jest + nock
     pitch: A clean, well-tested (75 tests) custom n8n node — but an inert single-day spike, never published.
-    metrics: []
+    hook: "One module per n8n resource/operation with a dedicated regex-anchored input-validation layer — 75/75 tests green in ~1.6 seconds, written in a single day."
+    metrics:
+      - v: "75/75"
+        k: tests
+      - v: "1"
+        k: day build
+    art: minimal
   - rank: 34
     id: minio-console
     tier: 3
@@ -129,5 +258,15 @@ projects:
     year: "2024"
     status: active
     status_kind: operational
+    stack:
+      - Go 1.23
+      - Docker (scratch)
+      - Gitea Actions
     pitch: Self-hosts and maintains a custom build pipeline for MinIO's Console.
-    metrics: []
+    hook: "A multi-stage Dockerfile compiles the upstream Go console down to a FROM scratch final image — no shell, no package manager — stamped with OCI build metadata. (Upstream code is MinIO's; the pipeline is mine.)"
+    metrics:
+      - v: "scratch"
+        k: final image
+      - v: "7"
+        k: commits mine
+    art: minimal

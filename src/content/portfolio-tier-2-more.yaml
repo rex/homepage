@@ -16,6 +16,7 @@ projects:
       - IndexedDB
       - service worker
     pitch: The strongest consumer-app entry — a gamified daily-wins tracker wired over live MQTT pub/sub, not REST polling.
+    hook: "Wins flow through a real pub/sub pipeline, not request/response: the client publishes the win event, the server computes points, streaks, and level authoritatively, then fans out to every surface."
     blurb: "A Vue 3 PWA + FastAPI gamified daily-wins tracker wired over live MQTT pub/sub (not REST polling): the client publishes a win, the server computes points/streak/level and fans out events, and the Pinia store reacts live — with IndexedDB + service worker for offline resync and hand-designed badge art. Deployed via Gitea CI → homelab."
     metrics:
       - v: 3.4K
@@ -39,6 +40,7 @@ projects:
       - embedded Python 3.11
       - yt-dlp / gallery-dl
     pitch: A native macOS download manager that embeds a full Python runtime inside the .app and drives yt-dlp/gallery-dl as in-process Python objects.
+    hook: "Embeds a full Python 3.11 runtime inside the .app bundle (PythonKit + Python-Apple-support xcframework) and calls yt-dlp as in-process Python objects — no subprocess, no IPC."
     blurb: A native macOS download manager that embeds a full Python 3.11 runtime inside the .app bundle (PythonKit + beeware's Python-Apple-support xcframework) and drives yt-dlp/gallery-dl as in-process Python objects rather than shelling out — solving PYTHONHOME/PYTHONPATH relocation in a sandbox, GIL-safe threading, and a CI step that rebuilds the 200 MB Python payload. Synthwave UI.
     metrics:
       - v: 9.6K
@@ -62,6 +64,7 @@ projects:
       - React
       - tokio
     pitch: The only native ops-GUI for the homelab — a background worker polls all Pi-hole nodes, diffs DNS record sets, and reconciles drift.
+    hook: "A background Rust/tokio worker polls all three Pi-hole nodes concurrently, diffs DNS record sets pairwise, classifies the drift, and emits reconciliation plans."
     blurb: "A native macOS ops GUI (Tauri 2.0 + Rust + React): a background tokio worker polls all 3 Pi-hole nodes concurrently, diffs DNS record sets pairwise, classifies drift, and emits reconciliation events over Tauri's event bus — a real distributed-consistency problem — plus Nginx Proxy Manager control."
     metrics:
       - v: 9.6K
@@ -86,6 +89,7 @@ projects:
       - React
       - W3C DTCG tokens
     pitch: A three-language full-stack disk-usage tool for TrueNAS with a Go crawler that dodges the classic bounded-queue deadlock.
+    hook: "The Go crawler uses an unbounded work-stealing directory queue (mutex + sync.Cond) feeding a batched Postgres upserter over a bounded channel — backpressure exactly where it matters, none where it doesn't."
     blurb: "A three-language full-stack disk-usage tool for TrueNAS: a Go crawler using an unbounded work-stealing directory queue (mutex + sync.Cond) feeding a separately-batched Postgres upserter to avoid the classic bounded-queue deadlock, a FastAPI backend serving treemap/duplicate/stale views, and a brutalist React UI with an exported W3C DTCG design-token package. Deletion is a staged, event-sourced audited workflow."
     metrics:
       - v: 10.9K
@@ -113,6 +117,7 @@ projects:
       - CloudFront + S3
       - raw ES5.1 edge fn
     pitch: This site — a hand-built design-token system on a CDK-provisioned CloudFront stack with a raw-ES5.1 edge function doing redirects, canonicalization, analytics, and a fail-closed /admin gate.
+    hook: "The CloudFront viewer-request function is hand-written in raw ES5.1 to fit the CloudFront Functions runtime's 10KB / ~1ms budget — routing, redirects, and security headers at the edge."
     blurb: Astro 5 static site with a hand-built design-token system and self-hosted fonts (~47KB gzipped JS total), on a CDK-provisioned CloudFront + S3 + Route 53 stack with a hand-written CloudFront viewer-request function in raw ES5.1 (10KB/1ms budget) doing vanity-domain redirects, canonicalization, a privacy-first analytics beacon, and a fail-closed /admin Basic-Auth gate.
     metrics:
       - v: 47 KB
@@ -123,7 +128,7 @@ projects:
     visual: Homepage screenshot
     links:
       live: https://piercemoore.com
-      repo: https://github.com/piercemoore/homepage
+      repo: https://github.com/rex/homepage
   - rank: 21
     id: jurassic-park
     tier: 2
@@ -138,6 +143,7 @@ projects:
       - OpenSCAD (BOSL2 / NopSCADlib)
       - Makefile → STL
     pitch: Hardware/CAD range nothing else touches — a layout planner with a filament calculator, paired with a parametric OpenSCAD → STL pipeline.
+    hook: "A Makefile-driven OpenSCAD pipeline (.scad → STL + rendered PNG per part) using BOSL2 skin() lofting to build a procedural T-Rex — beside a hand-rolled React catalog of 70+ printable parts."
     blurb: A React/Tailwind layout planner (70+ catalog elements, fence/floor tools, undo/redo) with a filament calculator that turns a 2D park layout into a per-color spool shopping list, paired with a parametric OpenSCAD workspace (BOSL2/NopSCADlib) and a Makefile-driven .scad→STL pipeline — including a procedurally-lofted T-Rex and snap-fit fence posts with ceramic insulators.
     metrics:
       - v: 70+
@@ -160,6 +166,7 @@ projects:
       - PouchDB / CouchDB
       - Gitea Actions CI/CD
     pitch: A cyberpunk “mission control” packing checklist with offline-first bidirectional sync and a per-item formula engine.
+    hook: "Offline-first bidirectional PouchDB/CouchDB sync plus a tiny per-item formula engine — quantities recomputed live from trip parameters — shipped through a real Gitea Actions CI/CD pipeline."
     blurb: A cyberpunk “mission control” packing checklist (vanilla-JS single-file app) with offline-first bidirectional PouchDB/CouchDB sync and a per-item formula engine (quantities computed from live trip parameters), shipped through a surprisingly mature Gitea Actions CI/CD pipeline (semver build-metadata, Docker layer caching, SHA-tagged registry pushes, OCI labels, HEALTHCHECK).
     metrics:
       - v: 2,500
