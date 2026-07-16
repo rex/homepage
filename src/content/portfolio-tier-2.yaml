@@ -181,3 +181,6 @@ projects:
         k: STT / LLM
     art: statustable
     visual: Voice-pilot writeup + screenshots
+    detail:
+      gallery:
+        - { src: "/projects/doombox/home.jpg", caption: "DoomBox — the packing dashboard" }

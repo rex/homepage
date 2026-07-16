@@ -65,7 +65,8 @@ projects:
       evolution:
         - year: "2026"
           note: Determinism kernel, WASM shell, and causal debrief landed; blue-green pipeline gated on the property suite.
-      gallery: []
+      gallery:
+        - { src: "/projects/outageforge/war-room.jpg", caption: "OutageForge — the product landing" }
   - rank: 2
     id: homelab-platform
     tier: 1
@@ -288,3 +289,11 @@ projects:
         k: to ship
     art: board
     visual: Catalog screenshot (lead with it)
+    detail:
+      form: shortform
+      intro: >
+        Specimen is a self-hosted cataloging system for a 20,000-file font hoard —
+        it discovers, dedupes, and deeply analyzes every font, with CLIP visual
+        embeddings powering similarity search and duplicate detection.
+      gallery:
+        - { src: "/projects/specimen/catalog.jpg", caption: "Specimen — the live catalog (20,810 fonts)" }
