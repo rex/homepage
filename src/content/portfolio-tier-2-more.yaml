@@ -129,6 +129,9 @@ projects:
     links:
       live: https://piercemoore.com
       repo: https://github.com/rex/homepage
+    detail:
+      gallery:
+        - { src: "/projects/piercemoore-com/home.jpg", caption: "piercemoore.com — the home page" }
   - rank: 21
     id: jurassic-park
     tier: 2

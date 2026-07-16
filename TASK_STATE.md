@@ -96,6 +96,22 @@ _(none)_
 
 ## 6. Handoff note (fill when ending a session)
 
+2026-07-15 — Two more portfolio passes on branch `codex/implement-projects-page`:
+- **v1.2.0 — generative plate art** (`src/lib/plate-art.ts`): deterministic
+  (FNV-1a → mulberry32, no `Math.random`), token-classed inline SVG that flips
+  with the theme automatically. A shape grammar keyed off each project's `art:`
+  value replaces the placeholder signal bars; minimal cards get a sigil; exactly
+  one amber accent per plate. Verified in both themes.
+- **v1.3.0 — screenshot harvest** (`npm run harvest`): `scripts/harvest-screenshots.mjs`
+  + `scripts/screenshot-targets.json` (Playwright) capture live-app JPEGs into
+  `public/projects/<id>/` and write wiring hints. Public targets
+  (wideframe.studio, piercemoore.com) captured + wired into their case-page
+  `detail.gallery`. **Homelab (`thelab.host`) targets are best-guess URLs marked
+  `reachable:lan` — VERIFY them and run `npm run harvest -- --lan` on the LAN/VPN**
+  to fill the rest, then paste the `gallery:` blocks from `scripts/gallery-suggestions.json`.
+- Also reconciled the stale `v0.1.0` refs in `docs/design-system.md` (site has
+  been v1.x since Pierce's May-3 `b3e335f` "Version 1.0.0 :D" bump on main).
+
 2026-07-13 (v1.1.0, branch `codex/implement-projects-page`) — Post-review revision pass:
 portfolio CSS fully tokenized (light mode fixed — artifacts were hardcoded dark), Fraunces
 variable axes + ss02 applied, `.page-gutter` adopted, `shipped` status color split from

@@ -190,6 +190,14 @@ projects:
     visual: App screenshot / Quality Verdict
     links:
       live: https://wideframe.studio
+    detail:
+      form: shortform
+      intro: >
+        Wideframe is a focused macOS studio for desktop wallpapers — drop in any
+        image, frame the exact slice for your display, and set it in one click.
+        Shipped and public on the Mac App Store.
+      gallery:
+        - { src: "/projects/wideframe/landing.jpg", caption: "wideframe.studio — the live product" }
   - rank: 6
     id: mcp-rancher
     tier: 1

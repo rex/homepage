@@ -1,0 +1,29 @@
+{
+  "_readme": "URL manifest for `npm run harvest`. reachable:public works from anywhere; reachable:lan targets are homelab-only (thelab.host) — their URLs are best-guesses, VERIFY/edit them, then run `npm run harvest -- --lan` while on the LAN/VPN. Output lands in public/projects/<id>/<name>.jpg and a wiring hint is written to scripts/gallery-suggestions.json.",
+  "output": "public/projects",
+  "defaults": { "width": 1440, "height": 900, "deviceScaleFactor": 1, "quality": 80, "waitMs": 2500, "theme": "dark" },
+  "targets": [
+    { "id": "wideframe", "reachable": "public",
+      "shots": [ { "url": "https://wideframe.studio", "name": "landing", "caption": "wideframe.studio — the live product", "waitMs": 3200 } ] },
+    { "id": "piercemoore-com", "reachable": "public",
+      "shots": [ { "url": "https://piercemoore.com", "name": "home", "caption": "piercemoore.com — the home page", "waitMs": 3200 } ] },
+    { "id": "outageforge", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://outageforge.thelab.host", "name": "war-room", "caption": "OutageForge — the war room" } ] },
+    { "id": "lattice", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://lattice.thelab.host", "name": "layout", "caption": "Lattice — Gridfinity layout editor" } ] },
+    { "id": "specimen", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://specimen.thelab.host", "name": "catalog", "caption": "Specimen — the font catalog" } ] },
+    { "id": "doombox", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://doombox.thelab.host", "name": "home", "caption": "DoomBox — the interface" } ] },
+    { "id": "lootbox", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://lootbox.thelab.host", "name": "home", "caption": "Lootbox — reward wall" } ] },
+    { "id": "cheddar", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://cheddar.thelab.host", "name": "dashboard", "caption": "Cheddar — the web dashboard" } ] },
+    { "id": "pennywise", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://pennywise.thelab.host", "name": "webapp", "caption": "Pennywise — the hub webapp" } ] },
+    { "id": "reaper", "reachable": "lan", "note": "VERIFY URL",
+      "shots": [ { "url": "https://reaper.thelab.host", "name": "home", "caption": "Reaper — crawl dashboard" } ] },
+    { "id": "palantir", "reachable": "lan", "note": "VERIFY URL — likely Grafana",
+      "shots": [ { "url": "https://grafana.thelab.host", "name": "dashboards", "caption": "Palantir — Grafana observability" } ] }
+  ]
+}

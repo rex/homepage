@@ -1,6 +1,6 @@
 # piercemoore.com — design system
 
-The site is built typography-first on three families and one accent color. This doc describes the system as it stands at v0.1.0 (alpha launch). Tokens live in [design-tokens.json](design-tokens.json) in W3C DTCG format, importable by Figma's Tokens Studio plugin, Penpot, Style Dictionary, etc.
+The site is built typography-first on three families and one accent color. This doc describes the system as it currently stands (see `package.json` for the live version). Tokens live in [design-tokens.json](design-tokens.json) in W3C DTCG format, importable by Figma's Tokens Studio plugin, Penpot, Style Dictionary, etc.
 
 ## Principles
 
@@ -184,7 +184,7 @@ These are the named patterns. Build them as Figma components matching the names.
 - One sentence: "start where you are." — never anything else
 
 ### `Footer`
-- Single mono caps line: `piercemoore.com @ v0.1.0 · build <hash> · YYYY-MM-DD HH:MM CDT`
+- Single mono caps line: `piercemoore.com @ vX.Y.Z · build <hash> · YYYY-MM-DD HH:MM CDT` (version is injected from `package.json`)
 - All `ink-muted` except the domain itself which is `ink`
 - No mantra (lives in MantraBand above)
 
