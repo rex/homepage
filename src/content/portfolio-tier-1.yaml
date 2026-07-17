@@ -129,6 +129,17 @@ projects:
         k: lines SQL
     art: statustable
     visual: De-identified UI + schema diagram
+    detail:
+      form: shortform
+      intro: >
+        The live app is deliberately unstyled — these are the design concepts for
+        the next evolution, rendered from the Cheddar design system. Every figure
+        and client here is invented (the persona is fictional); the real app's
+        numbers belong to a real person and never leave the homelab.
+      gallery:
+        - { src: "/projects/cheddar-design/overview.jpg", caption: "Cheddar — design concept, Overview (fictional persona + demo data)" }
+        - { src: "/projects/cheddar-design/ledger.jpg", caption: "Cheddar — design concept, Ledger" }
+        - { src: "/projects/cheddar-design/calendar.jpg", caption: "Cheddar — design concept, Calendar" }
   - rank: 4
     id: pennywise
     tier: 1

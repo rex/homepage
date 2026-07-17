@@ -46,3 +46,6 @@ scripts/gallery-suggestions.json
 # shots are committed explicitly with `git add -f`; this keeps un-published and
 # PII-bearing captures (finances, auth screens, etc.) out of the public repo.
 public/projects/
+
+# Playwright storageState from `npm run harvest` (session cookies — never commit)
+.harvest-auth/

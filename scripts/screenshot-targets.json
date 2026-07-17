@@ -1,29 +1,61 @@
 {
-  "_readme": "URL manifest for `npm run harvest`. reachable:public works from anywhere; reachable:lan targets are homelab-only (thelab.host) — their URLs are best-guesses, VERIFY/edit them, then run `npm run harvest -- --lan` while on the LAN/VPN. Output lands in public/projects/<id>/<name>.jpg and a wiring hint is written to scripts/gallery-suggestions.json.",
+  "_readme": "URL/mockup manifest for `npm run harvest`. reachable:public|local run anywhere; reachable:lan needs the LAN/VPN (`npm run harvest -- --lan`). auth.op points at a 1Password item in the `agentic` vault — creds are read at runtime via the `op` CLI, never stored here. `mutate` rewrites DOM text before capture (de-identify / demo data). serveRoot serves a local design kit over HTTP (Babel/JSX kits can't fetch over file://). Output → public/projects/<id>/<name>.jpg; publish curated shots with `git add -f`.",
   "output": "public/projects",
-  "defaults": { "width": 1440, "height": 900, "deviceScaleFactor": 1, "quality": 80, "waitMs": 2500, "theme": "dark" },
+  "defaults": { "width": 1440, "height": 900, "deviceScaleFactor": 1, "quality": 80, "waitMs": 2500, "theme": "dark", "timeout": 25000 },
   "targets": [
     { "id": "wideframe", "reachable": "public",
       "shots": [ { "url": "https://wideframe.studio", "name": "landing", "caption": "wideframe.studio — the live product", "waitMs": 3200 } ] },
+
     { "id": "piercemoore-com", "reachable": "public",
       "shots": [ { "url": "https://piercemoore.com", "name": "home", "caption": "piercemoore.com — the home page", "waitMs": 3200 } ] },
-    { "id": "outageforge", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://outageforge.thelab.host", "name": "war-room", "caption": "OutageForge — the war room" } ] },
-    { "id": "lattice", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://lattice.thelab.host", "name": "layout", "caption": "Lattice — Gridfinity layout editor" } ] },
-    { "id": "specimen", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://specimen.thelab.host", "name": "catalog", "caption": "Specimen — the font catalog" } ] },
-    { "id": "doombox", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://doombox.thelab.host", "name": "home", "caption": "DoomBox — the interface" } ] },
-    { "id": "lootbox", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://lootbox.thelab.host", "name": "home", "caption": "Lootbox — reward wall" } ] },
-    { "id": "cheddar", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://cheddar.thelab.host", "name": "dashboard", "caption": "Cheddar — the web dashboard" } ] },
-    { "id": "pennywise", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://pennywise.thelab.host", "name": "webapp", "caption": "Pennywise — the hub webapp" } ] },
-    { "id": "reaper", "reachable": "lan", "note": "VERIFY URL",
-      "shots": [ { "url": "https://reaper.thelab.host", "name": "home", "caption": "Reaper — crawl dashboard" } ] },
-    { "id": "palantir", "reachable": "lan", "note": "VERIFY URL — likely Grafana",
-      "shots": [ { "url": "https://grafana.thelab.host", "name": "dashboards", "caption": "Palantir — Grafana observability" } ] }
+
+    { "id": "outageforge", "reachable": "lan",
+      "shots": [ { "url": "https://outageforge.thelab.host", "name": "war-room", "caption": "OutageForge — the product landing" } ] },
+
+    { "id": "specimen", "reachable": "lan",
+      "shots": [ { "url": "https://specimen.thelab.host", "name": "catalog", "caption": "Specimen — the live catalog (20,810 fonts)" } ] },
+
+    { "id": "doombox", "reachable": "lan",
+      "shots": [ { "url": "https://doombox.thelab.host", "name": "home", "caption": "DoomBox — the packing dashboard" } ] },
+
+    { "id": "reaper", "reachable": "lan", "baseUrl": "https://reaper.thelab.host",
+      "shots": [ { "path": "/", "name": "dashboard", "caption": "Reaper — crawl dashboard" } ] },
+
+    { "id": "lattice", "reachable": "lan", "baseUrl": "https://lattice.thelab.host",
+      "auth": { "op": "op://agentic/app-lattice", "loginUrl": "https://lattice.thelab.host" },
+      "shots": [ { "path": "/", "name": "layout", "caption": "Lattice — Gridfinity layout editor" } ] },
+
+    { "id": "cheddar", "reachable": "lan", "baseUrl": "https://cheddar.thelab.host",
+      "auth": { "op": "op://agentic/app-cheddar", "loginUrl": "https://cheddar.thelab.host" },
+      "_note": "Live app shows a real person's finances — any published shot MUST be de-identified via `mutate`, or use the cheddar-design kit instead.",
+      "shots": [ { "path": "/", "name": "dashboard", "caption": "Cheddar — the web dashboard" } ] },
+
+    { "id": "pennywise", "reachable": "lan", "baseUrl": "https://pennywise.thelab.host",
+      "auth": { "op": "op://agentic/app-pennywise", "loginUrl": "https://pennywise.thelab.host" },
+      "_note": "Real earnings on screen — `replace` swaps them for obvious demo figures before capture. These are literal text matches taken from a prior capture; if the live numbers have moved, update `find` (or use findRegex).",
+      "shots": [ { "path": "/", "name": "webapp", "caption": "Pennywise — the hub webapp (demo data)",
+        "replace": [
+          { "find": "$50,175", "text": "$4,206,900" },
+          { "find": "$48,150", "text": "$4,200,000" },
+          { "find": "$2,025", "text": "$6,900" },
+          { "find": "50 invoices · 669h billed", "text": "1,337 invoices · 42,069h billed" },
+          { "find": "48 reviewed · 50 submitted", "text": "1,336 reviewed · 1,337 submitted" }
+        ] } ] },
+
+    { "id": "cheddar-design", "reachable": "local",
+      "serveRoot": "/Users/pierce/Code/__ECOSYSTEMS/cheddar/_design/cheddar-design-system/project",
+      "_note": "Desktop app kit ONLY. ui_kits/mobile is deliberately EXCLUDED: tiff-data.js holds real PII (name + real numbers).",
+      "shots": [
+        { "path": "ui_kits/app/index.html", "name": "overview", "caption": "Cheddar — design concept, Overview", "width": 1280, "height": 900, "waitMs": 4000 },
+        { "path": "ui_kits/app/index.html", "name": "calendar", "caption": "Cheddar — design concept, Calendar", "width": 1280, "height": 900, "waitMs": 4000, "click": "text=Calendar" },
+        { "path": "ui_kits/app/index.html", "name": "ledger", "caption": "Cheddar — design concept, Ledger", "width": 1280, "height": 900, "waitMs": 4000, "click": "text=Ledger" }
+      ] },
+
+    { "id": "anchor", "reachable": "local",
+      "serveRoot": "/Users/pierce/Code/__ECOSYSTEMS/anchor/anchor-design-system",
+      "shots": [
+        { "path": "app-mockup.html", "name": "app-mockup", "caption": "Anchor — design concept, capture", "waitMs": 3500 },
+        { "path": "app-mockup.html", "name": "anchors", "caption": "Anchor — design concept, the anchors view", "waitMs": 3500, "click": "text=ANCHORS" }
+      ] }
   ]
 }

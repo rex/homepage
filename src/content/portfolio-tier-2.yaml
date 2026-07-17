@@ -129,6 +129,10 @@ projects:
         k: surfaces + backend
     art: phone
     visual: Screenshots + design-doctrine excerpts
+    detail:
+      gallery:
+        - { src: "/projects/anchor/anchors.jpg", caption: "Anchor — design concept, the anchors view" }
+        - { src: "/projects/anchor/app-mockup.jpg", caption: "Anchor — design concept, capture" }
   - rank: 14
     id: bump-tracker
     tier: 2
