@@ -96,6 +96,45 @@ _(none)_
 
 ## 6. Handoff note (fill when ending a session)
 
+2026-07-16 (v1.5.1, branch `codex/implement-projects-page` @ 8a403a1 — clean, pushed) —
+**⛔ DO NOT MERGE to `main` until Pierce explicitly approves.** Portfolio + nav were
+built by a prior agent (`c45c8cc`); this session reviewed them adversarially, then
+iterated: v1.2.0 generative plate art (`src/lib/plate-art.ts`), v1.3.0–v1.5.1 the
+screenshot-harvest pipeline.
+
+- **Harvest pipeline** — `npm run harvest` (`scripts/harvest-screenshots.mjs` +
+  `scripts/screenshot-targets.json`). Full capability/gotcha notes in memory
+  `project_screenshot_harvest.md`. Renders live apps AND local Claude design-kit
+  mockups (via a throwaway HTTP server — Babel/JSX can't use `file://`), does
+  1Password login (`op` CLI → cached storageState in gitignored `.harvest-auth/`),
+  click-through, and de-identification (`replace`/`mutate`). `public/projects/` is
+  **gitignored** — publish curated shots with `git add -f`.
+- **Galleries wired so far:** wideframe, piercemoore-com, specimen, outageforge,
+  doombox (live captures) + cheddar (3 design-concept screens) + anchor (2). All in
+  their `detail.gallery` in the tier YAML.
+- **⚠️ The agent CANNOT reach the LAN from its session** — macOS 26.5.1 Local Network
+  privacy blocks Homebrew node/chromium (`EHOSTUNREACH`) while system `curl` works.
+  **Pierce runs `npm run harvest -- --lan` from HIS terminal** (it has the permission),
+  pastes output, agent wires the good ones. Design kits + public URLs work agent-side.
+- **⚠️ PII:** cheddar `ui_kits/mobile/tiff-data.js` has a real name + real numbers —
+  EXCLUDED. Desktop kit is a fictional persona (safe). Live Cheddar/Pennywise show
+  real finances → only publish de-identified (Pennywise `replace` = absurd numbers).
+
+**NEXT (waiting on Pierce):**
+1. Pierce runs `npm run harvest -- --lan --only=pennywise,reaper,lattice` from his
+   terminal → pastes output → agent wires good captures (exercises 1Password login,
+   the Reaper `networkidle`→`domcontentloaded` fix, and Pennywise absurd-number de-id).
+2. Palantir — architecture diagram, NOT a screenshot (separate effort; Arda MCP can
+   derive the homelab arch).
+3. Version note: site is legitimately **v1.x** — Pierce bumped 0.1.0→1.0.0 himself
+   (`b3e335f`, May 3). Agent is forbidden from major bumps; all this session's were
+   minor/patch. Stale `v0.1.0` doc refs already reconciled (v1.3.0).
+
+Curation artifacts (outside the public repo, at `~/Code/portfolio-curation/`):
+INVENTORY.md, PORTFOLIO.md, THE-REST.md, CURATION-NOTES.md, capsules-all.json,
+transcripts/. Tiering (8 T1 / 14 T2 / 12 T3 / 65 archive) + decisions in memory
+`project_portfolio_curation.md`.
+
 2026-07-15 — Two more portfolio passes on branch `codex/implement-projects-page`:
 - **v1.2.0 — generative plate art** (`src/lib/plate-art.ts`): deterministic
   (FNV-1a → mulberry32, no `Math.random`), token-classed inline SVG that flips

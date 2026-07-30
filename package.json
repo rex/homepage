@@ -1,7 +1,7 @@
 {
   "name": "piercemoore",
   "type": "module",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "private": true,
   "description": "piercemoore.com — senior devops engineer's personal site",
   "scripts": {
