@@ -17,7 +17,6 @@
         bump-patch bump-minor bump-major check-version-bumped version \
         clean clean-all \
         docker-build docker-run docker-stop docker-clean \
-        serena-index serena-cache-copy serena-dashboard \
         check-if-the-agent-can-consider-this-task-completed
 
 # ─── Configuration ────────────────────────────────────────────────────
@@ -82,11 +81,6 @@ help:
 	@echo "  $(GREEN)make clean-all$(RESET)            Remove build cache + deps (destructive!)"
 	@echo "  $(GREEN)make update$(RESET)               Update dependencies"
 	@echo "  $(GREEN)make info$(RESET)                 Show project info"
-	@echo ""
-	@echo "$(BOLD)Serena (agent code intelligence)$(RESET)"
-	@echo "  $(GREEN)make serena-index$(RESET)         Pre-cache symbols for this project"
-	@echo "  $(GREEN)make serena-cache-copy$(RESET)    Copy .serena/cache to a worktree (WORKTREE=<path>)"
-	@echo "  $(GREEN)make serena-dashboard$(RESET)     Print dashboard URL"
 	@echo ""
 	@echo "$(BOLD)Completion$(RESET)"
 	@echo "  $(GREEN)make check-if-the-agent-can-consider-this-task-completed$(RESET)"
@@ -284,42 +278,6 @@ info:
 	@echo "  Commit:  $$(git rev-parse --short HEAD 2>/dev/null || echo 'N/A')"
 	@echo "  Tree:    $$(git status --porcelain | wc -l | tr -d ' ') uncommitted changes"
 	@echo "  Port:    $(PORT)"
-
-# ─── Serena (agent code intelligence) ────────────────────────────────
-# Wraps the Serena MCP server's project-level commands so agents and
-# operators can pre-warm caches and reach the dashboard without
-# remembering the full uvx invocation. See
-# serena/references/protocol.md for full details.
-
-## serena-index: Pre-cache symbols for the current project
-serena-index:
-	@echo "$(CYAN)Indexing project for Serena...$(RESET)"
-	@uvx --from git+https://github.com/oraios/serena serena project index . \
-		|| { echo "$(RED)Serena index failed — is uvx installed?$(RESET)"; exit 1; }
-	@echo "$(GREEN)Index ready at .serena/cache/$(RESET)"
-
-## serena-cache-copy: Copy .serena/cache to a worktree (avoids re-indexing)
-serena-cache-copy:
-	@if [ -z "$(WORKTREE)" ]; then \
-		echo "$(RED)Usage: make serena-cache-copy WORKTREE=<path>$(RESET)"; \
-		exit 1; \
-	fi
-	@if [ ! -d ".serena/cache" ]; then \
-		echo "$(YELLOW)No .serena/cache here — run 'make serena-index' first.$(RESET)"; \
-		exit 1; \
-	fi
-	@if [ ! -d "$(WORKTREE)" ]; then \
-		echo "$(RED)Worktree path '$(WORKTREE)' does not exist.$(RESET)"; \
-		exit 1; \
-	fi
-	@mkdir -p "$(WORKTREE)/.serena"
-	@cp -r .serena/cache "$(WORKTREE)/.serena/cache"
-	@echo "$(GREEN)Cache copied → $(WORKTREE)/.serena/cache$(RESET)"
-
-## serena-dashboard: Print Serena dashboard URL (default localhost:24282)
-serena-dashboard:
-	@echo "$(CYAN)Serena dashboard:$(RESET) http://localhost:24282/dashboard/index.html"
-	@echo "$(YELLOW)(port increments if multiple instances are running)$(RESET)"
 
 # ─── Required-files + commit-surface gates ──────────────────────────
 

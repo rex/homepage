@@ -44,6 +44,7 @@ import argparse
 import hashlib
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import NoReturn
@@ -59,6 +60,7 @@ _X = "\033[0m" if _TTY else ""
 VERBATIM_SCRIPTS = (
     "check_architecture.py", "check_module_rules.py", "check_docs.py",
     "check_version_bumped.py", "bump_version.py", "sync_skeleton.py",
+    "stamp_skill.py", "check_skills.py",
 )
 
 # Verbatim .claude/ directories: every file the skeleton ships in each
@@ -85,6 +87,9 @@ ADVISORY = {
 # never a heuristic — a repo-local file is never deleted by guesswork.
 RETIRED = (
     ".claude/hooks/pre-compact.sh",
+    ".claude/hooks/serena-gate.sh",
+    ".claude/hooks/serena-required.sh",
+    ".claude/rules/serena.md",
 )
 
 SKELETON_CANDIDATES = (
@@ -194,6 +199,36 @@ def autopush_state(repo: Path, skeleton: Path) -> str:
     return "foreign"
 
 
+def _stamp_self(repo: Path, skeleton: Path, version: str) -> None:
+    """Record agentic-skeleton in the repo's VIBE.yaml/WORKSPACE.yaml
+    `skills:` provenance (source: sync). Best-effort — a stamp failure
+    never fails the sync. The unify decision: one provenance record for
+    every skill, agentic-skeleton included, alongside skeleton-version."""
+    target = next((repo / n for n in ("VIBE.yaml", "WORKSPACE.yaml")
+                   if (repo / n).is_file()), None)
+    if target is None:
+        return
+    stamp = skeleton / "scripts" / "stamp_skill.py"
+    if not stamp.is_file():
+        return
+    runner = ["uv", "run"] if shutil.which("uv") else [sys.executable]
+    try:
+        r = subprocess.run(
+            runner + [str(stamp), "agentic-skeleton", "--version", version,
+                      "--source", "sync", "--file", target.name,
+                      "--root", str(repo)],
+            check=False, capture_output=True, text=True,
+        )
+        if r.returncode == 0:
+            print(f"  {_G}stamped{_X} agentic-skeleton@{version} → "
+                  f"{target.name} provenance")
+        else:
+            print(f"{_Y}⚠ provenance stamp skipped "
+                  f"({(r.stderr or '').strip() or 'error'}){_X}")
+    except OSError as exc:
+        print(f"{_Y}⚠ provenance stamp skipped: {exc}{_X}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(
         description="Sync a repo's skeleton-owned files.")
@@ -281,6 +316,7 @@ def main() -> int:
                   f"auto-push hook in the parent repo.{_X}")
         (repo / ".claude").mkdir(exist_ok=True)
         (repo / ".claude" / "skeleton-version").write_text(version + "\n")
+        _stamp_self(repo, skeleton, version)
         if advisory_drift:
             print(f"{_Y}⚠ {len(advisory_drift)} advisory file(s) differ — "
                   f"reconcile by hand, NOT auto-copied:{_X}")

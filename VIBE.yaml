@@ -14,7 +14,8 @@ workflow:
   signed_commits_required: true
   push_after_each_commit_if_remote_exists: true
   validation_command: make validate
-  final_verification_command: make check-if-the-agent-can-consider-this-task-completed
+  final_verification_command: make
+    check-if-the-agent-can-consider-this-task-completed
   ask_before_dockerizing: true
 
 quality_gates:
@@ -33,11 +34,11 @@ quality_gates:
     command: make typecheck
   tests:
     mode: deferred
-    command: null
+    command:
     required_suites: []
     coverage:
       enabled: false
-      minimum_percentage: null
+      minimum_percentage:
   clean_worktree_required_on_completion: true
 
 architecture:
@@ -82,3 +83,8 @@ versioning:
   bump_required_per_commit: false
   changelog_path: CHANGELOG.md
   tag_prefix: "v"
+skills:
+  - id: agentic-skeleton
+    version: "0.47.0"
+    applied: '2026-09-03'
+    source: sync

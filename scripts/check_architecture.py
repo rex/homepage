@@ -63,7 +63,7 @@ PRUNE_DIRS = frozenset({
     ".git", ".hg", ".svn", "node_modules", ".venv", "venv", "env",
     "__pycache__", ".mypy_cache", ".ruff_cache", ".pytest_cache",
     ".tox", "dist", "build", "out", ".next", ".nuxt", ".svelte-kit",
-    "target", "vendor", "Pods", "Carthage", ".terraform", ".serena",
+    "target", "vendor", "Pods", "Carthage", ".terraform",
     ".claude", "coverage", ".idea", ".gradle", ".dart_tool",
 })
 

@@ -23,9 +23,8 @@
 #   "RUN DISCOVERY NOW" injection as ambient signal that loses to
 #   foreground task framing. See
 #   agentic-skeleton/references/skill-vs-slash-vs-hook.md.
-# - Gate Serena initialization. The serena-required.sh
-#   UserPromptSubmit hook does that, with a flag file
-#   (.claude/serena-initialized) to avoid repetition.
+# - Enforce anything. Every line it injects is ambient orientation.
+#   For per-prompt hard enforcement, use a UserPromptSubmit hook.
 #
 # Hook event semantics:
 # - SessionStart fires on `startup | resume | clear` exactly once.
@@ -36,28 +35,12 @@
 # References:
 # - ~/.claude/skills/agentic-skeleton/references/skill-vs-slash-vs-hook.md (the triad)
 # - ~/.claude/skills/agentic-skeleton/references/claude-code-skill-loading.md::§8 (hooks)
-# - ~/.claude/skills/serena/references/protocol.md (full Serena protocol)
 
 set -euo pipefail
 
 cd "${CLAUDE_PROJECT_DIR:-.}"
 
 ctx="## Session orientation\n\n"
-
-# ─── Serena reminder (informational) ───────────────────────────────────
-# Per-prompt enforcement is in serena-required.sh; this is just
-# orientation in case the user opens a session and starts working
-# without having initialized Serena.
-
-if [ -f .mcp.json ] && grep -q '"serena"' .mcp.json 2>/dev/null; then
-  if [ ! -f .claude/serena-initialized ]; then
-    ctx+="### Serena (not yet initialized this session)\n"
-    ctx+="The serena-required UserPromptSubmit hook will warn you on the next prompt with the exact ToolSearch + initialization sequence. You can also run \`/scaffold\` or \`/retrofit\` for a guided setup, or initialize directly per ~/.claude/skills/serena/references/protocol.md. Symbolic edits via Serena are the default substrate; use built-in Read/Edit/Glob/Grep on code only after init.\n\n"
-  else
-    ctx+="### Serena initialized\n"
-    ctx+="Use Serena's symbolic tools (find_symbol, replace_symbol_body, search_for_pattern) as the default substrate for code work.\n\n"
-  fi
-fi
 
 # ─── Standing rules (always injected — soft compliance) ───────────────
 
@@ -73,7 +56,10 @@ ctx+="5. **Operational policy comes from the user explicitly.** When you encount
 
 ctx+="### Repo state\n"
 ctx+="Branch: $(git branch --show-current 2>/dev/null || echo 'detached')\n"
-ctx+="Uncommitted: $(git status --porcelain 2>/dev/null | wc -l | tr -d ' ') files\n\n"
+# The `|| true` subshell is load-bearing: under `set -euo pipefail` a
+# not-yet-`git init`ed directory (the /scaffold Step 0 case) would otherwise
+# kill the whole hook with git's exit 128 and inject nothing.
+ctx+="Uncommitted: $( (git status --porcelain 2>/dev/null || true) | wc -l | tr -d ' ') files\n\n"
 
 # ─── Skeleton currency (informational) ────────────────────────────────
 # Surfaces drift between this repo's skeleton-owned files (gate scripts,

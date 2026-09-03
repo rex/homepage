@@ -1,6 +1,7 @@
 ---
-description: Python-specific code rules (loaded when .py files are being edited)
-globs: ["**/*.py"]
+description: Python-specific code rules (path-scoped: loads only when .py files are being edited)
+paths:
+  - "**/*.py"
 ---
 
 # Python rules

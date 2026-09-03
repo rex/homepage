@@ -62,14 +62,7 @@ infra/          — CDK app (TypeScript) — S3 + CloudFront + Route 53
 1. Read this file.
 2. Read `CONVENTIONS.md` (if present) before editing code.
 3. Check `MAP.md` (if present) for the module you're touching.
-4. If `.mcp.json` declares `serena`: the FIRST tool calls of the session
-   are `mcp__serena__initial_instructions` →
-   `mcp__serena__check_onboarding_performed` →
-   (`mcp__serena__onboarding` OR `mcp__serena__list_memories`). Use
-   Serena's symbolic tools (`find_symbol`, `replace_symbol_body`,
-   `search_for_pattern`) over built-in `Read`/`Edit`/`Glob`/`Grep` for
-   code work. Full protocol: `.claude/rules/serena.md`.
-5. Run §3 commands before declaring a task done.
+4. Run §3 commands before declaring a task done.
 
 ## 11. When ending a session
 

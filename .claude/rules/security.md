@@ -1,6 +1,5 @@
 ---
-description: Security rules — hard stops. Applies everywhere.
-globs: ["**/*"]
+description: Security rules — hard stops. Unconditional; loads in every session.
 ---
 
 # Security rules (hard stops)

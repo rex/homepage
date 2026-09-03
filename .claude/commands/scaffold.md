@@ -32,45 +32,10 @@ What matters:
   exists, skip ALL `git checkout -b` steps and commit directly on the
   current branch.
 
-Scaffolding a fresh dir? You'll `git init` later in Step 3 — none of the
+Scaffolding a fresh dir? You'll `git init` later in Step 2 — none of the
 above applies yet.
 
-## Step 1 — Initialize Serena (REQUIRED FIRST ACTION)
-
-Serena's tools are **deferred** in Claude Code (their JSONSchema
-definitions aren't preloaded). Two-step initialization is required —
-ToolSearch fetches the schemas, THEN call the tools. Run this first:
-
-```
-ToolSearch(query="select:mcp__serena__initial_instructions,mcp__serena__check_onboarding_performed,mcp__serena__list_memories,mcp__serena__onboarding,mcp__serena__write_memory,mcp__serena__activate_project,mcp__serena__find_symbol,mcp__serena__get_symbols_overview,mcp__serena__search_for_pattern,mcp__serena__replace_symbol_body,mcp__serena__insert_before_symbol,mcp__serena__insert_after_symbol")
-```
-
-Then in order:
-
-1. `mcp__serena__initial_instructions` — fetches the dynamically-composed
-   Serena Instructions Manual for this context + modes.
-2. `mcp__serena__check_onboarding_performed`.
-3. If onboarding not done: `mcp__serena__onboarding`. Follow its prompt
-   to gather project purpose, tech stack, code style/conventions,
-   task-completion commands, codebase structure. Write each as a
-   separate memory via `mcp__serena__write_memory`.
-4. If onboarding done: `mcp__serena__list_memories`, read what's
-   relevant.
-
-Once `mcp__serena__initial_instructions` succeeds, write the flag file
-to disable the per-prompt warning hook:
-
-```
-mkdir -p .claude && touch .claude/serena-initialized
-```
-
-Skip this step ONLY if `.mcp.json` does not declare `serena` (e.g.
-the very first run before `.mcp.json` exists). The
-`bootstrap_greenfield.py` script lays it down; once it's there, the
-serena-required UserPromptSubmit hook will keep prompting until
-initialization completes.
-
-## Step 2 — Discovery (inline)
+## Step 1 — Discovery (inline)
 
 Ask only what you can't answer from context (fresh dir = ask all of
 Q1–Q5). Persist answers to `.claude/session-context.md` at the end.
@@ -81,7 +46,7 @@ Q1–Q5). Persist answers to `.claude/session-context.md` at the end.
   thing.
 - b) **Just a question / chat** — exit `/scaffold`, answer.
 - c) **Iterate on existing agent-collab project** — read existing
-  `VIBE.yaml`, skip to Step 4.
+  `VIBE.yaml`, skip to Step 3.
 - d) **Retrofit existing repo** — exit `/scaffold`; tell user to run
   `/retrofit`.
 - e) **New greenfield project** — continue with Q2–Q5.
@@ -143,7 +108,7 @@ fast_path: false
 <q5 if provided>
 ```
 
-## Step 3 — Run the bootstrap script
+## Step 2 — Run the bootstrap script
 
 ```
 ~/.claude/skills/agentic-skeleton/scripts/bootstrap_greenfield.py <target-dir>
@@ -154,8 +119,9 @@ The script handles steps 2–13 + 21 of the 22-step bootstrap sequence
 directory structure, root AGENTS.md + VIBE.yaml + CLAUDE.md/GEMINI.md
 symlinks, TASK_STATE.md, README.md, CHANGELOG.md, VERSION, Makefile,
 .gitignore (universal tooling stub — see `.gitignore` handling in
-Step 5), .claude/ config (hooks chmod +x, settings.json, .mcp.json,
-agents, commands, rules).
+Step 4), .claude/ config (hooks chmod +x, settings.json, .mcp.json,
+agents, commands, rules), scripts/mcp/op-headers.sh (chmod +x — the
+`headersHelper` both remote MCP servers call).
 
 If the target dir already has files, the script merges rather than
 overwriting; review the diff before committing. `maybe_seed_gitignore`
@@ -163,7 +129,7 @@ is idempotent — running it against a target that already has a
 `.gitignore` (e.g. one a lang-* skill wrote first) appends only the
 missing universal tooling lines, never duplicates.
 
-## Step 4 — Hand-edits (the things scripts can't do)
+## Step 3 — Hand-edits (the things scripts can't do)
 
 Walk the user through the agent-decision steps the script can't
 automate (steps 1, 14, 15, 19, 20, 22):
@@ -184,7 +150,7 @@ automate (steps 1, 14, 15, 19, 20, 22):
   `lang-docker` patterns. If declined, set
   `VIBE.yaml.deployment.dockerized: false`.
 
-## Step 5 — Layer in stack-specific scaffolding
+## Step 4 — Layer in stack-specific scaffolding
 
 Based on Q2:
 - Python / FastAPI → invoke `lang-python` patterns: `pyproject.toml`
@@ -203,18 +169,18 @@ content (e.g. mentioning `pyproject.toml` triggers `lang-python`).
 If a stack skill doesn't load, suggest the slash invocation
 (`/lang-python`) explicitly.
 
-**`.gitignore` discipline.** Step 3 lays down the universal tooling
-stub (`.serena/`, `.task_state_history/`, `.claude/serena-initialized`)
-from `templates/greenfield/.gitignore`. When a lang-* skill contributes
-stack-specific entries (Python `__pycache__/`, Node `node_modules/`,
-etc.), **append to the existing `.gitignore` — never overwrite it**.
-The universal stanza must remain or the `serena-required.sh`
-UserPromptSubmit hook's flag file shows up as untracked and trips
-`stop-gate.sh`. If you accidentally clobber the file, re-run
+**`.gitignore` discipline.** Step 2 lays down the universal tooling
+stub (`.task_state_history/`) from `templates/greenfield/.gitignore`.
+When a lang-* skill contributes stack-specific entries (Python
+`__pycache__/`, Node `node_modules/`, etc.), **append to the existing
+`.gitignore` — never overwrite it**. The universal stanza must remain
+or local tooling output shows up as untracked and trips `stop-gate.sh`
+(Check 2 blocks on any dirty tree). If you accidentally clobber the
+file, re-run
 `bootstrap_greenfield.py` against the target — its `maybe_seed_gitignore`
 step is idempotent and will re-append any missing universal lines.
 
-## Step 6 — First commit + push
+## Step 5 — First commit + push
 
 ```
 git add -A
@@ -245,7 +211,7 @@ rm /tmp/commit-msg
 `git commit -F <file>` reads the message from the file; bash-guard sees
 only the file path, not the message contents.
 
-## Step 7 — Verify
+## Step 6 — Verify
 
 - `make validate` passes.
 - `make check-if-the-agent-can-consider-this-task-completed` passes.
@@ -258,7 +224,5 @@ only the file path, not the message contents.
   greenfield order with script-vs-agent ownership column.
 - `~/.claude/skills/agentic-skeleton/references/skill-vs-slash-vs-hook.md` — why this
   is a slash command, not a skill cascade.
-- `~/.claude/skills/serena/references/protocol.md` — full Serena
-  required-first-action protocol.
 - `~/.claude/skills/agentic-skeleton/references/ask-first-checklist.md` — when ASKING
   is the right call (steps 1, 19, 20 above).

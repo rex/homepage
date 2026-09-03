@@ -1,6 +1,10 @@
 ---
-description: Ansible-specific rules (loaded when Ansible files are being edited)
-globs: ["ansible/**", "playbooks/**", "roles/**", "inventories/**"]
+description: Ansible-specific rules (path-scoped: loads only when Ansible files are being edited)
+paths:
+  - "ansible/**"
+  - "playbooks/**"
+  - "roles/**"
+  - "inventories/**"
 ---
 
 # Ansible rules

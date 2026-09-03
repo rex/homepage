@@ -12,7 +12,8 @@ Behavior:
        patch: X.Y.Z+1
   3. Writes the new VERSION.
   4. Inserts a new `## [X.Y.Z] — YYYY-MM-DD — Agent: <name>` header
-     above any existing `## [` block in CHANGELOG.md (creates CHANGELOG
+     above the FIRST existing `## [` heading in CHANGELOG.md — semver or
+     date-based alike, fenced code examples excluded (creates CHANGELOG
      if missing). If --changelog-note is given, places a matching bullet
      under "### Changed" (or Fixed/Added/Removed if the note starts with
      a recognized keyword).
@@ -59,22 +60,22 @@ follows [Semantic Versioning](https://semver.org/) and
 """
 
 
-def err(msg: str) -> None:
+def _err(msg: str) -> None:
     print(f"{_R}ERROR:{_X} {msg}", file=sys.stderr)
 
 
-def warn(msg: str) -> None:
+def _warn(msg: str) -> None:
     print(f"{_Y}WARN:{_X} {msg}", file=sys.stderr)
 
 
-def ok(msg: str) -> None:
+def _ok(msg: str) -> None:
     print(f"{_G}✓{_X} {msg}")
 
 
 def bump(current: str, level: str) -> str:
     m = SEMVER_RE.match(current)
     if not m:
-        err(f"VERSION file has non-semver content: {current}")
+        _err(f"VERSION file has non-semver content: {current}")
         sys.exit(1)
     major, minor, patch = (int(g) for g in m.groups())
     if level == "major":
@@ -83,11 +84,11 @@ def bump(current: str, level: str) -> str:
         return f"{major}.{minor + 1}.0"
     if level == "patch":
         return f"{major}.{minor}.{patch + 1}"
-    err(f"unknown bump level: {level}")
+    _err(f"unknown bump level: {level}")
     sys.exit(2)
 
 
-def section_for_note(note: str) -> str:
+def _section_for_note(note: str) -> str:
     """Choose a Keep-a-Changelog section based on note's leading verb."""
     if not note:
         return "Changed"
@@ -103,7 +104,28 @@ def section_for_note(note: str) -> str:
     return "Changed"
 
 
-def insert_changelog_block(changelog_path: Path, header: str, section: str, note: str) -> None:
+def _first_entry_offset(text: str) -> int | None:
+    """Offset of the first `## [` heading outside fenced code, else None.
+
+    Any bracketed heading counts — semver (`## [1.2.3]`) or date-based
+    (`## [2026-07-09]`), hyphen or em-dash after — so repos whose
+    CHANGELOGs use date headers get new entries at the TOP rather than
+    appended to the bottom. Fence tracking is what keeps the literal
+    `## [X.Y.Z]` template inside the code-fence example some CHANGELOGs
+    carry from matching (a bare regex would insert INSIDE the fence).
+    """
+    offset = 0
+    in_fence = False
+    for line in text.splitlines(keepends=True):
+        if line.lstrip().startswith(("```", "~~~")):
+            in_fence = not in_fence
+        elif not in_fence and line.startswith("## ["):
+            return offset
+        offset += len(line)
+    return None
+
+
+def _insert_changelog_block(changelog_path: Path, header: str, section: str, note: str) -> None:
     if changelog_path.is_file():
         text = changelog_path.read_text()
     else:
@@ -114,13 +136,9 @@ def insert_changelog_block(changelog_path: Path, header: str, section: str, note
     block_lines.append("")
     block = "\n".join(block_lines) + "\n"
 
-    # Insert above the first REAL versioned `## [N.N.N]` heading. A
-    # plain `^## \[` would match the `## [X.Y.Z]` template inside the
-    # markdown code-fence example some CHANGELOGs carry, placing new
-    # entries INSIDE the fence. Anchoring on digits skips the template.
-    m = re.search(r"^## \[\d+\.\d+\.\d+\]", text, re.MULTILINE)
-    if m:
-        text = text[: m.start()] + block + text[m.start() :]
+    pos = _first_entry_offset(text)
+    if pos is not None:
+        text = text[:pos] + block + text[pos:]
     else:
         if not text.endswith("\n"):
             text += "\n"
@@ -129,7 +147,7 @@ def insert_changelog_block(changelog_path: Path, header: str, section: str, note
     changelog_path.write_text(text)
 
 
-def bump_package_json(new_version: str) -> Path | None:
+def _bump_package_json(new_version: str) -> Path | None:
     """Update package.json's top-level "version" field if present.
 
     Returns the path that was rewritten, or None if package.json is
@@ -147,13 +165,13 @@ def bump_package_json(new_version: str) -> Path | None:
         count=1,
     )
     if n == 0:
-        warn("package.json present but has no semver version field — skipping")
+        _warn("package.json present but has no semver version field — skipping")
         return None
     pkg_path.write_text(new_text)
     return pkg_path
 
 
-def stage_in_git(*paths: Path) -> bool:
+def _stage_in_git(*paths: Path) -> bool:
     try:
         subprocess.run(
             ["git", "rev-parse", "--git-dir"],
@@ -177,30 +195,30 @@ def main() -> int:
     version_file = Path("VERSION")
     if not version_file.is_file():
         version_file.write_text("0.1.0\n")
-        warn("VERSION file missing — seeded at 0.1.0")
+        _warn("VERSION file missing — seeded at 0.1.0")
 
     current = version_file.read_text().strip()
     new = bump(current, args.level)
     version_file.write_text(f"{new}\n")
-    ok(f"VERSION: {current} → {new}")
+    _ok(f"VERSION: {current} → {new}")
 
     today = datetime.date.today().isoformat()
     header = f"## [{new}] — {today} — Agent: {args.agent}"
-    section = section_for_note(args.changelog_note)
+    section = _section_for_note(args.changelog_note)
     changelog = Path("CHANGELOG.md")
-    insert_changelog_block(changelog, header, section, args.changelog_note)
-    ok(f"CHANGELOG: wrote header {header}")
+    _insert_changelog_block(changelog, header, section, args.changelog_note)
+    _ok(f"CHANGELOG: wrote header {header}")
 
-    pkg = bump_package_json(new)
+    pkg = _bump_package_json(new)
     if pkg is not None:
-        ok(f"package.json: version → {new}")
+        _ok(f"package.json: version → {new}")
 
     staged_paths = [version_file, changelog]
     if pkg is not None:
         staged_paths.append(pkg)
-    if stage_in_git(*staged_paths):
+    if _stage_in_git(*staged_paths):
         names = " + ".join(p.name for p in staged_paths)
-        ok(f"staged {names}")
+        _ok(f"staged {names}")
 
     print(f"\n{_G}New version:{_X} {new}")
     return 0

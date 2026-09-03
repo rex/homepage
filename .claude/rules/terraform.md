@@ -1,6 +1,8 @@
 ---
-description: Terraform-specific rules (loaded when .tf / .tfvars files are being edited)
-globs: ["**/*.tf", "**/*.tfvars"]
+description: Terraform-specific rules (path-scoped: loads only when .tf / .tfvars files are being edited)
+paths:
+  - "**/*.tf"
+  - "**/*.tfvars"
 ---
 
 # Terraform rules

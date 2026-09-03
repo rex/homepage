@@ -8,6 +8,8 @@
 #      (delegates to check_architecture.py + check_module_rules.py)
 #   5. Lint gate — make lint, when quality_gates.lint.required
 #   6. Typecheck gate — make typecheck, when quality_gates.typecheck.required
+#   7. Tests gate — make test on uncommitted/unpushed changes matching
+#      quality_gates.tests.stop_gate_globs (opt-in; absent = check skipped)
 #
 # Fires on: Stop
 # Reads:    JSON from stdin (includes stop_hook_active to prevent loops)
@@ -190,6 +192,60 @@ if [ -f VIBE.yaml ] && [ "$(gate_required typecheck)" = "true" ]; then
   TC_OUT=$(make typecheck 2>&1) || block "Typecheck gate failed (make typecheck). quality_gates.typecheck.required is true — resolve before stopping:
 
 ${TC_OUT}"
+fi
+
+# --- Check 7: tests on unfinished code changes (opt-in via VIBE.yaml) ---
+# Opt-in ONLY: quality_gates.tests.stop_gate_globs is a list of git
+# pathspecs (e.g. ["*.swift"]). Absent or empty means this check never
+# runs — which is every repo that has not opted in. When it IS set and
+# quality_gates.tests.mode is `required`, uncommitted or unpushed changes
+# matching those pathspecs must clear `make test` (which carries the
+# coverage sub-gate) before the session may stop. Pushed work already
+# passed `make validate` in the committing flow, so a clean, fully-pushed
+# tree skips the run.
+if [ -f VIBE.yaml ] && command -v python3 >/dev/null 2>&1; then
+  STOP_GATE_GLOBS=$(python3 -c "
+import yaml
+try:
+    d = yaml.safe_load(open('VIBE.yaml')) or {}
+    t = ((d.get('quality_gates') or {}).get('tests') or {})
+    if t.get('mode') == 'required':
+        for g in (t.get('stop_gate_globs') or []):
+            g = str(g).strip()
+            if g:
+                print(g)
+except Exception:
+    pass
+" 2>/dev/null || echo "")
+
+  if [ -n "$STOP_GATE_GLOBS" ]; then
+    TEST_PATHSPECS=()
+    while IFS= read -r pathspec; do
+      if [ -n "$pathspec" ]; then
+        TEST_PATHSPECS+=("$pathspec")
+      fi
+    done <<< "$STOP_GATE_GLOBS"
+
+    TEST_PENDING=""
+    if [ "${#TEST_PATHSPECS[@]}" -gt 0 ]; then
+      if ! git diff --quiet -- "${TEST_PATHSPECS[@]}" 2>/dev/null \
+          || ! git diff --cached --quiet -- "${TEST_PATHSPECS[@]}" 2>/dev/null; then
+        TEST_PENDING="working-tree"
+      elif git rev-parse --abbrev-ref '@{upstream}' >/dev/null 2>&1 \
+          && [ -n "$(git diff --name-only '@{upstream}'...HEAD -- "${TEST_PATHSPECS[@]}" 2>/dev/null)" ]; then
+        TEST_PENDING="unpushed-commits"
+      fi
+    fi
+
+    if [ -n "$TEST_PENDING" ]; then
+      if [ ! -f Makefile ] || ! command -v make >/dev/null 2>&1; then
+        block "Tests gate cannot run: Makefile or 'make' is missing while quality_gates.tests.mode is required and quality_gates.tests.stop_gate_globs is set. A gate that cannot run is not a passing gate — restore the standard Makefile."
+      fi
+      TEST_OUT=$(make test 2>&1) || block "Tests gate failed (make test) with ${TEST_PENDING} changes matching quality_gates.tests.stop_gate_globs. quality_gates.tests.mode is required — resolve before stopping:
+
+$(echo "${TEST_OUT}" | tail -30)"
+    fi
+  fi
 fi
 
 # All clear — allow stop.

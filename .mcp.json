@@ -1,22 +1,6 @@
 {
   "$schema": "https://modelcontextprotocol.io/schema/v1/mcp.json",
   "mcpServers": {
-    "serena": {
-      "command": "uvx",
-      "args": [
-        "--from",
-        "git+https://github.com/oraios/serena",
-        "serena",
-        "start-mcp-server",
-        "--context",
-        "agent",
-        "--project",
-        "."
-      ],
-      "env": {
-        "MCP_TIMEOUT": "60000"
-      }
-    },
     "context7": {
       "command": "npx",
       "args": [

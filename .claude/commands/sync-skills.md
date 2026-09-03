@@ -65,8 +65,6 @@ Directories in scope: `.claude/hooks/`, `.claude/rules/`,
 
 ## After syncing
 
-If `serena-required.sh` was updated, delete the session flag so the
-updated instructions take effect on the next prompt:
-```bash
-rm -f .claude/serena-initialized
-```
+Hook changes take effect on the next session — `settings.json` wiring is
+read at session start, so restart the session (or `/clear`) before
+relying on an updated hook.
