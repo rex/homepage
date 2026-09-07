@@ -65,6 +65,7 @@ PRUNE_DIRS = frozenset({
     ".tox", "dist", "build", "out", ".next", ".nuxt", ".svelte-kit",
     "target", "vendor", "Pods", "Carthage", ".terraform",
     ".claude", "coverage", ".idea", ".gradle", ".dart_tool",
+    ".uv-cache", ".uv", ".serena", ".agentic",
 })
 
 
