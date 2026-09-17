@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terminal Mirage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #0C0F1A;
+      --tungsten: #282C34;
+      --laser-blue: #3AF3FF;
+      --acid-green: #B4FF3A;
+      --offwhite: #F5F7FA;
+      --font-heading: 'Work Sans', 'Helvetica Neue', Arial, sans-serif;
+      --font-body: 'IBM Plex Mono', 'Input Mono', 'SFMono-Regular', Menlo, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 15% 20%, rgba(58, 243, 255, 0.08), transparent 45%),
+                  radial-gradient(circle at 80% 10%, rgba(180, 255, 58, 0.08), transparent 40%),
+                  repeating-linear-gradient(180deg, rgba(40, 44, 52, 0.25) 0, rgba(12, 15, 26, 0.45) 2px, rgba(12, 15, 26, 0.45) 8px),
+                  var(--navy);
+      color: var(--offwhite);
+      font-family: var(--font-body);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(58, 243, 255, 0.03) 0, rgba(58, 243, 255, 0.06) 1px, transparent 1px, transparent 4px),
+                  linear-gradient(rgba(40, 44, 52, 0.35) 0, rgba(40, 44, 52, 0.35) 1px, transparent 1px, transparent 3px);
+      background-size: 4px 100%, 100% 4px;
+      mix-blend-mode: screen;
+    }
+
+    main {
+      width: min(1100px, 94vw);
+      padding: clamp(2rem, 3vw, 4rem) 0 6rem;
+      display: grid;
+      gap: clamp(1.5rem, 2vw, 2.5rem);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    header {
+      width: min(1100px, 94vw);
+      margin-top: clamp(2rem, 4vw, 4rem);
+      padding: clamp(2rem, 3vw, 3.5rem);
+      border: 1px solid rgba(58, 243, 255, 0.45);
+      border-radius: 18px;
+      background: rgba(12, 15, 26, 0.75);
+      box-shadow: 0 0 12px rgba(58, 243, 255, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "// SYSTEM LINKED";
+      position: absolute;
+      top: 1.25rem;
+      right: 1.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: rgba(58, 243, 255, 0.55);
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      font-family: var(--font-heading);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin: 0;
+      color: var(--offwhite);
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 4vw, 4rem);
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      margin: 0.5rem 0 0;
+      color: rgba(245, 247, 250, 0.8);
+      max-width: 60ch;
+      line-height: 1.6;
+    }
+
+    .mono-divider {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      color: rgba(180, 255, 58, 0.7);
+      display: inline-block;
+    }
+
+    .panel {
+      position: relative;
+      background: linear-gradient(135deg, rgba(40, 44, 52, 0.9), rgba(12, 15, 26, 0.85));
+      border: 1px solid rgba(58, 243, 255, 0.35);
+      border-radius: 16px;
+      padding: clamp(1.5rem, 2.5vw, 2rem);
+      box-shadow: 0 0 10px rgba(58, 243, 255, 0.12);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 280px;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(58, 243, 255, 0.15), transparent 50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .panel.booted {
+      animation: boot-up 0.9s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    }
+
+    .panel:hover::before,
+    .panel:focus-within::before {
+      opacity: 1;
+    }
+
+    .panel:hover,
+    .panel:focus-within {
+      border-color: rgba(180, 255, 58, 0.85);
+      box-shadow: 0 0 18px rgba(58, 243, 255, 0.2), 0 0 12px rgba(180, 255, 58, 0.2);
+    }
+
+    .panel h2 {
+      font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+      color: var(--laser-blue);
+    }
+
+    .panel p {
+      margin: 0;
+      line-height: 1.7;
+      color: rgba(245, 247, 250, 0.78);
+    }
+
+    .panel footer {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: rgba(180, 255, 58, 0.7);
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(58, 243, 255, 0.4);
+      background: rgba(12, 15, 26, 0.6);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(245, 247, 250, 0.85);
+    }
+
+    .data-stream {
+      display: grid;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+
+    .data-stream span {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(245, 247, 250, 0.6);
+    }
+
+    .data-stream span::before {
+      content: attr(data-label);
+      color: rgba(180, 255, 58, 0.7);
+      letter-spacing: 0.2em;
+      margin-right: 1rem;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .timeline-item {
+      border-left: 2px solid rgba(58, 243, 255, 0.5);
+      padding-left: 1rem;
+    }
+
+    .timeline-item strong {
+      color: var(--acid-green);
+    }
+
+    @keyframes boot-up {
+      0% {
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+        filter: blur(4px);
+      }
+      60% {
+        filter: blur(0);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes flicker {
+      0%, 100% { box-shadow: 0 0 12px rgba(58, 243, 255, 0.15); }
+      45% { box-shadow: 0 0 16px rgba(180, 255, 58, 0.25); }
+      55% { box-shadow: 0 0 18px rgba(58, 243, 255, 0.3); }
+    }
+
+    .panel.flicker {
+      animation: flicker 2.4s ease-in-out infinite;
+    }
+
+    footer.status-bar {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: rgba(12, 15, 26, 0.92);
+      border-top: 1px solid rgba(58, 243, 255, 0.4);
+      padding: 0.65rem clamp(1.5rem, 4vw, 4rem);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .status-bar strong {
+      color: var(--laser-blue);
+    }
+
+    .status-ready {
+      color: var(--acid-green);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .status-indicator {
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 50%;
+      background: var(--acid-green);
+      box-shadow: 0 0 10px rgba(180, 255, 58, 0.8);
+      animation: blink 1s steps(2, end) infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .panel,
+      .panel.booted,
+      .panel.flicker,
+      .status-indicator {
+        animation: none !important;
+        transition: none !important;
+      }
+      .panel {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    a:focus-visible {
+      outline: 2px dashed var(--laser-blue);
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 720px) {
+      header {
+        text-align: left;
+      }
+
+      header::after {
+        position: static;
+        display: block;
+        margin-top: 1rem;
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="panel booted" style="opacity:1; transform:none;">
+    <h1>Terminal Mirage</h1>
+    <p>A speculative control room where glitch art meets mission-critical systems. Navigate luminous panes, decode digital echoes, and witness creative anomalies rendered in Midnight Synth hues.</p>
+    <span class="mono-divider">==== &gt; SIGNAL TRACE: 001 &lt; ====</span>
+  </header>
+
+  <main>
+    <section class="panel" tabindex="0">
+      <h2>Project Vector // Mirage Nodes</h2>
+      <p>Interactive sculptures projected as holographic terminals. Each node pulses with generative patterns that respond to ambient soundscapes, translating frequency into neon vector lattices.</p>
+      <div class="tags">
+        <span class="tag">Generative</span>
+        <span class="tag">Sound Reactive</span>
+        <span class="tag">XR Installation</span>
+      </div>
+      <footer>
+        <span>Protocol: VX-87</span>
+        <span>Live Feed &rarr;</span>
+      </footer>
+    </section>
+
+    <section class="panel" tabindex="0">
+      <h2>Field Notes // Desert Resonance</h2>
+      <p>Capturing mirages across nocturnal dunes using LIDAR sweeps. Outputs are remixed into layered ASCII topographies that shimmer like heat-haze over the terminal grid.</p>
+      <div class="data-stream">
+        <span data-label="SCAN">07°22' N | 45°10' E</span>
+        <span data-label="NOISE">-34 dB :: Stable</span>
+        <span data-label="OUTPUT">ASCII Mesh v2.3</span>
+      </div>
+    </section>
+
+    <section class="panel" tabindex="0">
+      <h2>Relay // Visual Systems Lab</h2>
+      <p>A remote laboratory where artists collaborate with machine vision algorithms. Visual datasets refract into prismatic palettes, choreographed through modular command lines.</p>
+      <div class="tags">
+        <span class="tag">AI Vision</span>
+        <span class="tag">Collaborative</span>
+        <span class="tag">Live Coding</span>
+      </div>
+      <footer>
+        <span>Latency: 12ms</span>
+        <span>Enter Lab &rarr;</span>
+      </footer>
+    </section>
+
+    <section class="panel" tabindex="0">
+      <h2>Chronology // Signal Drift</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <strong>2046.04</strong>
+          <p>Prototype console manifests in desert observatory. First confirmed spectral mirage captured.</p>
+        </div>
+        <div class="timeline-item">
+          <strong>2047.11</strong>
+          <p>Launch of Mirage Nodes public interface. Audience-triggered data loops introduced.</p>
+        </div>
+        <div class="timeline-item">
+          <strong>2048.06</strong>
+          <p>Terminal Mirage network expands to orbital lab. Zero-gravity lightfields mapped.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" tabindex="0">
+      <h2>Comm-Link // Message Buffer</h2>
+      <p>Queue your transmissions to the Mirage channel. Encryption layers shimmer as glyphs before dissolving into the data stream.</p>
+      <form>
+        <label for="handle">Handle</label>
+        <input id="handle" name="handle" type="text" placeholder="CALLSIGN" required />
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="TYPE SIGNAL..." required></textarea>
+        <button type="submit">Transmit</button>
+      </form>
+    </section>
+
+    <section class="panel" tabindex="0">
+      <h2>Diagnostics // System Metrics</h2>
+      <p>Live telemetry from Mirage subsystems, rendered as flickering readouts. All channels synchronized within tolerance.</p>
+      <div class="data-stream">
+        <span data-label="CPU">68% UTIL</span>
+        <span data-label="TEMP">42°C OPTIMAL</span>
+        <span data-label="STREAM">LAT 09ms</span>
+        <span data-label="MEM">77% ENGAGED</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="status-bar" role="status">
+    <span><strong>Terminal Mirage</strong> // Control Interface v4.6</span>
+    <span class="status-ready"><span class="status-indicator" aria-hidden="true"></span>READY</span>
+  </footer>
+
+  <script>
+    (function () {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const panels = document.querySelectorAll('main .panel');
+      if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('booted');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.2 });
+        panels.forEach(panel => observer.observe(panel));
+      } else {
+        panels.forEach(panel => panel.classList.add('booted'));
+      }
+
+      panels.forEach(panel => {
+        const delay = (Math.random() * 3 + 1).toFixed(2);
+        panel.style.setProperty('--flicker-delay', delay + 's');
+        if (!prefersReducedMotion) {
+          panel.classList.add('flicker');
+          panel.style.animationDelay = delay + 's';
+        }
+      });
+
+      const form = document.querySelector('form');
+      if (form) {
+        form.addEventListener('submit', event => {
+          event.preventDefault();
+          const handle = form.handle.value.trim();
+          const message = form.message.value.trim();
+          if (handle && message) {
+            alert('Transmission queued for ' + handle.toUpperCase());
+            form.reset();
+          }
+        });
+      }
+    })();
+  </script>
+  <style>
+    form {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    label {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: rgba(58, 243, 255, 0.85);
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea {
+      background: rgba(12, 15, 26, 0.8);
+      border: 1px solid rgba(58, 243, 255, 0.4);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--offwhite);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: 2px solid var(--laser-blue);
+      outline-offset: 2px;
+    }
+
+    button {
+      justify-self: start;
+      padding: 0.75rem 1.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(180, 255, 58, 0.9);
+      background: linear-gradient(90deg, rgba(58, 243, 255, 0.2), rgba(180, 255, 58, 0.25));
+      color: var(--offwhite);
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-family: var(--font-body);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover,
+    button:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 0 16px rgba(180, 255, 58, 0.35);
+    }
+  </style>
+</body>
+</html>
