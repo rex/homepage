@@ -18,7 +18,7 @@ ENV_FILE := .env
 CDK      := npx cdk
 LOAD_ENV := set -a; . ./$(ENV_FILE); set +a
 
-.PHONY: help check-env diff deploy deploy-site deploy-ci synth bootstrap
+.PHONY: help check-env diff deploy deploy-site deploy-ci deploy-status mint-status-key synth bootstrap
 
 help: ## Show available targets
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
@@ -40,6 +40,13 @@ deploy-site: check-env ## Deploy only PiercemooreSiteStack (S3 + CF + Route 53)
 
 deploy-ci: check-env ## Deploy only PiercemooreCiStack (deploy role + OIDC)
 	@$(LOAD_ENV); $(CDK) deploy PiercemooreCiStack
+
+# CDK_ARGS lets a reviewed, non-interactive run pass --require-approval never.
+deploy-status: check-env ## Deploy only PiercemooreStatusWriterStack (halifirien's S3 writer)
+	@$(LOAD_ENV); $(CDK) deploy PiercemooreStatusWriterStack --exclusively $(CDK_ARGS)
+
+mint-status-key: ## Mint the status writer's access key straight into 1Password (never printed)
+	@python3 scripts/mint_status_key.py
 
 synth: check-env ## Synth CloudFormation without deploying
 	@$(LOAD_ENV); $(CDK) synth

@@ -31,7 +31,31 @@ GitHub Actions (OIDC) → Deploy Role (S3 + CF only)
 - `bin/homepage.ts` — CDK app entry point
 - `lib/site-stack.ts` — S3 + CloudFront + Route 53 + access-log bucket
 - `lib/ci-stack.ts` — OIDC role for GitHub Actions deploy
+- `lib/status-writer-stack.ts` — IAM user `halifirien-status-writer`: `s3:PutObject` on `status/*` only
+- `scripts/mint_status_key.py` — `make mint-status-key`: mints that user's key straight into 1Password
 - `functions/edge.js` — CloudFront Function for routing + custom error pages
+
+## Homelab status writer (`status/`)
+
+halifirien (rex/halifirien), the homelab's beacon, PUTs `status/status.json` every 15 minutes.
+It authenticates as `halifirien-status-writer` (PiercemooreStatusWriterStack), whose only
+permission is `s3:PutObject` under `status/*`. The site deploy's `--delete` sync excludes
+`status/*` (`.github/workflows/deploy.yml`), so deploys never remove the beacon's file.
+
+The access key is not a CloudFormation resource, so its secret never lands in a template or an
+output. Two commands set it up:
+
+```sh
+make deploy-status      # the user + policy (review `make diff` first)
+make mint-status-key    # aws iam create-access-key -> op item create, on stdin; never printed
+```
+
+The key lives in 1Password at `agentic/svc-aws-halifirien-status-writer` (fields
+`access-key-id`, `secret-access-key`). The ring reads it through ExternalSecrets
+(homelab-inventory `stacks/halifirien.yml`). To rotate it:
+1. Delete the old key (`aws iam delete-access-key`) and the 1Password item.
+2. Run `make mint-status-key`.
+3. Let ExternalSecrets refresh, or restart the pod.
 
 ## Access logs
 

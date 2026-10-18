@@ -3,6 +3,7 @@ import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { SiteStack } from '../lib/site-stack';
 import { CiStack } from '../lib/ci-stack';
+import { StatusWriterStack } from '../lib/status-writer-stack';
 
 const app = new cdk.App();
 
@@ -29,6 +30,13 @@ new CiStack(app, 'PiercemooreCiStack', {
   distribution: site.distribution,
   githubRepo: 'rex/homepage',
   branches: ['main'],
+});
+
+new StatusWriterStack(app, 'PiercemooreStatusWriterStack', {
+  env,
+  description: 'IAM writer for the homelab status beacon (halifirien): PutObject on status/* only',
+  bucket: site.bucket,
+  prefix: 'status',
 });
 
 app.synth();

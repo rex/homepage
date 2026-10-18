@@ -1,3 +1,16 @@
+# Changelog
+
+## [1.1.0] — 2026-10-18 — Agent: Claude Opus 5.5
+### Added
+- **Homelab status writer** (#17, rex/halifirien#1): `PiercemooreStatusWriterStack` creates the
+  IAM user `halifirien-status-writer`, whose only permission is `s3:PutObject` on
+  `<site-bucket>/status/*`. Its key was minted with `make mint-status-key`, straight into
+  1Password `agentic/svc-aws-halifirien-status-writer`, and never printed. Before the deploy,
+  `cdk diff` showed no differences in PiercemooreSiteStack or PiercemooreCiStack.
+### Changed
+- The site deploy's `--delete` sync excludes `status/*`, so a deploy no longer removes the
+  beacon's `status/status.json` (it would have come back on the next 15-minute cycle).
+
 ## Archived from TASK_STATE.md — 2026-06-06
 
 ### Resolved blockers

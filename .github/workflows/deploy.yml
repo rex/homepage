@@ -59,13 +59,17 @@ jobs:
             --cache-control "public, max-age=31536000, immutable" \
             --delete
 
+      # status/ belongs to halifirien, the homelab beacon, which PUTs status/status.json every
+      # 15 minutes (rex/homepage#17). It is not in dist/, so without the exclude --delete would
+      # remove it on every deploy until the next beacon cycle.
       - name: Sync the rest to S3
         run: |
           aws s3 sync dist/ s3://${{ secrets.AWS_SITE_BUCKET }}/ \
             --cache-control "public, max-age=600" \
             --delete \
             --exclude "_astro/*" \
-            --exclude "fonts/*"
+            --exclude "fonts/*" \
+            --exclude "status/*"
 
       - name: Invalidate CloudFront
         run: |
