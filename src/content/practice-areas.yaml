@@ -3,7 +3,7 @@
 # Years: rough estimate, honest
 # Sparkline: 10 values between 0.0 and 1.0, representing activity over ~24 months
 # Last incident/artifact: most recent meaningful work in this domain
-# Placeholder postmortem links stub to /postmortems/[slug] — routes will 404 until v2
+# recent_link: only set it once the target page is live; /postmortems/[slug] builds nothing yet
 #
 # lead:     always-visible thesis sentence on the tile
 # expanded: the rest, revealed by the tile's "+ more" toggle
@@ -20,9 +20,8 @@ areas:
       - helm
       - argocd
     recent: "2026-03 — nyc etcd self-removal recovery"
-    recent_link: /postmortems/2026-03-nyc-etcd-self-removal
     lead: >
-      Production Kubernetes across ten-plus physical venues, managed
+      Production Kubernetes across 14 physical venues, managed
       through a central Rancher control plane in AWS.
     expanded: >
       The unglamorous day-2 work is the job: RKE1 to RKE2 migration,
@@ -88,7 +87,7 @@ areas:
     expanded: >
       Led a cloud cost reduction from roughly $14k/month to $5k/month
       through rightsizing, consolidation, and cleanup, with reliability
-      holding through the cut. Certified Cloud Practitioner.
+      holding through the cut.
 
   - slug: cicd-platform
     name: ci/cd & delivery
