@@ -6,6 +6,8 @@ export interface Props {
 }
 
 const { entries } = Astro.props;
+// Derived, not typed: a hand-written count went stale once already.
+const paidRoles = entries.filter((e) => e.kind !== 'volunteer').length;
 ---
 <section id="career" class="page-gutter relative pt-24 pb-16" aria-labelledby="career-heading">
   <div class="margin-mark hidden md:block" data-boot style="--boot-delay: 650ms;">
@@ -18,7 +20,7 @@ const { entries } = Astro.props;
       versions, in reverse chronological order.
     </h2>
     <p class="mt-4 text-base text-ink-muted leading-relaxed">
-      Twenty years across nine roles. The first three are expanded by default. The rest open on click.
+      Nearly twenty years across {paidRoles} roles. The first three are expanded by default. The rest open on click.
     </p>
   </header>
 

@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.1] — 2026-11-05 — Agent: Claude Opus 5.5
+### Fixed
+- Contact email is `hireme@piercemoore.com` everywhere: the contact section, humans.txt,
+  security.txt, and the vCard in `public/contact-qr.png` (regenerated).
+- Cluster count matches the résumé: 16 Kubernetes clusters across 14 venues, replacing "ten-plus".
+- The Drive Shack career entry says Pierce has been back on contract since March 2025.
+- The cloud tile no longer claims a current AWS Cloud Practitioner cert, which has lapsed.
+- The Kubernetes tile no longer links to an unbuilt postmortem page that returned a 404.
+- The career log intro says "nearly twenty years across 14 roles". The role count is now
+  derived from the data, where it had been a hand-typed "nine".
+- robots.txt disallows `/animation-lab`. The old rule had a trailing slash, which never
+  matched the slashless route.
+
 ## [1.1.0] — 2026-10-18 — Agent: Claude Opus 5.5
 ### Added
 - **Homelab status writer** (#17, rex/halifirien#1): `PiercemooreStatusWriterStack` creates the

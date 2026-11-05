@@ -1,4 +1,4 @@
-primary_email: hello@piercemoore.com
+primary_email: hireme@piercemoore.com
 
 # `kind: email` flags links the consumer must render via MailLink so the
 # address is never present in raw HTML. Other links render as generic
@@ -6,8 +6,8 @@ primary_email: hello@piercemoore.com
 links:
   - label: email
     kind: email
-    href: "mailto:hello@piercemoore.com"
-    value: hello@piercemoore.com
+    href: "mailto:hireme@piercemoore.com"
+    value: hireme@piercemoore.com
 
   - label: github
     href: "https://github.com/rex"
@@ -28,7 +28,7 @@ humans_txt: |
   /* TEAM */
 
   Engineer: Pierce Moore
-  Contact: hello [at] piercemoore.com
+  Contact: hireme [at] piercemoore.com
   GitHub: /rex
   From: Addison, TX
 
@@ -59,7 +59,7 @@ humans_txt: |
   thanks. That's on purpose.
 
 security_txt: |
-  Contact: mailto:hello@piercemoore.com
+  Contact: mailto:hireme@piercemoore.com
   Preferred-Languages: en
   Canonical: https://piercemoore.com/.well-known/security.txt
   Expires: __SECURITY_EXPIRES__

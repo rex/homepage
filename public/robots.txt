@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 Disallow: /admin/
-Disallow: /animation-lab/
+Disallow: /animation-lab
 Disallow: /this-is-only-here-to-see-real-people-vs-robots-i-am-not-logging-all-your-shit-i-promise
 
 Sitemap: https://piercemoore.com/sitemap-index.xml
