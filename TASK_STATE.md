@@ -96,6 +96,13 @@ _(none)_
 
 ## 6. Handoff note (fill when ending a session)
 
+2026-11-10 (v1.7.0, branch `feat/postmortems`): first voice pass on the three postmortem
+drafts, using Pierce's private voice corpus. Read its README.md and analysis.md first:
+`~/Documents/Codex/job-hunt-log/outputs/job-hunt/writing-voice-audit-20261104/`. Nothing
+from it gets quoted into this public repo. Facts didn't change; only the phrasing did. The
+drafts stay `draft: true` until Pierce reviews them and the CONFIRMs are resolved
+(rex/homepage#24). The whole-site voice pass is rex/homepage#25.
+
 2026-11-09 (v1.6.0, branch `feat/postmortems`, cut from `codex/implement-projects-page` @ 37fce72):
 the postmortems section is live in code. It has an MDX collection (`src/content.config.ts`,
 `src/content/postmortems/`), helpers in `src/lib/postmortems.ts`, a real `[slug].astro`

@@ -1,6 +1,6 @@
 ---
 title: The second certificate
-summary: A power surge took one venue down overnight. The power came back by morning, but the Kubernetes cluster didn't, because three unrelated failures were stacked behind it.
+summary: A power surge took one venue down overnight. The power came back by morning. The Kubernetes cluster didn't, because three unrelated failures were stacked up behind it, each one hiding the next.
 month: "2022-06"
 duration: About 15 hours of guest-facing degradation, and about 28 hours from first alert to last cleanup
 impact: Games at one venue wouldn't start for most of a business day
@@ -8,18 +8,18 @@ tags: [kubernetes, rancher, certificates, helm, rabbitmq]
 draft: true
 ---
 
-{/* Source: rex/resume campaign/incident-research/unified-incident-report.md, section 5.1 and Part 2 items 3 to 6. Anonymized: no people, places, hosts, cluster IDs or exact dates. Draft until Pierce's voice pass (rex/homepage#24). */}
+{/* Source: rex/resume campaign/incident-research/unified-incident-report.md, section 5.1 and Part 2 items 3 to 6. Anonymized: no people, places, hosts, cluster IDs or exact dates. First voice pass done against Pierce's voice corpus (rex/homepage#24); stays a draft until he reviews it and the CONFIRM below is resolved. */}
 
 ## Summary
 
 Overnight, an electrical short in game hardware at one of our venues sent a surge through the
-building and killed every UPS battery at once, so nothing shut down cleanly. Facilities had
-power back by about 7 a.m. The venue's on-prem Kubernetes cluster didn't come back with it.
+building and killed every UPS battery at once. Nothing shut down cleanly. Facilities had
+power back by about 7 a.m. The venue's on-prem Kubernetes cluster did not come back with it.
 It was an RKE cluster, managed by a central Rancher server in the cloud.
 
-That cluster ran the message bus (RabbitMQ) that starts every game from a guest's tablet. It
-also ran pricing, bay access codes and the visitor service. I was the only person working the
-Kubernetes layer, and services were back at about 9:45 that night.
+That cluster ran the message bus (RabbitMQ) that starts every game from a guest's tablet. No
+bus, no games. It also ran pricing, bay access codes and the visitor service. I was the only
+person working the Kubernetes layer. Services came back at about 9:45 that night.
 
 ## Impact
 
@@ -56,8 +56,9 @@ All times are Central.
 - **Three unrelated failures stacked on one power event.** They were an expired server
   certificate, a third-party chart repo that silently dropped old versions, and a second
   internal certificate nobody was tracking. Each one hid the next.
-- **The error message lied.** "User cannot get clusters" reads as RBAC, so I spent hours on
-  permission and network theories. Rancher's own admission webhook was failing TLS.
+- **The error message lied.** "User cannot get clusters" reads as RBAC, so I spent hours
+  chasing permission and network theories. The real problem was Rancher's own admission
+  webhook failing TLS.
 - **I was alone on the Kubernetes layer for about 18 hours.** The venue was half-open, other
   teams were fighting point of sale and the network, and the office VPN circuit was down too.
 - **There was no infrastructure as code for venue clusters.** That work had been deferred, so
@@ -65,11 +66,12 @@ All times are Central.
 
 ## The turn
 
-At one point Rancher wouldn't let an admin delete even a user or a cluster object. From then
-on the problem couldn't be permissions, because the admin account couldn't do anything
-anywhere. That moved me from "who is allowed to do this" to "what sits in the request path
-and can say no." In Rancher, that's the validating admission webhook. Its serving certificate
-was a second one-year certificate that nobody had a reminder for.
+At one point Rancher wouldn't let an admin delete anything. Not a user, not a cluster object.
+Nothing. That's when it clicked: this couldn't be permissions, because the admin account
+couldn't do anything anywhere. So I stopped asking "who is allowed to do this?" and started
+asking "what sits in the request path and can say no?" In Rancher, that's the validating
+admission webhook. Its serving certificate was a second one-year certificate that nobody had a
+reminder for.
 
 What I wrote to the team that night:
 
@@ -91,10 +93,10 @@ What I wrote to the team that night:
 ## What I got wrong
 
 1. The Rancher server certificate lapsed even though a reminder existed. Expiry tracking was
-   a calendar habit, not monitoring.
+   a calendar habit, not monitoring, and habits lapse.
 2. I had deferred the scripted rebuild path, and that cost hours here.
 3. During cleanup the next morning I stacked a "while I'm in here" MetalLB upgrade onto a
-   system I'd only just recovered, and it caused a short second outage.
+   system I'd only just recovered. It caused a short second outage, entirely of my own making.
 
 ## What changed
 
@@ -108,7 +110,7 @@ What I wrote to the team that night:
   people that week.
 - **Infrastructure as code for venue clusters went from "someday" to required.** Two years
   later I was building venue clusters with Terraform.
-- **I don't trust third-party Helm repos I don't mirror.**
+- **I don't trust third-party Helm repos I don't mirror.** Not anymore.
 
 ## What I'd tell someone else
 

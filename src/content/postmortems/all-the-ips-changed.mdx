@@ -1,6 +1,6 @@
 ---
 title: All the IPs changed
-summary: My own overnight maintenance run took down every venue cluster in the fleet. Finding the cause was the easy part; my slowest decision was not failing over sooner.
+summary: My own overnight maintenance run took down every venue cluster in the fleet. Finding the cause was the easy part. The slowest decision I made all day was not failing over sooner.
 month: "2024-08"
 duration: About 22 hours from the change to the last venue back
 impact: Every venue was affected, and several were down through opening
@@ -8,22 +8,24 @@ tags: [kubernetes, rke2, ansible, change-management, failover]
 draft: true
 ---
 
-{/* Source: rex/resume campaign/incident-research/unified-incident-report.md, section 5.2 and Part 2 items 7 to 9. Anonymized: no people, venue names, hosts, IP ranges, make targets or exact dates. Says "Kubernetes node VMs", not "ESXi hosts" (settled). Draft until Pierce's voice pass (rex/homepage#24). */}
+{/* Source: rex/resume campaign/incident-research/unified-incident-report.md, section 5.2 and Part 2 items 7 to 9. Anonymized: no people, venue names, hosts, IP ranges, make targets or exact dates. Says "Kubernetes node VMs", not "ESXi hosts" (settled). First voice pass done against Pierce's voice corpus (rex/homepage#24); stays a draft until he reviews it and the CONFIRMs below are resolved. */}
 
 ## Context
 
-I was the only infrastructure engineer for about ten venues. Each venue ran a three-node
-RKE2 cluster on a standalone virtualization host, and a central Rancher cluster managed all
-of them. Two weeks earlier I had finished moving every venue off the cloud and onto those
-on-prem clusters. That same week we cut the cloud fleet from 51 instances to 26, and kept two
-venues' cloud clusters running as a safety net.
+I was the infrastructure engineer for about ten venues. The only one. Each venue ran a
+three-node RKE2 cluster on a standalone virtualization host, and a central Rancher cluster
+managed all of them. Two weeks earlier I'd finished moving every venue off the cloud and onto
+those on-prem clusters. That same week we cut the cloud fleet from 51 instances to 26, and
+kept two venues' cloud clusters running as a safety net.
+
+Remember that safety net. I didn't, for a while.
 
 ## What happened
 
 At 1 a.m. I ran our node-maintenance Ansible playbook against every venue at once. It ran
 `apt` with `name: "*"` and `state: latest`, plus an LVM expand, on every Ubuntu Kubernetes
-node VM in parallel. It had no `serial:` and no drain. I'd tried it on a single node the
-evening before. By morning, the venue clusters were down.
+node VM in parallel. No `serial:`. No drain. I'd tried it on a single node the evening
+before. By morning, the venue clusters were down.
 
 {/* CONFIRM (Pierce): the single-node trial the evening before exited non-zero (code 2). If this post publishes, know your answer to "was there a warning sign?" */}
 
@@ -49,9 +51,9 @@ All times are Central.
 ## What made it hard
 
 - **Ten clusters broke at the same moment.** The Rancher management plane I'd normally
-  recover them through was already degraded from the previous week, and the churn made it
+  recover them through was already degraded from the previous week, and all the churn made it
   worse.
-- **Nodes looked healthy** but wouldn't run containers, or even delete them.
+- **Nodes looked healthy.** They just wouldn't run containers. Or even delete them.
 - **I was the only person with the context to fix it,** and I was coming off a night of
   alerts.
 
@@ -59,25 +61,30 @@ All times are Central.
 
 The VMs' IP addresses had all changed. The Kubernetes nodes were on DHCP with no
 reservations, so when the upgrades restarted networking or rebooted them, they came back on
-new addresses. RKE2 node registration, etcd peer URLs, Kong upstreams and DNS were all bound
-to the old ones. That turned ten mysterious cluster failures into one cause.
+new addresses. RKE2 node registration, etcd peer URLs, Kong upstreams and DNS were all still
+pointed at the old ones. Ten mysterious cluster failures turned into one boring cause, which
+is the best kind of cause to have.
 
 {/* CONFIRM (Pierce): there are two causes on record. The day after, you said the IPs changed; four days after, that Rancher's state "got totally scrambled". This post uses the recommended framing: the IP change was the trigger, and the already-fragile management plane made recovery slow. Confirm it. */}
 
 ## The decision I'd make differently
 
 I chose to bring each cluster up on its new IPs and repoint everything at them, rather than
-re-IP every VM, because that was faster per venue. It got the first four venues back, but too
-slowly. Each venue looked one change away from coming up, and I stayed anchored on that.
+re-IP every VM, because that was faster per venue. It got the first four venues back. Slowly.
+Too slowly. Every venue looked like it was one change away from coming up, and I stayed
+anchored on that.
 
-At about 2:30 p.m. I remembered the two cloud clusters were still running. I repointed their
-DNS and then rebuilt the rest of the cloud infrastructure as a fallback. Afterwards I was told
-I should have pulled that trigger hours earlier, and that was right.
+At about 2:30 p.m. I remembered the two cloud clusters were still running. (There's that
+safety net.) I repointed their DNS and then rebuilt the rest of the cloud infrastructure as a
+fallback. Afterwards I was told I should have pulled that trigger hours earlier. They were
+right.
 
 {/* CONFIRM (Pierce): who said it. Report A says your manager; Report B says an ops lead. The post deliberately doesn't say. */}
 
-Why didn't I fail over sooner? Sunk cost, plus I didn't feel empowered to spend money on the
-cloud again. Now I set the failover criteria before I start risky work, not during it.
+Why didn't I fail over sooner? Honestly: sunk cost, plus I didn't feel empowered to spend
+money on the cloud again right after we'd finished cutting it. Now I set the failover criteria
+before I start risky work, not in the middle of it, when I'm the least objective person in the
+room.
 
 ## What changed
 
@@ -101,4 +108,5 @@ cloud again. Now I set the failover criteria before I start risky work, not duri
 - Run a preflight that asserts static addressing.
 - Run it in the window when every venue is closed, with the fallback already armed.
 
-The general rule: fleet-wide changes go canary first, then rolling. Never all at once.
+The general rule: fleet-wide changes go canary first, then rolling. Never all at once. I
+learned that one the expensive way.

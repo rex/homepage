@@ -1,6 +1,6 @@
 ---
 title: The default was latest
-summary: A storage failover broke one venue's message broker on a Saturday. My rebuild made it worse, because a version dropdown quietly defaulted to the newest chart.
+summary: A storage failover knocked one venue's message broker over on a Saturday. Then I made it worse, because a version dropdown quietly defaulted to the newest chart.
 month: "2022-11"
 duration: A Saturday afternoon, with about two hours lost before paging reached me
 impact: The venue's message broker was down until the chart was pinned back
@@ -8,42 +8,45 @@ tags: [kubernetes, rancher, helm, rabbitmq, on-call]
 draft: true
 ---
 
-{/* Source: rex/resume campaign/incident-research/unified-incident-report.md, section 5.3 and Part 2 item 10. Anonymized: no venue, vendor product names or exact dates. Draft until Pierce's voice pass (rex/homepage#24). */}
+{/* Source: rex/resume campaign/incident-research/unified-incident-report.md, section 5.3 and Part 2 item 10. Anonymized: no venue, vendor product names or exact dates. First voice pass done against Pierce's voice corpus (rex/homepage#24); stays a draft until he reviews it and the CONFIRMs below are resolved. */}
 
 {/* CONFIRM (Pierce): the start time and total duration aren't on record, and neither is the guest-facing impact. The broker is the bus that starts games, so the venue's games were probably down. Fill these in from memory. */}
 
 ## What happened
 
-On a Saturday, the venue's virtual SAN failed over, and afterwards the venue's RabbitMQ
-couldn't start. Paging didn't break through my phone's silent mode. There were 54 missed
-calls, and for about two hours nobody could reach me.
+On a Saturday, the venue's virtual SAN failed over, and when the dust settled the venue's
+RabbitMQ wouldn't start. That should have been a quick page. It wasn't, because the page
+never broke through my phone's silent mode. Fifty-four missed calls. For about two hours,
+nobody could reach me.
 
 ## How I made it worse
 
-To rebuild the broker, I removed the venue from Rancher's multi-cluster RabbitMQ app and
-added it back. Rancher's upgrade form defaults the chart version to *latest*, and I didn't
-change it. That deployed a much newer Bitnami chart that we had never tested. It failed with
-`load_definition.json` not found, and with a secret that didn't contain the key
-`rabbitmq-password`.
+To rebuild the broker, I pulled the venue out of Rancher's multi-cluster RabbitMQ app and
+added it back. Simple enough. Except Rancher's upgrade form defaults the chart version to
+*latest*, and I didn't change it. So instead of rebuilding what we had, I deployed a much
+newer Bitnami chart that we'd never tested. It failed with `load_definition.json` not found,
+and with a secret that didn't contain the key `rabbitmq-password`.
 
 {/* CONFIRM (Pierce): one source says the "secret does not contain key" error showed up at every venue, which would mean the upgrade reached the whole multi-cluster app. The other says the config matched the healthy venues. Settle whether other venues were touched. */}
 
 ## The turn
 
-At 5 p.m. I compared the broken venue's config with the healthy venues', and it was
-identical. If the config was the same, what differed had to be the version. I pinned the
-chart back to the previous version, and at 5:07 p.m. everything went green at once.
+At 5 p.m. I compared the broken venue's config with the healthy venues'. Identical. So the
+config wasn't the problem. If everything I *had* configured matched, the difference had to be
+something I hadn't: the version. I pinned the chart back to the previous version, and at
+5:07 p.m. everything went green at once.
 
 ## What changed
 
-- **Paging:** I fixed my phone's bypass settings and reworked how pages reach me.
+- **Paging:** I fixed my phone's bypass settings and reworked how pages reach me. Fifty-four
+  missed calls is a lesson you only need once.
 - **Automated health checks** on the message broker, so a broken broker pages someone instead
   of waiting to be noticed.
 - **A runbook** for rebuilding the broker.
-- **Explicit chart versions:** I always pin the chart version on Rancher app edits, and never
-  accept the form's default.
+- **Explicit chart versions:** I pin the chart version on every Rancher app edit. The form's
+  default is not a decision I get to skip.
 
 ## What I'd tell someone else
 
-When the config matches a working system, compare versions. A default in a UI is a change
-you didn't mean to make.
+When the config matches a working system, stop staring at the config and compare versions.
+And a default in a UI is still a change. It's just one you didn't mean to make.
