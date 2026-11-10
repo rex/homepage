@@ -1,23 +1,49 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { allPostmortems, formatMonth, isVisible } from '../../lib/postmortems';
+
+// Visible entries link to their page; drafts are listed as in flight, unlinked.
+const entries = await allPostmortems();
+const published = entries.filter(isVisible);
+const inFlight = entries.filter((entry) => !isVisible(entry));
 ---
 <BaseLayout
   title="Pierce Moore — Writing"
-  description="Postmortems and notes from a senior DevOps engineer. Currently archiving the inbox; new entries shipping soon."
+  description="Postmortems of real production incidents from a senior DevOps engineer: what broke, what made it hard, what changed."
 >
   <section class="page-gutter pt-32 pb-24 max-w-prose">
     <div class="label-mono mb-3">/ writing</div>
-    <h1 class="display-roman text-3xl text-ink leading-tight">postmortems and notes — coming soon.</h1>
+    <h1 class="display-roman text-3xl text-ink leading-tight">postmortems.</h1>
     <p class="mt-6 text-base text-ink-muted leading-relaxed">
-      I'm pulling postmortems forward from the last two years and rewriting the
-      ones worth sharing. They'll land here as I clear them. Pieces in flight:
+      Real production incidents I worked, written up the way I'd want to read
+      them: what broke, what made it hard, what I got wrong, what changed.
+      Names, places and hosts are scrubbed.
     </p>
-    <ul class="mt-6 space-y-3 font-mono text-sm text-ink-dim">
-      <li>· nyc etcd self-removal recovery (rke2, multi-node)</li>
-      <li>· emptyDir + postgres: how it actually fails</li>
-      <li>· venue provisioning pattern: terraform → ansible → jenkins</li>
-      <li>· ~64% aws cost reduction, in three passes</li>
-    </ul>
+    {published.length > 0 && (
+      <ul class="mt-8 space-y-6">
+        {published.map((entry) => (
+          <li>
+            <a href={`/postmortems/${entry.id}`} class="group block">
+              <div class="font-mono text-xs uppercase tracking-[0.16em] text-ink-dim">
+                {formatMonth(entry.data.month)}{entry.data.draft ? ' · draft' : ''}
+              </div>
+              <div class="mt-1 display-roman text-xl text-ink group-hover:text-accent">{entry.data.title}</div>
+              <p class="mt-1 text-sm text-ink-muted leading-relaxed">{entry.data.summary}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+    {inFlight.length > 0 && (
+      <>
+        <p class="mt-10 text-base text-ink-muted">In flight:</p>
+        <ul class="mt-4 space-y-3 font-mono text-sm text-ink-dim">
+          {inFlight.map((entry) => (
+            <li>· {entry.data.title.toLowerCase()} ({formatMonth(entry.data.month).toLowerCase()})</li>
+          ))}
+        </ul>
+      </>
+    )}
     <p class="mt-8 display-italic text-ink-muted">
       Until then, the FAQ on the home page is the static version of <q>what i think.</q>
     </p>

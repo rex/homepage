@@ -96,6 +96,15 @@ _(none)_
 
 ## 6. Handoff note (fill when ending a session)
 
+2026-11-09 (v1.6.0, branch `feat/postmortems`, cut from `codex/implement-projects-page` @ 37fce72):
+the postmortems section is live in code. It has an MDX collection (`src/content.config.ts`,
+`src/content/postmortems/`), helpers in `src/lib/postmortems.ts`, a real `[slug].astro`
+template, and `/writing` lists entries. There are three anonymized drafts (`draft: true`),
+which render under `astro dev` only. `{/* CONFIRM */}` comments in each draft are open
+questions for Pierce, so never publish one with those unresolved. Tracked in Rivendell
+rex/homepage#19 (parent), #20 to #23 (this work), and #24 (voice pass with Pierce's voice
+corpus, then publish). Same merge rule as below: nothing goes to `main` without Pierce.
+
 2026-07-16 (v1.5.1, branch `codex/implement-projects-page` @ 8a403a1 — clean, pushed) —
 **⛔ DO NOT MERGE to `main` until Pierce explicitly approves.** Portfolio + nav were
 built by a prior agent (`c45c8cc`); this session reviewed them adversarially, then

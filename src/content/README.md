@@ -22,6 +22,9 @@ Loaded via `src/lib/content.ts` using raw Vite imports. Consumers call typed acc
 - `faq.yaml` — Q&A section
 - `contact.yaml` — contact links and copy
 - `error-pages.yaml` — 404 / 5xx content served by CloudFront edge function
+- `postmortems/*.mdx` — incident write-ups; the one Astro content collection (schema in
+  `src/content.config.ts`). `draft: true` renders under `astro dev` only. Scrub people, places,
+  hosts, IPs and exact dates before anything lands here.
 
 ## Invariants
 
@@ -30,4 +33,4 @@ Loaded via `src/lib/content.ts` using raw Vite imports. Consumers call typed acc
 
 ## Gotchas
 
-- Loaded via `?raw` Vite import, not Astro content collections — schema validation is manual in `src/lib/content.ts`
+- The YAML files are loaded via `?raw` Vite import, not Astro content collections — schema validation is manual in `src/lib/content.ts`. Only `postmortems/` is a collection.

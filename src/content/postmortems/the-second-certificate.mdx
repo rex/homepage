@@ -1,0 +1,119 @@
+---
+title: The second certificate
+summary: A power surge took one venue down overnight. The power came back by morning, but the Kubernetes cluster didn't, because three unrelated failures were stacked behind it.
+month: "2022-06"
+duration: About 15 hours of guest-facing degradation, and about 28 hours from first alert to last cleanup
+impact: Games at one venue wouldn't start for most of a business day
+tags: [kubernetes, rancher, certificates, helm, rabbitmq]
+draft: true
+---
+
+{/* Source: rex/resume campaign/incident-research/unified-incident-report.md, section 5.1 and Part 2 items 3 to 6. Anonymized: no people, places, hosts, cluster IDs or exact dates. Draft until Pierce's voice pass (rex/homepage#24). */}
+
+## Summary
+
+Overnight, an electrical short in game hardware at one of our venues sent a surge through the
+building and killed every UPS battery at once, so nothing shut down cleanly. Facilities had
+power back by about 7 a.m. The venue's on-prem Kubernetes cluster didn't come back with it.
+It was an RKE cluster, managed by a central Rancher server in the cloud.
+
+That cluster ran the message bus (RabbitMQ) that starts every game from a guest's tablet. It
+also ran pricing, bay access codes and the visitor service. I was the only person working the
+Kubernetes layer, and services were back at about 9:45 that night.
+
+## Impact
+
+- Games wouldn't start for most of the business day: black tablets, and nothing on the TVs.
+- Guests got about 15 hours of degraded service after power returned. About 28 hours passed
+  between the moment I spotted the outage and the last cleanup step the next morning.
+- Point of sale, Wi-Fi and phones were broken at the same time. Other teams and vendors owned
+  those, and they muddied the picture all day.
+
+## Timeline
+
+All times are Central.
+
+| Time | What happened |
+|---|---|
+| 04:03 | The venue's virtualization host is unreachable over VPN. I flag a full venue outage. |
+| ~07:00 | Power is restored and the VMs boot, but the cluster doesn't recover. |
+| 10:17 | **Finding 1:** the Rancher server's SSL certificate expired overnight. There was a reminder for it, and this one lapsed. |
+| 10:20–10:32 | I renew the certificate and delete the dead worker nodes. The cluster re-registers, and pricing and access codes come up. RabbitMQ doesn't. |
+| 12:55 | **Finding 2:** Bitnami had pruned chart versions older than six months from its Helm repo index ([bitnami/charts#10539](https://github.com/bitnami/charts/issues/10539)), so our pinned RabbitMQ chart couldn't be resolved for a redeploy. I work around it. |
+| 13:37 | **Finding 3:** Rancher starts refusing everything with a 403: the user `cannot get resource "clusters"`. It reads as RBAC. |
+| 12:49–14:33 | My VP and I agree on a 30–60 minute timebox before rebuilding. Rotating the cluster certificates and adding fresh workers both fail, so I call the rebuild. |
+| 18:13–18:26 | Rancher won't even delete the broken cluster. I strip the finalizers on the cluster object and delete it by hand. |
+| 18:39 | A Rancher issue showing webhooks being blocked ([rancher/rancher#29451](https://github.com/rancher/rancher/issues/29451)) moves the theory from permissions to the request path. |
+| 20:18 | **Root cause:** the serving certificate for Rancher's own validating admission webhook had expired. I delete the secret and restart the webhook pod, and it issues a new one. |
+| 20:46–20:51 | Rancher accepts deletes again and lets me create the new cluster. |
+| ~21:42 | The rebuilt cluster is serving all four services. The venue power-cycles its tablets. |
+| Next day, 06:21 | Before opening, with a backup taken first, I upgrade Rancher from 2.5.7 to 2.6.5. |
+| Next day, 07:07 | **My own slip:** a MetalLB upgrade wipes the venue's IP pool config. The message bus is unreachable for about 3 minutes until I restore it. |
+| Next day, 07:50 | I relaunch the tablet apps floor by floor and audit the venue's queues. Done. |
+
+## What made it hard
+
+- **Three unrelated failures stacked on one power event.** They were an expired server
+  certificate, a third-party chart repo that silently dropped old versions, and a second
+  internal certificate nobody was tracking. Each one hid the next.
+- **The error message lied.** "User cannot get clusters" reads as RBAC, so I spent hours on
+  permission and network theories. Rancher's own admission webhook was failing TLS.
+- **I was alone on the Kubernetes layer for about 18 hours.** The venue was half-open, other
+  teams were fighting point of sale and the network, and the office VPN circuit was down too.
+- **There was no infrastructure as code for venue clusters.** That work had been deferred, so
+  a rebuild meant hours of manual steps.
+
+## The turn
+
+At one point Rancher wouldn't let an admin delete even a user or a cluster object. From then
+on the problem couldn't be permissions, because the admin account couldn't do anything
+anywhere. That moved me from "who is allowed to do this" to "what sits in the request path
+and can say no." In Rancher, that's the validating admission webhook. Its serving certificate
+was a second one-year certificate that nobody had a reminder for.
+
+What I wrote to the team that night:
+
+> You know how we have alerts/reminders set up to cycle the rancher SSL certificate? … Well it turns out there's a second thing.
+
+{/* CONFIRM (Pierce): the webhook-certificate root cause is inferred from shell timing (the secret was deleted at 20:18 and the stuck user at 20:46). Neither archive has your own account of how you found it. A colleague's write-up names the expired Rancher server certificate as the cause; this post treats that as finding 1 of 3. Confirm from memory before this publishes. */}
+
+## Why I recovered the way I did
+
+- **Timebox, then rebuild.** A clean venue cluster was a known quantity. The corrupted one
+  wasn't, so we agreed the cutoff before going deeper.
+- **Deleting the cluster object by stripping its finalizers was a one-way door.** I only did
+  it after deciding to rebuild, and I wouldn't experiment on any other venue to confirm a
+  theory.
+- **I upgraded Rancher before opening, with a backup taken first.** That moved us onto the
+  release line that issues 10-year internal certificates, during the window when no guests
+  were affected.
+
+## What I got wrong
+
+1. The Rancher server certificate lapsed even though a reminder existed. Expiry tracking was
+   a calendar habit, not monitoring.
+2. I had deferred the scripted rebuild path, and that cost hours here.
+3. During cleanup the next morning I stacked a "while I'm in here" MetalLB upgrade onto a
+   system I'd only just recovered, and it caused a short second outage.
+
+## What changed
+
+- **The certificate problem was fixed for good.** After the upgrade I rotated every
+  certificate in every cluster to 10-year validity, added a runbook step to rotate after every
+  new cluster build, and set up automated expiry checks on cluster and component certificates.
+  A few months later a cluster certificate turned up three days before expiry. It was renewed
+  with a revised version of the same script, with no outage.
+- **The postmortem with leadership two weeks later** produced a power-outage procedure for
+  the venue and the support center, plus automated escalation. Chat notifications had failed
+  people that week.
+- **Infrastructure as code for venue clusters went from "someday" to required.** Two years
+  later I was building venue clusters with Terraform.
+- **I don't trust third-party Helm repos I don't mirror.**
+
+## What I'd tell someone else
+
+- When an admin can't do anything anywhere, stop debugging permissions and look at what
+  sits in the request path.
+- Inventory every certificate, not just the one on the front door.
+- Agree on the timebox and the rebuild criteria before you start digging.
+- Don't stack upgrades onto a system you just brought back.
