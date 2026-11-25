@@ -101,4 +101,5 @@ _(none)_
 
 ## 6. Handoff note (fill when ending a session)
 
-_(no recent handoff — older notes archived to CHANGELOG.md 2026-06-06)_
+2026-11-25 — Portfolio and navigation release v1.2.0 supersedes the parked plan above.
+Release evidence is tracked in rex/homepage#27. Résumé corrections are in PR #18.

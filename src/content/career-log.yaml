@@ -15,10 +15,10 @@ entries:
     location: Dallas, TX
     summary: >
       Joined May 2020 on contract as DevOps Engineer, converted
-      full-time to Senior DevOps Engineer April 2021. Own DevOps,
-      automation, cloud, CI/CD, and venue platform reliability across
-      the org. Built and scaled a multi-venue Kubernetes/Rancher
-      platform, designed company-wide Ansible for Windows and Linux,
+      full-time to Senior DevOps Engineer April 2021. As the sole
+      infrastructure engineer reporting to the President/COO, I own
+      cloud, CI/CD, and venue platform reliability. I built the
+      Kubernetes/Rancher platform, automated over 1,000 Windows and Linux endpoints with Ansible,
       and led an AWS cleanup that cut spend by roughly 64% without
       sacrificing reliability. Back on contract since March 2025,
       same scope.

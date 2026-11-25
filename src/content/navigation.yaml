@@ -1,0 +1,8 @@
+label: "site index"
+eyebrow: "index"
+shortcut_prefix: "g"
+items:
+  - { number: "00", label: "home", href: "/", matches: ["/"], shortcut: "h" }
+  - { number: "01", label: "writing", href: "/writing", matches: ["/writing"], shortcut: "w" }
+  - { number: "02", label: "projects", href: "/portfolio", matches: ["/portfolio", "/projects"], shortcut: "p" }
+  - { number: "03", label: "cv", href: "/cv", matches: ["/cv", "/resume"], shortcut: "c" }

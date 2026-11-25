@@ -37,3 +37,7 @@ tfplan.*
 
 # MCP/tool caches
 .context7-cache/
+
+# Only reviewed gallery images should enter the public catalogue.
+public/projects/
+.harvest-auth/

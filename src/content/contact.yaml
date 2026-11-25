@@ -21,6 +21,10 @@ links:
     href: "/cv"
     value: piercemoore.com/cv
 
+  - label: portfolio
+    href: "/portfolio"
+    value: piercemoore.com/portfolio
+
 location: Addison, TX
 availability: "open to senior platform role · remote or dallas · selective contract work"
 

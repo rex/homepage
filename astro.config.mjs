@@ -25,6 +25,7 @@ export default defineConfig({
   // forwards crawlers and humans to /cv.
   redirects: {
     '/resume': '/cv',
+    '/projects': '/portfolio',
   },
   integrations: [
     react(),

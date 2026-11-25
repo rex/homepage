@@ -1,0 +1,216 @@
+projects:
+  - name: IPManagerDeluxe
+    year: "2010"
+    language: PHP
+    description: "[DEPRECATED] A fully comprehensive IPv4 and IPv6 management solution"
+    href: https://github.com/rex/IPManagerDeluxe
+  - name: TickOMatic
+    year: "2010"
+    language: JavaScript
+    description: "[DEPRECATED] Beautiful and relaxing timer that helps remain focused and productive. Set the clock to how long you want to stay focused, and work until the clock runs out!"
+    href: https://github.com/rex/TickOMatic
+  - name: superChat
+    year: "2010"
+    language: HTML
+    description: "[DEPRECATED] A next-generation AJAX-based chat system that allows for multi-user chats, full-screen chat displays, and so much more."
+    href: https://github.com/rex/superChat
+  - name: BANTP
+    year: "2011"
+    language: JavaScript
+    description: Bad Ass New Tab Page
+    href: https://github.com/rex/BANTP
+  - name: gMoney
+    year: "2011"
+    language: HTML
+    description: "[DEPRECATED] Google Calendar-based expense and budget tracking tool"
+    href: https://github.com/rex/gMoney
+  - name: RubyPHP
+    year: "2012"
+    language: JavaScript
+    description: A class to provide PHP with Ruby-like functionality. Ability to treat every single entity (strings, booleans, arrays, objects, etc) like an object with methods specifically designed for each.
+    href: https://github.com/rex/RubyPHP
+  - name: quizzicus
+    year: "2012"
+    language: PHP
+    description: "[DEPRECATED. SUPER DEPRECATED] Web-based test and quiz taking tool."
+    href: https://github.com/rex/quizzicus
+  - name: ops-utilities
+    year: "2012"
+    language: Python
+    description: "[DEPRECATED] A collection of utilities to make server administration and development easier."
+    href: https://github.com/rex/ops-utilities
+  - name: BasecampExporter
+    year: "2012"
+    language: PHP
+    description: "[DEPRECATED] The simplest possible way to get your much-needed data out of the New Basecamp."
+    href: https://github.com/rex/BasecampExporter
+  - name: RSStoAnything
+    year: "2012"
+    language: JavaScript
+    description: "[DEPRECATED] Take your standard, run-of-the-mill RSS feed, convert it to any format, and save it anywhere you want. However you want."
+    href: https://github.com/rex/RSStoAnything
+  - name: PM_Site
+    year: "2012"
+    language: PHP
+    description: "[SUPER OLD, BEYOND DEPRECATED] Home page of Pierce Moore, piercemoore.com"
+    href: https://github.com/rex/PM_Site
+  - name: chillgrim
+    year: "2012"
+    language: "?"
+    description: Website dedicated to showcasing the best in chillout and downtempo
+    href: https://github.com/rex/chillgrim
+  - name: BackboneSnippets
+    year: "2013"
+    language: "?"
+    description: "[DEPRECATED] Code expansion snippets to make development in Backbone.js easier for lazy people like me."
+    href: https://github.com/rex/BackboneSnippets
+  - name: rex-template
+    year: "2013"
+    language: JavaScript
+    description: Efficiently and quickly compiles all the template files in a directory into an output file using your favorite microtemplating framework.
+    href: https://github.com/rex/rex-template
+  - name: zngine-flow
+    year: "2013"
+    language: PHP
+    description: "[DEPRECATED] A proof of concept to illustrate feature branching and continuous integration workflow"
+    href: https://github.com/rex/zngine-flow
+  - name: SuperCLI
+    year: "2013"
+    language: JavaScript
+    description: "[DEPRECATED] A Node.js module that aims to make logging into the console a less painful, more beautiful experience."
+    href: https://github.com/rex/SuperCLI
+  - name: rexmon-slave
+    year: "2013"
+    language: JavaScript
+    description: "[DEPRECATED] Incredibly lightweight server monitoring using Node.js. You're welcome."
+    href: https://github.com/rex/rexmon-slave
+  - name: rex-foreman
+    year: "2013"
+    language: CoffeeScript
+    description: A fresh, multi-platform, lightweight take on the foreman project.
+    href: https://github.com/rex/rex-foreman
+  - name: rex-mongo
+    year: "2013"
+    language: JavaScript
+    description: A small collection of utilities to simplify development using MongoDB.
+    href: https://github.com/rex/rex-mongo
+  - name: rex-git
+    year: "2013"
+    language: JavaScript
+    description: A toolkit built in Node.js that makes it easy to perform git operations recursively on a folder and its subfolders.
+    href: https://github.com/rex/rex-git
+  - name: rex-shell
+    year: "2013"
+    language: JavaScript
+    description: A lightweight library for Node.js that will help developers display nice, pretty, colored messages in a console window.
+    href: https://github.com/rex/rex-shell
+  - name: rex-utils
+    year: "2013"
+    language: JavaScript
+    description: A collection of tools and utilities designed to make the life of a developer a less stressful one. Quickly back up all your dotfiles and various .conf files on your machine so that you have a safety net just in case.
+    href: https://github.com/rex/rex-utils
+  - name: rex-ecosystem
+    year: "2013"
+    language: JavaScript
+    description: The bendable, foldable, easily clonable rex ecosystem
+    href: https://github.com/rex/rex-ecosystem
+  - name: rex-redis
+    year: "2013"
+    language: JavaScript
+    description: A small collection of utilities to simplify development in a Redis-powered environment.
+    href: https://github.com/rex/rex-redis
+  - name: rex-exec
+    year: "2013"
+    language: JavaScript
+    description: A small set of functions designed to provide a simple way to execute shell commands and process the output.
+    href: https://github.com/rex/rex-exec
+  - name: rex-app
+    year: "2013"
+    language: JavaScript
+    description: Amazingly simple full-team cross-platform deployment of web applications of all shapes and sizes.
+    href: https://github.com/rex/rex-app
+  - name: rex-bundle
+    year: "2013"
+    language: "?"
+    description: Easily create ready-to-run packages of your application.
+    href: https://github.com/rex/rex-bundle
+  - name: rex-npm
+    year: "2013"
+    language: "?"
+    description: A collection of tools and command line utilities that make development with NPM an easier, more fluid experience.
+    href: https://github.com/rex/rex-npm
+  - name: rex-whoami
+    year: "2013"
+    language: "?"
+    description: Simple user/account switching for various nerd services like GitHub and NPM.
+    href: https://github.com/rex/rex-whoami
+  - name: rex-config
+    year: "2013"
+    language: "?"
+    description: The backbone of the rex ecosystem, rex-config provides all rex-* modules an API to perform CRUD operations on the global and local .rex config objects.
+    href: https://github.com/rex/rex-config
+  - name: rex-suite
+    year: "2013"
+    language: "?"
+    description: The big daddy of the rex ecosystem, installing this module gives you direct access to a simpler development workflow.
+    href: https://github.com/rex/rex-suite
+  - name: ShouldPHP
+    year: "2013"
+    language: PHP
+    description: A PHP port of the absolutely fantastic 'Should.js' library
+    href: https://github.com/rex/ShouldPHP
+  - name: microsite
+    year: "2014"
+    language: CSS
+    description: Test microsite to prove it's not hard to make something sexy.
+    href: https://github.com/rex/microsite
+  - name: ssh_builder
+    year: "2014"
+    language: Ruby
+    description: Ruby gem for dynamically building and maintaining your SSH config file.
+    href: https://github.com/rex/ssh_builder
+  - name: server-gem
+    year: "2014"
+    language: Ruby
+    description: Manage servers in a really awesome way. Like a boss.
+    href: https://github.com/rex/server-gem
+  - name: rex.github.io
+    year: "2014"
+    language: HTML
+    description: Nerdy home page of Pierce Moore
+    href: https://github.com/rex/rex.github.io
+  - name: prex.io-god
+    year: "2014"
+    language: Ruby
+    description: God monitors for the site and Sidekiq workers powering Prex.io
+    href: https://github.com/rex/prex.io-god
+  - name: butler
+    year: "2014"
+    language: Ruby
+    description: Simple application that I am building with the intention of making it much easier to view and manage multimedia files (primarily audio) in various locations on my machine.
+    href: https://github.com/rex/butler
+  - name: redis_utils
+    year: "2014"
+    language: Ruby
+    description: A gem intended to take some of the pain out of Redis CRUD operations.
+    href: https://github.com/rex/redis_utils
+  - name: redass
+    year: "2014"
+    language: Ruby
+    description: Redis administration via web browser that doesn't completely suck.
+    href: https://github.com/rex/redass
+  - name: css-utils
+    year: "2014"
+    language: CSS
+    description: Small, object-oriented CSS classes to alleviate the weary developer from rewriting the same CSS classes over and over.
+    href: https://github.com/rex/css-utils
+  - name: sd-haproxy
+    year: "2014"
+    language: Python
+    description: HAProxyPro monitoring plugin for ServerDensity
+    href: https://github.com/rex/sd-haproxy
+  - name: site-legacy
+    year: "2014"
+    language: JavaScript
+    description: Nerdy home page of Pierce Moore
+    href: https://github.com/rex/site-legacy

@@ -1,32 +1,216 @@
 ---
-import { loadHero } from '../lib/content';
+import { loadNavigation } from '../lib/navigation-content';
 
-const hero = await loadHero();
+const navigation = await loadNavigation();
+const normalize = (path: string) => path.replace(/\/+$/, '') || '/';
+const currentPath = normalize(Astro.url.pathname);
+const isCurrent = (matches: string[]) => matches.some((match) => {
+  const normalized = normalize(match);
+  return currentPath === normalized || (normalized !== '/' && currentPath.startsWith(`${normalized}/`));
+});
+const current = navigation.items.find((item) => isCurrent(item.matches)) ?? navigation.items[0];
 ---
-<header class="page-gutter top-bar hairline-b" data-boot style="--boot-delay: 600ms;">
-  <div class="flex items-center justify-between gap-4 py-3">
-    <div class="flex items-center gap-3 font-mono text-xs uppercase tracking-[0.16em] text-ink-muted">
-      <span class="text-ink">piercemoore.com</span>
-      <span aria-hidden="true" class="text-ink-faint">·</span>
-      <span class="numeric-tabular">v2.0.0</span>
-    </div>
-    <div class="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-accent">
-      <span aria-hidden="true" class="status-dot-inline"></span>
-      <span>{hero.status.split('·')[0].trim()}</span>
-    </div>
-  </div>
-</header>
+
+<nav
+  class="site-index"
+  aria-label={navigation.label}
+  data-site-index
+  data-shortcut-prefix={navigation.shortcut_prefix}
+  data-boot
+  style="--boot-delay: 500ms;"
+>
+  <span class="site-index__eyebrow" aria-hidden="true">{navigation.eyebrow}</span>
+  <details class="site-index__menu" open>
+    <summary>
+      <span>{navigation.eyebrow}</span>
+      <b>{current?.number}</b>
+      <i aria-hidden="true"></i>
+    </summary>
+    <ol class="site-index__list">
+      {navigation.items.map((item) => {
+        const active = isCurrent(item.matches);
+        return (
+          <li>
+            <a
+              href={item.href}
+              class:list={{ current: active }}
+              aria-current={active ? 'page' : undefined}
+              data-shortcut={item.shortcut}
+            >
+              <span>{item.number}</span>
+              {item.label}
+              {active && <i aria-hidden="true"></i>}
+            </a>
+          </li>
+        );
+      })}
+    </ol>
+  </details>
+</nav>
+
+<script>
+  import { initNavigation } from '../lib/navigation-interactions';
+
+  initNavigation();
+</script>
 
 <style>
-  .top-bar {
-    position: relative;
+  .site-index {
+    position: fixed;
+    top: 2rem;
+    right: 24px;
+    z-index: 70;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    font-family: 'Cascadia Code', monospace;
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
   }
-  .status-dot-inline {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
+
+  .site-index__eyebrow {
+    color: var(--ink-faint);
+    font-size: 0.5625rem;
+    letter-spacing: 0.18em;
+  }
+
+  .site-index__menu summary {
+    display: none;
+  }
+
+  .site-index__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-index__list a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.125rem 0;
+    color: var(--ink-dim);
+    transition: color 160ms ease-out;
+  }
+
+  .site-index__list a::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    content: '';
+    transition: width 180ms ease-out;
+  }
+
+  .site-index__list a:hover,
+  .site-index__list a:focus-visible {
+    color: var(--accent);
+  }
+
+  .site-index__list a:hover::after,
+  .site-index__list a:focus-visible::after {
+    width: 100%;
+  }
+
+  .site-index__list a span {
+    color: var(--ink-faint);
+  }
+
+  .site-index__list a.current {
+    color: var(--ink);
+  }
+
+  .site-index__list a.current span {
+    color: var(--accent);
+  }
+
+  .site-index__list i,
+  .site-index__menu summary i {
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: var(--accent);
-    box-shadow: 0 0 7px color-mix(in srgb, var(--accent) 40%, transparent);
+    box-shadow: 0 0 6px var(--accent-dim);
+  }
+
+  .site-index--armed {
+    outline: 1px solid var(--accent-dim);
+    outline-offset: 0.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .site-index { right: 64px; }
+  }
+
+  @media (min-width: 1024px) {
+    .site-index { right: 96px; }
+  }
+
+  @media (min-width: 1536px) {
+    .site-index { right: 144px; }
+  }
+
+  @media (max-width: 767px) {
+    .site-index {
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .site-index__eyebrow {
+      display: none;
+    }
+
+    .site-index__menu summary {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 0.6rem;
+      border: 1px solid var(--hairline);
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      color: var(--ink-muted);
+      cursor: pointer;
+      list-style: none;
+      backdrop-filter: blur(12px);
+    }
+
+    .site-index__menu summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .site-index__menu summary b {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .site-index__list {
+      display: none;
+      margin-top: 0.4rem;
+      padding: 0.75rem;
+      border: 1px solid var(--hairline);
+      background: color-mix(in srgb, var(--bg) 94%, transparent);
+      box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(12px);
+    }
+
+    .site-index__menu[open] .site-index__list {
+      display: flex;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-index__list a,
+    .site-index__list a::after {
+      transition: none;
+    }
   }
 </style>

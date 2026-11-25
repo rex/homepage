@@ -1,0 +1,66 @@
+title: "Projects — Pierce Moore"
+description: "Selected systems, tools, products, and public work spanning two decades."
+nav:
+  site: "piercemoore.com"
+  route: "projects"
+  availability: "open to senior platform roles"
+index:
+  issue: "range / index 01"
+  title: "selected work"
+  thesis: "range, made legible."
+  summary: "Infrastructure, native apps, product ecosystems, hardware, AI tooling, and the odd side quest."
+  total_label: "projects"
+  curated_label: "curated cases"
+labels:
+  heroes: "tier 01 / flagship systems"
+  all_heroes: "browse the full index"
+  index: "project index"
+  filter: "filter"
+  search: "search projects"
+  search_placeholder: "name, stack, or discipline"
+  tier: "depth"
+  all: "all curated"
+  tier_one: "flagship"
+  tier_two: "selected"
+  tier_three: "archive"
+  status: "status"
+  currently_selected: "selected case"
+  pitch: "brief"
+  hook: "the engineering move"
+  stack: "stack"
+  metrics: "scale"
+  links: "links"
+  live_site: "live site"
+  source_repo: "source repository"
+  no_results: "no projects match this filter"
+  historical: "the long arc"
+  historical_summary: "Public projects from 2010–2021 — the experiments, utilities, and odd ideas that built the range."
+  historical_count: "public archive"
+  terminal: '$ find ./work --range "twenty years"'
+  open_case: "open case"
+tiers:
+  - { id: "all", label: "all curated" }
+  - { id: "1", label: "tier 01 / flagship" }
+  - { id: "2", label: "tier 02 / selected" }
+  - { id: "3", label: "tier 03 / archive" }
+states:
+  - { id: "active", label: "active" }
+  - { id: "in-progress", label: "in progress" }
+  - { id: "shipped", label: "shipped" }
+  - { id: "archived", label: "archived" }
+case:
+  kicker: "case file"
+  back: "back to the index"
+  brief: "brief"
+  hook: "the engineering move"
+  highlights: "highlights"
+  gallery: "artifacts"
+  gallery_pending: "imagery pending — placeholder plate holds the slot"
+  evolution: "evolution"
+  metrics: "scale"
+  stack: "stack"
+  links: "links"
+  live_site: "live site"
+  source_repo: "source repository"
+  prev: "prev case"
+  next: "next case"

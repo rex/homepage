@@ -1,0 +1,158 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectArtifact from '../../components/ProjectArtifact.astro';
+import { loadPortfolio } from '../../lib/portfolio-content';
+import type { PortfolioContent, PortfolioProject } from '../../lib/portfolio-content';
+import '../../styles/portfolio.css';
+
+export async function getStaticPaths() {
+  const portfolio = await loadPortfolio();
+  return portfolio.projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project, portfolio },
+  }));
+}
+
+interface Props {
+  project: PortfolioProject;
+  portfolio: PortfolioContent;
+}
+
+const { project, portfolio } = Astro.props;
+const labels = portfolio.case;
+const stateLabels = new Map(portfolio.states.map((state) => [state.id, state.label]));
+
+const detail = project.detail ?? {};
+const form = detail.form ?? 'shortform';
+const lede = detail.intro ?? project.blurb ?? project.pitch;
+const gallery = detail.gallery ?? [];
+const highlights = detail.highlights ?? [];
+const sections = detail.sections ?? [];
+const evolution = detail.evolution ?? [];
+
+const ordered = portfolio.projects;
+const index = ordered.findIndex((candidate) => candidate.id === project.id);
+const prev = index > 0 ? ordered[index - 1] : undefined;
+const next = index < ordered.length - 1 ? ordered[index + 1] : undefined;
+
+const title = `${project.name} — ${portfolio.nav.route} — Pierce Moore`;
+---
+
+<BaseLayout title={title} description={project.pitch} bodyClass="portfolio-page">
+  <div class="portfolio-shell page-gutter">
+    <header class="portfolio-masthead">
+      <p class="portfolio-breadcrumb">
+        <span><a href="/">{portfolio.nav.site}</a></span><b>/</b><span><a href="/portfolio">{portfolio.nav.route}</a></span><b>/</b><span>{project.id}</span>
+      </p>
+      <p class="portfolio-availability"><i aria-hidden="true"></i>{portfolio.nav.availability}</p>
+    </header>
+
+    <article class="case-shell">
+      <header class="case-header">
+        <p class="case-kicker">
+          <b>{labels.kicker}</b> · {String(project.rank).padStart(2, '0')} / {project.tag} · {project.year} · {stateLabels.get(project.status)}
+        </p>
+        <h1>{project.name}</h1>
+        <p class="case-lede">{lede}</p>
+        <div class="case-meta">
+          <span>{project.bucket ?? project.group ?? project.tag}</span>
+          {form === 'longform' && <span>longform</span>}
+        </div>
+        <div class="case-art">
+          <ProjectArtifact project={project} />
+          {gallery.length === 0 && <p class="case-note">{labels.gallery_pending}</p>}
+        </div>
+      </header>
+
+      {highlights.length > 0 && (
+        <section class="case-section">
+          <h2><small>{labels.highlights}</small></h2>
+          <ul class="case-highlights">
+            {highlights.map((highlight) => <li>{highlight}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {project.hook && (
+        <section class="case-section">
+          <h2><small>{labels.hook}</small></h2>
+          <p class="case-prose">{project.hook}</p>
+        </section>
+      )}
+
+      {form === 'shortform' && project.blurb && detail.intro && (
+        <section class="case-section">
+          <h2><small>{labels.brief}</small></h2>
+          <p class="case-prose">{project.blurb}</p>
+        </section>
+      )}
+
+      {form === 'longform' && sections.map((section) => (
+        <section class="case-section">
+          <h2>{section.title}{section.label && <small>{section.label}</small>}</h2>
+          <p class="case-prose">{section.body}</p>
+        </section>
+      ))}
+
+      {gallery.length > 0 && (
+        <section class="case-section">
+          <h2><small>{labels.gallery}</small></h2>
+          <div class="case-gallery">
+            {gallery.map((item) => (
+              <figure>
+                <img src={item.src} alt={item.caption ?? project.name} loading="lazy" />
+                {item.caption && <figcaption>{item.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {evolution.length > 0 && (
+        <section class="case-section">
+          <h2><small>{labels.evolution}</small></h2>
+          <ol class="case-evolution">
+            {evolution.map((entry) => (
+              <li><b>{entry.year}</b><p>{entry.note}</p></li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {project.metrics.length > 0 && (
+        <section class="case-section">
+          <h2><small>{labels.metrics}</small></h2>
+          <dl class="case-metrics">
+            {project.metrics.map((metric) => <div><dt>{metric.k}</dt><dd>{metric.v}</dd></div>)}
+          </dl>
+        </section>
+      )}
+
+      {project.stack && project.stack.length > 0 && (
+        <section class="case-section">
+          <h2><small>{labels.stack}</small></h2>
+          <ul class="case-stack">{project.stack.map((item) => <li>{item}</li>)}</ul>
+        </section>
+      )}
+
+      {project.links && (
+        <section class="case-section">
+          <h2><small>{labels.links}</small></h2>
+          <div class="case-links">
+            {project.links.live && <a href={project.links.live} target="_blank" rel="noreferrer">{labels.live_site}<span aria-hidden="true">↗</span></a>}
+            {project.links.repo && <a href={project.links.repo} target="_blank" rel="noreferrer">{labels.source_repo}<span aria-hidden="true">↗</span></a>}
+          </div>
+        </section>
+      )}
+
+      <footer class="case-footer">
+        <a class="case-back" href="/portfolio">← {labels.back}</a>
+        <span>
+          {prev && <a href={'/portfolio/' + prev.id}>← {labels.prev}: {prev.name}</a>}
+          {prev && next && <span aria-hidden="true"> · </span>}
+          {next && <a href={'/portfolio/' + next.id}>{labels.next}: {next.name} →</a>}
+        </span>
+      </footer>
+    </article>
+  </div>
+</BaseLayout>

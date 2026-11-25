@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0] — 2026-11-25
+
+- Published the portfolio at `/portfolio` with 56 case pages, 65 archive entries,
+  a `/projects` alias, and navigation from the homepage.
+- Linked the printable CV to the portfolio and aligned the Drive Shack scope
+  with the master résumé. The MCP Rancher case links to the public project.
+
 ## [1.1.1] — 2026-11-05 — Agent: Claude Opus 5.5
 ### Fixed
 - Contact email is `hireme@piercemoore.com` everywhere: the contact section, humans.txt,

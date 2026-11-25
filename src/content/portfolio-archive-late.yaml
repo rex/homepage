@@ -1,0 +1,111 @@
+projects:
+  - name: prex.io
+    year: "2015"
+    language: JavaScript
+    description: My website, built in the beautiful Laravel.
+    href: https://github.com/rex/prex.io
+  - name: Buffy
+    year: "2015"
+    language: JavaScript
+    description: Application to track progress and offer direction for watching Buffy and Angel
+    href: https://github.com/rex/Buffy
+  - name: todo
+    year: "2015"
+    language: "?"
+    description: All my various to-do lists for this thing and that.
+    href: https://github.com/rex/todo
+  - name: rex-eslint-config
+    year: "2015"
+    language: "?"
+    description: ESLint configuration for packages in the rex-* npm ecosystem
+    href: https://github.com/rex/rex-eslint-config
+  - name: sublime-theme
+    year: "2015"
+    language: JavaScript
+    description: A custom theme I built for myself, originally forked from the amazing Flatron. Includes a custom build script.
+    href: https://github.com/rex/sublime-theme
+  - name: prex.io-vagrant
+    year: "2015"
+    language: Shell
+    description: Vagrant configuration for prex.io machine with services, databases, & sites.
+    href: https://github.com/rex/prex.io-vagrant
+  - name: stdlib
+    year: "2015"
+    language: "?"
+    description: Application dependency boilerplates. But... Done right.
+    href: https://github.com/rex/stdlib
+  - name: steward
+    year: "2015"
+    language: Ruby
+    description: A web application built to provide a near-real-time assessment of the overall health, complexity, and pain points of all the repositories in an organization.
+    href: https://github.com/rex/steward
+  - name: jeeves
+    year: "2015"
+    language: CSS
+    description: Your friendly neighborhood stylesheet statistician, makeup artist, and reorganizer.
+    href: https://github.com/rex/jeeves
+  - name: destiny
+    year: "2015"
+    language: Ruby
+    description: A web application built to provide an overview of your characters in Destiny and easily manage multiple characters. NOT AFFILIATED WITH BUNGIE IN ANY WAY. Just a web developer with free time, multiple characters, and no patience.
+    href: https://github.com/rex/destiny
+  - name: node-boinc
+    year: "2016"
+    language: "?"
+    description: Client to access statistics for BOINC-enabled projects
+    href: https://github.com/rex/node-boinc
+  - name: pre-commit
+    year: "2016"
+    language: Shell
+    description: Plugins for Yelp's pre-commit
+    href: https://github.com/rex/pre-commit
+  - name: watchlist
+    year: "2016"
+    language: Ruby
+    description: ""
+    href: https://github.com/rex/watchlist
+  - name: lambda-chrome
+    year: "2017"
+    language: JavaScript
+    description: The extension by me, for me, to tweak Chrome juuuuuuust the way I like it
+    href: https://github.com/rex/lambda-chrome
+  - name: jetbrains
+    year: "2017"
+    language: "?"
+    description: ""
+    href: https://github.com/rex/jetbrains
+  - name: podcast-tracklists
+    year: "2018"
+    language: JavaScript
+    description: A place to centralize tracklists for podcasts I listen to
+    href: https://github.com/rex/podcast-tracklists
+  - name: firmware-eru
+    year: "2020"
+    language: C++
+    description: Firmware running on my 3D printer named Eru Ilúvatar
+    href: https://github.com/rex/firmware-eru
+  - name: dfwfightingcovid
+    year: "2020"
+    language: JavaScript
+    description: The source of the website DFWFightingCovid.com
+    href: https://github.com/rex/dfwfightingcovid
+  - name: home-assistant
+    year: "2020"
+    language: Python
+    description: My home assistant config
+    href: https://github.com/rex/home-assistant
+  - name: smart-home
+    year: "2020"
+    language: "?"
+    description: Objects and Configuration for devices and automations in my smart home.
+    href: https://github.com/rex/smart-home
+  - name: firmware-manwe
+    year: "2020"
+    language: "?"
+    description: Firmware for my 3D printer named Manwë
+    href: https://github.com/rex/firmware-manwe
+  - name: whoisgoingtoarcmusicfestival.com
+    year: "2021"
+    language: HTML
+    description: A website that keeps track of the people from twitch that I know are going to 2021 ARC Music Festival
+    href: https://github.com/rex/whoisgoingtoarcmusicfestival.com
